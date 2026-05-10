@@ -1,1 +1,9 @@
 @import "tailwindcss";
+@import "@heroui/styles";
+
+/* Default toast shell is z-50 (same as app modals); lift so toasts stay centered and above the page. */
+@layer utilities {
+  .toast-region {
+    @apply !z-[10050];
+  }
+}
