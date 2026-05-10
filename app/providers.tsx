@@ -10,9 +10,8 @@ import { BookProvider } from "./context/BookContext";
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <HeroUIProvider>
-      <ToastProvider placement="top">
-        <BookProvider>{children}</BookProvider>
-      </ToastProvider>
+      <BookProvider>{children}</BookProvider>
+      <ToastProvider placement="top" />
       <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
     </HeroUIProvider>
   );
