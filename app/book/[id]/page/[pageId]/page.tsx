@@ -168,7 +168,7 @@ export default function TranslatePage() {
                   </div>
                 </Switch.Content>
                 <Switch.Control className="relative inline-flex h-6 w-11 items-center rounded-full bg-slate-200 transition-colors group-data-[selected=true]:bg-blue-600 shadow-inner">
-                  <Switch.Thumb className="flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-sm transition-transform duration-300 translate-x-0.5 group-data-[selected=true]:translate-x-[22px]">
+                  <Switch.Thumb className="flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-sm transition-transform duration-300 translate-x-0.5 group-data-[selected=true]:translate-x-0.5">
                     {isAiMode ? <Sparkles className="w-3 h-3 text-blue-600" /> : <Power className="w-3 h-3 text-slate-400" />}
                   </Switch.Thumb>
                 </Switch.Control>
