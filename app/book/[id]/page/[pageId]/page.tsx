@@ -7,7 +7,7 @@ import { ChevronLeft, Save, Sparkles, Undo, Redo, Check, X, Power } from "lucide
 import { Roboto_Serif, Sarabun } from "next/font/google";
 import { useBooks } from "../../../../context/BookContext";
 // 🚀 ดึง toast มาจาก heroui ตาม Doc มาตรฐาน
-import { Switch, toast } from "@heroui/react";
+import { Switch, toast, Button, Spinner, TextArea } from "@heroui/react";
 
 const robotoSerif = Roboto_Serif({ subsets: ["latin"], weight: ["400"] });
 const sarabun = Sarabun({ subsets: ["thai"], weight: ["300"] });
@@ -46,21 +46,51 @@ export default function TranslatePage() {
     return <div className="h-screen flex items-center justify-center text-slate-400">Loading or Page not found...</div>;
   }
 
+  // ---------------------------------------------------------
+  // 1. 🚀 ระบบ Auto-Save (Debounce) พร้อม Toast แจ้งเตือน
+  // ---------------------------------------------------------
+  useEffect(() => {
+    if (!book || !page) return;
+
+    // 🚀 จุดสำคัญ: ดักไว้ว่าถ้า "ข้อความยังเหมือนกับที่เซฟไว้ตอนแรก" แปลว่าเพิ่งเปิดหน้าเว็บ ห้ามเด้ง Toast!
+    if (originalText === (page.originalText || "") && translatedText === (page.translatedText || "")) {
+      return;
+    }
+
+    const autoSaveTimer = setTimeout(() => {
+      const updatedPages = book.pages.map(p =>
+        p.id === pageId ? { ...p, originalText, translatedText } : p
+      );
+      const translatedCount = updatedPages.filter(p => p.translatedText.trim() !== "").length;
+      
+      updateBook(bookId, { pages: updatedPages, translatedPages: translatedCount });
+
+      // 🚀 เด้ง Toast เบาๆ แจ้งว่าเซฟแล้ว (ใช้ Toast ของ HeroUI)
+      toast.success("Auto-saved", {
+        description: "Your changes have been saved.",
+      });
+
+    }, 1500);
+
+    return () => clearTimeout(autoSaveTimer);
+  }, [originalText, translatedText]); // จับตาดูเฉพาะตอนข้อความเปลี่ยน
+
+  // ---------------------------------------------------------
+  // 2. ฟังก์ชันปุ่ม Save เดิม (เผื่อ User อยากกดเซฟเองแบบมั่นใจ)
+  // ---------------------------------------------------------
   const handleSave = () => {
     const updatedPages = book.pages.map(p =>
       p.id === pageId ? { ...p, originalText, translatedText } : p
     );
     const translatedCount = updatedPages.filter(p => p.translatedText.trim() !== "").length;
     
-    // อัปเดตข้อมูล
     updateBook(bookId, { pages: updatedPages, translatedPages: translatedCount });
 
-    // 🚀 ท่ามาตรฐาน 100%: ใช้โค้ดโครงสร้างเดียวกับที่น้องเอามาจาก Doc เลยครับ!
     toast.success("Saved successful!", {
       description: "Your page have been saved.",
       actionProps: {
         children: "Got it!",
-        className: "bg-success text-success-foreground", // ใช้สีระบบของ HeroUI
+        className: "bg-success text-success-foreground",
         onPress: () => toast.clear(), 
       },
     });
@@ -91,20 +121,59 @@ export default function TranslatePage() {
     }
   };
 
-  const handleAiTranslate = () => {
+  const handleAiTranslate = async () => {
     if (!aiInputText.trim()) {
-      toast.danger("Please enter text to translate."); // ใช้ danger ตามมาตรฐาน
+      toast.danger("Please enter text to translate.");
       return;
     }
+  
     setIsAiTranslating(true);
+    setAiPreviewText(""); // 🚀 ล้างหน้าจอ Preview ให้สะอาดก่อนเริ่มพิมพ์ใหม่
     
-    setTimeout(() => {
-      setAiPreviewText("นี่คือข้อความที่จำลองการแปลจาก AI เพื่อให้คุณพิจารณาก่อนกดยอมรับครับ");
-      setIsAiTranslating(false);
-      toast.success("Translation ready", {
-        description: "Review the preview, then Commit or Cancel.",
+    try {
+      const response = await fetch("/api/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: aiInputText,
+          from: book.originalLang,
+          to: book.translationLang,
+        }),
       });
-    }, 1500);
+  
+      if (!response.ok) throw new Error("Translation API failed");
+  
+      // 🚀 ท่ารับข้อมูลแบบ Streaming ค่อยๆ อ่านจากท่อทีละก้อน
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      let currentText = ""; // ตัวแปรชั่วคราวสำหรับเก็บข้อความที่ต่อกันแล้ว
+  
+      while (!done && reader) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        
+        if (value) {
+          // ถอดรหัสสัญญาณเป็นข้อความ แล้วเอาไปต่อท้ายของเดิม
+          const chunkValue = decoder.decode(value, { stream: true });
+          currentText += chunkValue;
+          
+          // 🚀 อัปเดต State ให้ UI ขยับทันที!
+          setAiPreviewText(currentText); 
+        }
+      }
+  
+      toast.success("AI Translation complete!", {
+        description: "You can now review and commit the translation.",
+      });
+  
+    } catch (error) {
+      toast.danger("AI Error", {
+        description: "Could not connect to Gemini AI or streaming failed.",
+      });
+    } finally {
+      setIsAiTranslating(false);
+    }
   };
 
   const handleAcceptTranslation = () => {
@@ -185,17 +254,33 @@ export default function TranslatePage() {
 
           {isAiMode && (
             <div className="shrink-0 mt-4 border-t border-slate-100 pt-6 flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300">
-              <textarea
-                placeholder="Type a sentence to translate with AI..."
+              <TextArea
                 value={aiInputText}
-                onChange={(e) => setAiInputText(e.target.value)}
-                className={`w-full h-24 resize-none outline-none text-slate-700 text-base p-4 bg-slate-50 rounded-2xl border border-slate-200 focus:border-blue-300 focus:ring-4 focus:ring-blue-100 transition-all ${robotoSerif.className}`}
+                onChange={(e) => {
+                  setAiInputText(e.target.value);
+                  
+                  // 🚀 ทริค Auto-expand แบบ Gemini: ให้กล่องยืดตาม Text แต่ไม่เกิน 150px (ประมาณ 5 บรรทัด)
+                  e.target.style.height = "auto"; 
+                  e.target.style.height = `${Math.min(e.target.scrollHeight, 150)}px`;
+                }}
+                placeholder="Type a sentence to translate with AI..."
+                variant="secondary"
+                className={`w-full min-h-[64px] resize-y text-slate-700 bg-slate-50 border border-slate-200 focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-100 rounded-2xl transition-all ${robotoSerif.className}`}
               />
               <div className="flex justify-end">
-                <button type="button" onClick={handleAiTranslate} disabled={isAiTranslating} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${isAiTranslating ? "bg-slate-100 text-slate-400 cursor-not-allowed" : "bg-blue-50 text-blue-600 hover:bg-blue-100"}`}>
-                  <Sparkles className={`w-4 h-4 ${isAiTranslating ? "animate-pulse" : ""}`} />
-                  {isAiTranslating ? "Translating..." : "AI Translate"}
-                </button>
+              <Button 
+                onPress={handleAiTranslate}
+                isDisabled={isAiTranslating}
+                variant="secondary"
+                className="font-bold px-5 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center gap-2"
+              >
+                {isAiTranslating ? (
+                  <Spinner size="sm" color="current" /> 
+                ) : (
+                  <Sparkles className="w-4 h-4" />
+                )}
+                {isAiTranslating ? "Translating..." : "AI Translate"}
+              </Button>
               </div>
             </div>
           )}
