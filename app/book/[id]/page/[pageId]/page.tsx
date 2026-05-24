@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ChevronLeft, Save, Sparkles, Undo, Redo, Check, X, Power } from "lucide-react";
+import { ChevronLeft, Save, Sparkles, Undo, Redo, Check, X, Power, WandSparkles } from "lucide-react";
 import { Roboto_Serif, Sarabun } from "next/font/google";
 import { useBooks } from "../../../../context/BookContext";
 // 🚀 ดึง toast มาจาก heroui ตาม Doc มาตรฐาน
@@ -227,20 +227,36 @@ export default function TranslatePage() {
             <div className="flex items-center gap-3">
               <Switch 
                 isSelected={isAiMode} 
-                onChange={setIsAiMode} 
-                className="group flex items-center gap-3 cursor-pointer"
+                onChange={() => setIsAiMode(!isAiMode)} 
+                size="lg" 
+                className="cursor-pointer"
               >
-                <Switch.Content>
-                  <div className="flex flex-col items-end select-none text-right mr-1">
-                    <span className="text-[13px] font-bold text-slate-800 leading-tight">AI Translation</span>
-                    <span className="text-[11px] font-medium text-slate-400">Let AI enhance your translation</span>
+                {/* 🚀 ท่า Render Props ของ HeroUI จัดการ Spacing & Motion ให้เอง 100% */}
+                {({ isSelected }) => (
+                  <div className="flex items-center gap-3">
+                    
+                    {/* ฝั่งข้อความ */}
+                    <div className="flex flex-col items-end select-none text-right">
+                      <span className="text-[13px] font-bold text-slate-800 leading-tight">AI Translation</span>
+                      <span className="text-[11px] font-medium text-slate-400">Let AI enhance your translation</span>
+                    </div>
+
+                    {/* ฝั่งปุ่มสวิตช์ */}
+                    <Switch.Control className={`transition-colors duration-300 ${isSelected ? "bg-blue-600" : "bg-slate-200"}`}>
+                      <Switch.Thumb className="bg-white shadow-sm flex items-center justify-center">
+                        <Switch.Icon>
+                          {isSelected ? (
+                            // 🚀 ใช้ StarFill (แบบทึบ) แทน Sparkles เส้นจะได้ไม่บางและไม่ดูแตกครับ
+                            <Sparkles className="w-3.5 h-3.5 text-blue-600 opacity-100" />
+                          ) : (
+                            <Power className="w-3.5 h-3.5 text-slate-400 opacity-70" />
+                          )}
+                        </Switch.Icon>
+                      </Switch.Thumb>
+                    </Switch.Control>
+
                   </div>
-                </Switch.Content>
-                <Switch.Control className="relative inline-flex h-6 w-11 items-center rounded-full bg-slate-200 transition-colors group-data-[selected=true]:bg-blue-600 shadow-inner">
-                  <Switch.Thumb className="flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-sm transition-transform duration-300 translate-x-0.5 group-data-[selected=true]:translate-x-0.5">
-                    {isAiMode ? <Sparkles className="w-3 h-3 text-blue-600" /> : <Power className="w-3 h-3 text-slate-400" />}
-                  </Switch.Thumb>
-                </Switch.Control>
+                )}
               </Switch>
             </div>
           </div>
