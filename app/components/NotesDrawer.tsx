@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useBooks, VocabularyItem } from "../context/BookContext";
+import { useBooks, VocabularyItem, NoteItem } from "../context/BookContext";
 import { Volume2, Edit, Trash2, Plus, X, Bold, Italic, Underline, Strikethrough, AlignLeft, AlignCenter, AlignRight, FileX, ChevronDown, ChevronUp, Notebook } from "lucide-react";
 import { toast, Spinner } from "@heroui/react";
 import { Roboto_Serif, Sarabun } from "next/font/google";
@@ -24,8 +24,8 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
   const [activeTab, setActiveTab] = useState<"notes" | "vocabulary">("notes");
 
   // Load initial state
-  const [noteText, setNoteText] = useState(page?.notebookText || "");
   const [vocabList, setVocabList] = useState<VocabularyItem[]>(page?.vocabularies || []);
+  const [notes, setNotes] = useState<NoteItem[]>(page?.notes || []);
   
   const [isAddingVocab, setIsAddingVocab] = useState(false);
   const [newVocabWord, setNewVocabWord] = useState("");
@@ -34,25 +34,12 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
   const [previewVocab, setPreviewVocab] = useState<Partial<VocabularyItem> | null>(null);
   const [expandedVocabs, setExpandedVocabs] = useState<Record<string, boolean>>({});
 
+  const [isAddingNote, setIsAddingNote] = useState(false);
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
+  const [currentNoteText, setCurrentNoteText] = useState("");
+  const [deleteConfirm, setDeleteConfirm] = useState<{ type: 'note' | 'vocab', id: string } | null>(null);
+
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
-  const autoSaveTimer = useRef<NodeJS.Timeout | null>(null);
-
-  // 🚀 Auto-Save Logic for Notes
-  const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const val = e.target.value;
-    setNoteText(val);
-
-    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
-    autoSaveTimer.current = setTimeout(() => {
-      if (book) {
-        const updatedPages = book.pages.map(p =>
-          p.id === pageId ? { ...p, notebookText: val } : p
-        );
-        updateBook(bookId, { pages: updatedPages });
-        toast.success("Auto-saved Notes", { description: "Your notes have been saved." });
-      }
-    }, 1500);
-  };
 
   // 🚀 Auto-Translate Logic for Vocabulary
   useEffect(() => {
@@ -139,24 +126,66 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
     if (!textarea) return;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
-    const selected = noteText.substring(start, end);
-    const before = noteText.substring(0, start);
-    const after = noteText.substring(end);
+    const selected = currentNoteText.substring(start, end);
+    const before = currentNoteText.substring(0, start);
+    const after = currentNoteText.substring(end);
     const val = before + prefix + selected + suffix + after;
-    setNoteText(val);
+    setCurrentNoteText(val);
     
-    // Auto-save format changes
-    if (book) {
-      const updatedPages = book.pages.map(p =>
-        p.id === pageId ? { ...p, notebookText: val } : p
-      );
-      updateBook(bookId, { pages: updatedPages });
-    }
-
     setTimeout(() => {
       textarea.focus();
       textarea.setSelectionRange(start + prefix.length, end + prefix.length);
     }, 0);
+  };
+
+  const handleSaveNote = () => {
+    if (!currentNoteText.trim() || !book || !page) return;
+    
+    let newNotes = [...notes];
+    if (editingNoteId) {
+      newNotes = newNotes.map(n => n.id === editingNoteId ? { ...n, content: currentNoteText } : n);
+    } else {
+      newNotes = [{ id: Date.now().toString(), content: currentNoteText, createdAt: Date.now() }, ...newNotes];
+    }
+
+    setNotes(newNotes);
+    const updatedPages = book.pages.map(p =>
+      p.id === pageId ? { ...p, notes: newNotes } : p
+    );
+    updateBook(bookId, { pages: updatedPages });
+
+    setIsAddingNote(false);
+    setEditingNoteId(null);
+    setCurrentNoteText("");
+    toast.success(editingNoteId ? "Note updated!" : "Note added!");
+  };
+
+  const handleDeleteNote = (id: string) => {
+    if (!book || !page) return;
+    const newNotes = notes.filter(n => n.id !== id);
+    setNotes(newNotes);
+    const updatedPages = book.pages.map(p =>
+      p.id === pageId ? { ...p, notes: newNotes } : p
+    );
+    updateBook(bookId, { pages: updatedPages });
+    toast.success("Note deleted!");
+  };
+
+  const renderMarkdown = (text: string) => {
+    let html = text
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/__(.*?)__/g, '<u>$1</u>')
+      .replace(/~~(.*?)~~/g, '<del>$1</del>')
+      .replace(/\n/g, '<br />');
+
+    html = html.replace(/&lt;div align='left'&gt;(.*?)&lt;\/div&gt;/g, '<div style="text-align: left;">$1</div>');
+    html = html.replace(/&lt;div align='center'&gt;(.*?)&lt;\/div&gt;/g, '<div style="text-align: center;">$1</div>');
+    html = html.replace(/&lt;div align='right'&gt;(.*?)&lt;\/div&gt;/g, '<div style="text-align: right;">$1</div>');
+
+    return { __html: html };
   };
 
   return (
@@ -188,25 +217,39 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
             >
               {/* Header */}
               <div className="p-0 shrink-0 border-b border-slate-100 flex flex-col">
-                {!isAddingVocab ? (
+                {!isAddingVocab && !isAddingNote && !editingNoteId ? (
                   <div className="px-5 py-4 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-slate-900 tracking-tight">Notes</h2>
-                    {activeTab === "vocabulary" && (
+                    {activeTab === "vocabulary" ? (
                       <button 
                         onClick={() => setIsAddingVocab(true)}
                         className="flex items-center gap-1 text-sm font-bold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-full shadow-sm transition-colors"
                       >
                         <Plus className="w-4 h-4" /> Add
                       </button>
+                    ) : (
+                      <button 
+                        onClick={() => {
+                          setIsAddingNote(true);
+                          setCurrentNoteText("");
+                        }}
+                        className="flex items-center gap-1 text-sm font-bold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-full shadow-sm transition-colors"
+                      >
+                        <Plus className="w-4 h-4" /> Add Note
+                      </button>
                     )}
                   </div>
                 ) : (
                   <div className="px-5 py-4 flex justify-between items-center bg-white">
-                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">Add vocabulary</h2>
+                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+                      {isAddingVocab ? "Add vocabulary" : (editingNoteId ? "Edit note" : "Add note")}
+                    </h2>
                     <div className="flex items-center gap-3">
                       <button 
                         onClick={() => {
                           setIsAddingVocab(false);
+                          setIsAddingNote(false);
+                          setEditingNoteId(null);
                           setNewVocabWord("");
                           setNewVocabRemarks("");
                           setPreviewVocab(null);
@@ -216,9 +259,9 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                         Cancel
                       </button>
                       <button 
-                        onClick={handleSaveVocab}
-                        disabled={!newVocabWord || !previewVocab || isTranslating}
-                        className={`bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded-full font-bold text-sm transition-colors ${(!newVocabWord || !previewVocab || isTranslating) ? "opacity-50 cursor-not-allowed" : ""}`}
+                        onClick={activeTab === "vocabulary" ? handleSaveVocab : handleSaveNote}
+                        disabled={activeTab === "vocabulary" ? (!newVocabWord || !previewVocab || isTranslating) : !currentNoteText.trim()}
+                        className={`bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded-full font-bold text-sm transition-colors ${(activeTab === "vocabulary" && (!newVocabWord || !previewVocab || isTranslating)) || (activeTab === "notes" && !currentNoteText.trim()) ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         Done
                       </button>
@@ -227,7 +270,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                 )}
 
                 {/* Tab Switcher */}
-                {!isAddingVocab && (
+                {!isAddingVocab && !isAddingNote && !editingNoteId && (
                   <div className="px-5 pb-4">
                     <div className="flex bg-slate-100 p-1 rounded-full w-full">
                       <button
@@ -250,33 +293,61 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
               <div className="p-0 overflow-hidden flex flex-col relative h-full bg-white">
                 {/* NOTES TAB */}
                 {!isAddingVocab && activeTab === "notes" && (
-                  <div className="flex-1 flex flex-col h-full px-5 py-5 overflow-hidden">
-                    <div className="flex-1 flex flex-col bg-[#f3f4f6] rounded-xl overflow-hidden">
-                      {/* Toolbar inside gray container */}
-                      <div className="px-3 py-2 flex items-center gap-1">
-                        <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors" onClick={() => insertFormat("**", "**")}><Bold className="w-4 h-4"/></button>
-                        <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors" onClick={() => insertFormat("*", "*")}><Italic className="w-4 h-4"/></button>
-                        <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors" onClick={() => insertFormat("__", "__")}><Underline className="w-4 h-4"/></button>
-                        <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors" onClick={() => insertFormat("~~", "~~")}><Strikethrough className="w-4 h-4"/></button>
-                        <div className="w-px h-4 bg-slate-300 mx-1"></div>
-                        <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors" onClick={() => insertFormat("<div align='left'>", "</div>")}><AlignLeft className="w-4 h-4"/></button>
-                        <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors" onClick={() => insertFormat("<div align='center'>", "</div>")}><AlignCenter className="w-4 h-4"/></button>
-                        <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors" onClick={() => insertFormat("<div align='right'>", "</div>")}><AlignRight className="w-4 h-4"/></button>
+                  <div className="flex-1 h-full flex flex-col px-5 py-5 overflow-y-auto">
+                    {(isAddingNote || editingNoteId) ? (
+                      <div className="flex-1 flex flex-col bg-[#f3f4f6] rounded-xl overflow-hidden min-h-[300px]">
+                        {/* Toolbar inside gray container */}
+                        <div className="px-3 py-2 flex items-center gap-1 shrink-0 overflow-x-auto">
+                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("**", "**")}><Bold className="w-4 h-4"/></button>
+                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("*", "*")}><Italic className="w-4 h-4"/></button>
+                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("__", "__")}><Underline className="w-4 h-4"/></button>
+                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("~~", "~~")}><Strikethrough className="w-4 h-4"/></button>
+                          <div className="w-px h-4 bg-slate-300 mx-1 shrink-0"></div>
+                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("<div align='left'>", "</div>")}><AlignLeft className="w-4 h-4"/></button>
+                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("<div align='center'>", "</div>")}><AlignCenter className="w-4 h-4"/></button>
+                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("<div align='right'>", "</div>")}><AlignRight className="w-4 h-4"/></button>
+                        </div>
+                        {/* Textarea inside gray container */}
+                        <textarea
+                          id="noteTextarea"
+                          className="flex-1 w-full p-4 resize-none outline-none text-slate-800 leading-relaxed placeholder:text-slate-400 bg-transparent text-sm font-medium"
+                          placeholder="Enter your note here (Markdown formatting supported)"
+                          value={currentNoteText}
+                          onChange={(e) => setCurrentNoteText(e.target.value)}
+                        />
                       </div>
-                      {/* Textarea inside gray container */}
-                      <textarea
-                        id="noteTextarea"
-                        className="flex-1 w-full p-4 resize-none outline-none text-slate-800 leading-relaxed placeholder:text-slate-400 bg-transparent text-sm font-medium"
-                        placeholder="Enter notes here."
-                        value={noteText}
-                        onChange={handleNoteChange}
-                      />
-                    </div>
+                    ) : notes.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center pt-20 text-center">
+                        <div className="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-4">
+                          <FileX className="w-6 h-6 text-slate-400" strokeWidth={1.5} />
+                        </div>
+                        <p className="text-slate-800 font-bold text-base mb-1">No notes added!</p>
+                        <p className="text-slate-500 text-sm">You can click add note to create a new note.</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-4 pb-8">
+                        {notes.map(note => (
+                          <div key={note.id} className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm relative group">
+                            <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5">
+                              <button onClick={() => { setEditingNoteId(note.id); setCurrentNoteText(note.content); }} className="p-1.5 text-slate-400 hover:text-blue-600 bg-white shadow-sm border border-slate-100 hover:bg-blue-50 rounded-full transition-colors"><Edit className="w-3.5 h-3.5"/></button>
+                              <button onClick={() => setDeleteConfirm({ type: 'note', id: note.id })} className="p-1.5 text-slate-400 hover:text-red-600 bg-white shadow-sm border border-slate-100 hover:bg-red-50 rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5"/></button>
+                            </div>
+                            <div 
+                              className="text-slate-800 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-strong:font-bold prose-em:italic"
+                              dangerouslySetInnerHTML={renderMarkdown(note.content)}
+                            />
+                            <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-medium text-slate-400">
+                              {new Date(note.createdAt).toLocaleDateString()} {new Date(note.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
 
                 {/* VOCABULARY TAB */}
-                {!isAddingVocab && activeTab === "vocabulary" && (
+                {!isAddingVocab && !isAddingNote && !editingNoteId && activeTab === "vocabulary" && (
                   <div className="flex-1 h-full flex flex-col px-5 py-5 overflow-y-auto">
                     {vocabList.length === 0 ? (
                       <div className="flex flex-col items-center justify-center pt-20 text-center">
@@ -295,7 +366,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                               <div className="flex justify-between items-start mb-1">
                                 <h4 className="text-[17px] font-bold text-slate-900 tracking-tight">{vocab.word}</h4>
                                 <div className="flex gap-1.5">
-                                  <button onClick={() => handleDeleteVocab(vocab.id)} className="p-1.5 text-slate-400 hover:text-red-600 bg-slate-50 hover:bg-slate-100 rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5"/></button>
+                                  <button onClick={() => setDeleteConfirm({ type: 'vocab', id: vocab.id })} className="p-1.5 text-slate-400 hover:text-red-600 bg-slate-50 hover:bg-slate-100 rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5"/></button>
                                 </div>
                               </div>
 
@@ -403,6 +474,54 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
               </div>
             </motion.div>
           </>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {deleteConfirm && (
+          <div className="fixed inset-0 z-[150] flex items-center justify-center">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+              onClick={() => setDeleteConfirm(null)}
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="relative bg-white rounded-2xl shadow-2xl w-[90%] max-w-[320px] p-6 text-center z-10"
+            >
+              <div className="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Delete this item?</h3>
+              <p className="text-sm text-slate-500 mb-6">This action cannot be undone. Are you sure you want to delete it?</p>
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setDeleteConfirm(null)}
+                  className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={() => {
+                    if (deleteConfirm.type === 'note') {
+                      handleDeleteNote(deleteConfirm.id);
+                    } else {
+                      handleDeleteVocab(deleteConfirm.id);
+                    }
+                    setDeleteConfirm(null);
+                  }}
+                  className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-red-500 text-white hover:bg-red-600 transition-colors shadow-sm shadow-red-500/20"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>

@@ -14,6 +14,12 @@ export interface VocabularyItem {
   createdAt: number;
 }
 
+export interface NoteItem {
+  id: string;
+  content: string;
+  createdAt: number;
+}
+
 // 🚀 อัปเกรด: เพิ่มกล่องเก็บข้อความต้นฉบับและคำแปล
 export interface PageItem {
   id: string;
@@ -21,6 +27,7 @@ export interface PageItem {
   originalText: string;
   translatedText: string;
   notebookText?: string;
+  notes?: NoteItem[];
   vocabularies?: VocabularyItem[];
 }
 
