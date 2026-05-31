@@ -2,12 +2,26 @@
 
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
+export interface VocabularyItem {
+  id: string;
+  word: string;
+  phonetic: string;
+  thaiReading: string;
+  partOfSpeech: string;
+  translation: string;
+  examples: string[];
+  remarks: string;
+  createdAt: number;
+}
+
 // 🚀 อัปเกรด: เพิ่มกล่องเก็บข้อความต้นฉบับและคำแปล
 export interface PageItem {
   id: string;
   title: string;
   originalText: string;
   translatedText: string;
+  notebookText?: string;
+  vocabularies?: VocabularyItem[];
 }
 
 export interface BookItem {

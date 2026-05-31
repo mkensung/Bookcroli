@@ -8,6 +8,7 @@ import { Roboto_Serif, Sarabun } from "next/font/google";
 import { useBooks } from "../../../../context/BookContext";
 // 🚀 ดึง toast มาจาก heroui ตาม Doc มาตรฐาน
 import { Switch, toast, Button, Spinner, TextArea } from "@heroui/react";
+import { NotesDrawer } from "../../../../components/NotesDrawer";
 
 const robotoSerif = Roboto_Serif({ subsets: ["latin"], weight: ["400"] });
 const sarabun = Sarabun({ subsets: ["thai"], weight: ["300"] });
@@ -27,8 +28,8 @@ export default function TranslatePage() {
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
 
   const [isAiMode, setIsAiMode] = useState(false);
-  const [aiInputText, setAiInputText] = useState(""); 
-  const [aiPreviewText, setAiPreviewText] = useState(""); 
+  const [aiInputText, setAiInputText] = useState("");
+  const [aiPreviewText, setAiPreviewText] = useState("");
   const [isAiTranslating, setIsAiTranslating] = useState(false);
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export default function TranslatePage() {
         p.id === pageId ? { ...p, originalText, translatedText } : p
       );
       const translatedCount = updatedPages.filter(p => p.translatedText.trim() !== "").length;
-      
+
       updateBook(bookId, { pages: updatedPages, translatedPages: translatedCount });
 
       // 🚀 เด้ง Toast เบาๆ แจ้งว่าเซฟแล้ว (ใช้ Toast ของ HeroUI)
@@ -83,7 +84,7 @@ export default function TranslatePage() {
       p.id === pageId ? { ...p, originalText, translatedText } : p
     );
     const translatedCount = updatedPages.filter(p => p.translatedText.trim() !== "").length;
-    
+
     updateBook(bookId, { pages: updatedPages, translatedPages: translatedCount });
 
     toast.success("Saved successful!", {
@@ -91,7 +92,7 @@ export default function TranslatePage() {
       actionProps: {
         children: "Got it!",
         className: "bg-success text-success-foreground",
-        onPress: () => toast.clear(), 
+        onPress: () => toast.clear(),
       },
     });
   };
@@ -126,10 +127,10 @@ export default function TranslatePage() {
       toast.danger("Please enter text to translate.");
       return;
     }
-  
+
     setIsAiTranslating(true);
     setAiPreviewText(""); // 🚀 ล้างหน้าจอ Preview ให้สะอาดก่อนเริ่มพิมพ์ใหม่
-    
+
     try {
       const response = await fetch("/api/translate", {
         method: "POST",
@@ -140,33 +141,33 @@ export default function TranslatePage() {
           to: book.translationLang,
         }),
       });
-  
+
       if (!response.ok) throw new Error("Translation API failed");
-  
+
       // 🚀 ท่ารับข้อมูลแบบ Streaming ค่อยๆ อ่านจากท่อทีละก้อน
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
       let done = false;
       let currentText = ""; // ตัวแปรชั่วคราวสำหรับเก็บข้อความที่ต่อกันแล้ว
-  
+
       while (!done && reader) {
         const { value, done: doneReading } = await reader.read();
         done = doneReading;
-        
+
         if (value) {
           // ถอดรหัสสัญญาณเป็นข้อความ แล้วเอาไปต่อท้ายของเดิม
           const chunkValue = decoder.decode(value, { stream: true });
           currentText += chunkValue;
-          
+
           // 🚀 อัปเดต State ให้ UI ขยับทันที!
-          setAiPreviewText(currentText); 
+          setAiPreviewText(currentText);
         }
       }
-  
+
       toast.success("AI Translation complete!", {
         description: "You can now review and commit the translation.",
       });
-  
+
     } catch (error) {
       toast.danger("AI Error", {
         description: "Could not connect to Gemini AI or streaming failed.",
@@ -195,7 +196,7 @@ export default function TranslatePage() {
 
     setAiInputText("");
     setAiPreviewText("");
-    
+
     toast.success("Translation accepted!");
   };
 
@@ -212,9 +213,12 @@ export default function TranslatePage() {
           </Link>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">{page.title}</h1>
         </div>
-        <button type="button" onClick={handleSave} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full font-bold shadow-sm transition-colors text-sm">
-          <Save className="w-4 h-4" /> Save
-        </button>
+        <div className="flex items-center gap-3">
+          <NotesDrawer bookId={bookId} pageId={pageId} />
+          <button type="button" onClick={handleSave} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full font-bold shadow-sm transition-colors text-sm">
+            <Save className="w-4 h-4" /> Save
+          </button>
+        </div>
       </header>
 
       <main className="flex-1 flex flex-col md:flex-row gap-4 p-6 overflow-hidden">
@@ -223,18 +227,18 @@ export default function TranslatePage() {
             <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-slate-100 text-[13px] font-bold text-slate-600">
               {book.originalLang}
             </div>
-            
+
             <div className="flex items-center gap-3">
-              <Switch 
-                isSelected={isAiMode} 
-                onChange={() => setIsAiMode(!isAiMode)} 
-                size="lg" 
+              <Switch
+                isSelected={isAiMode}
+                onChange={() => setIsAiMode(!isAiMode)}
+                size="lg"
                 className="cursor-pointer"
               >
                 {/* 🚀 ท่า Render Props ของ HeroUI จัดการ Spacing & Motion ให้เอง 100% */}
                 {({ isSelected }) => (
                   <div className="flex items-center gap-3">
-                    
+
                     {/* ฝั่งข้อความ */}
                     <div className="flex flex-col items-end select-none text-right">
                       <span className="text-[13px] font-bold text-slate-800 leading-tight">AI Translation</span>
@@ -260,7 +264,7 @@ export default function TranslatePage() {
               </Switch>
             </div>
           </div>
-          
+
           <textarea
             placeholder="Original language"
             value={originalText}
@@ -274,9 +278,9 @@ export default function TranslatePage() {
                 value={aiInputText}
                 onChange={(e) => {
                   setAiInputText(e.target.value);
-                  
+
                   // 🚀 ทริค Auto-expand แบบ Gemini: ให้กล่องยืดตาม Text แต่ไม่เกิน 150px (ประมาณ 5 บรรทัด)
-                  e.target.style.height = "auto"; 
+                  e.target.style.height = "auto";
                   e.target.style.height = `${Math.min(e.target.scrollHeight, 150)}px`;
                 }}
                 placeholder="Type a sentence to translate with AI..."
@@ -284,19 +288,15 @@ export default function TranslatePage() {
                 className={`w-full min-h-[64px] resize-y text-slate-700 bg-slate-50 border border-slate-200 focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-100 rounded-2xl transition-all ${robotoSerif.className}`}
               />
               <div className="flex justify-end">
-              <Button 
-                onPress={handleAiTranslate}
-                isDisabled={isAiTranslating}
-                variant="secondary"
-                className="font-bold px-5 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center gap-2"
-              >
-                {isAiTranslating ? (
-                  <Spinner size="sm" color="current" /> 
-                ) : (
+                <Button
+                  onPress={handleAiTranslate}
+                  isDisabled={isAiTranslating}
+                  variant="secondary"
+                  className="font-bold px-5 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center gap-2"
+                >
                   <Sparkles className="w-4 h-4" />
-                )}
-                {isAiTranslating ? "Translating..." : "AI Translate"}
-              </Button>
+                  AI Translate
+                </Button>
               </div>
             </div>
           )}
@@ -306,7 +306,7 @@ export default function TranslatePage() {
           <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-100 text-[13px] font-bold text-blue-600 w-fit mb-6 shrink-0">
             {book.translationLang}
           </div>
-          
+
           <textarea
             placeholder="Translation language."
             value={translatedText}
@@ -314,21 +314,31 @@ export default function TranslatePage() {
             className={`flex-1 w-full resize-none outline-none text-slate-800 text-lg leading-loose placeholder:text-slate-400 bg-transparent mb-4 ${sarabun.className}`}
           />
 
-          {isAiMode && aiPreviewText && (
+          {isAiMode && (isAiTranslating || aiPreviewText) && (
             <div className="shrink-0 mt-4 p-5 bg-white border border-blue-200 rounded-2xl shadow-lg shadow-blue-100/50 flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-blue-500" />
-                <span className="text-xs font-bold text-blue-500 uppercase tracking-wider">AI Translation Preview</span>
+                {isAiTranslating ? (
+                  <Spinner size="sm" color="current" className="text-blue-600" />
+                ) : (
+                  <Sparkles className="w-4 h-4 text-blue-500" />
+                )}
+                <span className="text-xs font-bold text-blue-500 uppercase tracking-wider">
+                  {isAiTranslating ? "AI Translating..." : "AI Translation Preview"}
+                </span>
               </div>
-              <p className={`text-slate-800 text-lg leading-relaxed ${sarabun.className}`}>{aiPreviewText}</p>
-              <div className="flex justify-end gap-2 mt-2 border-t border-slate-50 pt-4">
-                <button type="button" onClick={handleCancelTranslation} className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"><X className="w-4 h-4" /> Cancel</button>
-                <button type="button" onClick={handleAcceptTranslation} className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-200 transition-all active:scale-95"><Check className="w-4 h-4" /> Commit</button>
-              </div>
+              {aiPreviewText && (
+                <p className={`text-slate-800 text-lg leading-relaxed ${sarabun.className}`}>{aiPreviewText}</p>
+              )}
+              {!isAiTranslating && aiPreviewText && (
+                <div className="flex justify-end gap-2 mt-2 border-t border-slate-50 pt-4">
+                  <button type="button" onClick={handleCancelTranslation} className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"><X className="w-4 h-4" /> Cancel</button>
+                  <button type="button" onClick={handleAcceptTranslation} className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-200 transition-all active:scale-95"><Check className="w-4 h-4" /> Commit</button>
+                </div>
+              )}
             </div>
           )}
 
-          {!aiPreviewText && (
+          {!isAiTranslating && !aiPreviewText && (
             <div className="flex justify-end gap-3 shrink-0 mt-4">
               <button type="button" onClick={handleUndo} disabled={historyIndex <= 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex <= 0 ? "bg-slate-100 text-slate-400 cursor-not-allowed border border-transparent" : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shadow-sm"}`}><Undo className="w-4 h-4" /> Undo</button>
               <button type="button" onClick={handleRedo} disabled={historyIndex >= history.length - 1} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex >= history.length - 1 ? "bg-slate-100 text-slate-400 cursor-not-allowed border border-transparent" : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shadow-sm"}`}><Redo className="w-4 h-4" /> Redo</button>
