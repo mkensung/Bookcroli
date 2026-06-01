@@ -3,9 +3,9 @@
 import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { Select, ListBox } from "@heroui/react";
-import { 
-  BookOpen, Book, LayoutGrid, Bookmark, Search, 
-  Bell, Settings, Plus, Image as ImageIcon, X, Trash2, ChevronDown 
+import {
+  BookOpen, Book, LayoutGrid, Bookmark, Search,
+  Bell, Settings, Plus, Image as ImageIcon, X, Trash2, ChevronDown
 } from "lucide-react";
 import { useBooks } from "./context/BookContext";
 import { toast } from "@heroui/react";
@@ -22,7 +22,7 @@ const languages = [
 
 export default function Home() {
   const { books, addBook, deleteBook } = useBooks();
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [bookToDelete, setBookToDelete] = useState<number | null>(null);
@@ -53,9 +53,9 @@ export default function Home() {
   const handleCloseModal = () => {
     setIsModalOpen(false); // สั่งปิดหน้าต่าง
     // ล้างข้อมูลทุกช่องให้กลับเป็นค่าเริ่มต้น
-    setFormData({ 
-      title: "", author: "", totalPages: "", plot: "", 
-      originalLang: "", translationLang: "", coverImage: null 
+    setFormData({
+      title: "", author: "", totalPages: "", plot: "",
+      originalLang: "", translationLang: "", coverImage: null
     });
     setErrors({}); // ล้างแจ้งเตือน Error สีแดงทิ้งด้วย
   };
@@ -71,7 +71,7 @@ export default function Home() {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       toast.danger("Please fill in all required fields.");
-      return; 
+      return;
     }
 
     addBook({
@@ -83,7 +83,7 @@ export default function Home() {
       translationLang: formData.translationLang,
       totalPages: Number(formData.totalPages) || 100,
     });
-    
+
     toast.success("Book added successfully!");
     handleCloseModal(); // 🚀 เรียกใช้ฟังก์ชันล้างความจำตอนบันทึกสำเร็จด้วยเลย โค้ดจะได้คลีนขึ้น!
   };
@@ -98,7 +98,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans pb-20">
-      
+
       {/* --- Floating Navigation Bar --- */}
       <div className="pt-6 px-6 max-w-7xl mx-auto">
         <header className="flex items-center justify-between px-6 py-3 bg-white border border-slate-200 rounded-full shadow-sm">
@@ -152,15 +152,17 @@ export default function Home() {
               return (
                 <Link href={`/book/${book.id}`} key={book.id} className="block w-full">
                   <div className="group bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all relative flex flex-col gap-4 cursor-pointer h-full">
-                    <div className="w-full aspect-2/3 bg-slate-100 rounded-xl flex items-center justify-center border border-slate-200 overflow-hidden relative">
-                      {book.coverImage ? (
-                        <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
-                      ) : (
-                        <BookOpen className="w-10 h-10 stroke-1 text-slate-300" />
-                      )}
-                      <button 
+                    <div className="relative">
+                      <div className="w-full aspect-2/3 bg-slate-100 rounded-xl flex items-center justify-center border border-slate-200 overflow-hidden">
+                        {book.coverImage ? (
+                          <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
+                        ) : (
+                          <BookOpen className="w-14 h-14 stroke-1 text-slate-300" />
+                        )}
+                      </div>
+                      <button
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setBookToDelete(book.id); }}
-                        className="absolute top-2 right-2 w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-md scale-90 group-hover:scale-100 z-10"
+                        className="absolute -top-3 -right-3 w-11 h-11 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10"
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
@@ -204,7 +206,7 @@ export default function Home() {
             <div className="flex flex-col gap-6">
               <div className="flex flex-col md:flex-row gap-8 items-stretch">
                 <div className="w-full md:w-1/3 flex flex-col">
-                  <div 
+                  <div
                     onClick={() => fileInputRef.current?.click()}
                     className="flex-1 w-full bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-slate-500 cursor-pointer hover:bg-slate-100 transition-all hover:border-blue-300 hover:text-blue-500 p-4 text-center min-h-[240px] group"
                   >
@@ -224,7 +226,7 @@ export default function Home() {
                 <div className="w-full md:w-2/3 flex flex-col gap-4">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-semibold text-slate-800">Book name <span className="text-red-500">*</span></label>
-                    <input 
+                    <input
                       type="text" placeholder="Enter book name" value={formData.title}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("title", e.target.value)}
                       className={`px-4 py-3 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all font-medium border ${errors.title ? 'border-red-400' : 'border-slate-200'}`}
@@ -234,7 +236,7 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-sm font-semibold text-slate-800">Author name <span className="text-red-500">*</span></label>
-                      <input 
+                      <input
                         type="text" placeholder="Enter author name" value={formData.author}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("author", e.target.value)}
                         className={`px-4 py-3 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-medium border transition-all ${errors.author ? 'border-red-400' : 'border-slate-200'}`}
@@ -242,7 +244,7 @@ export default function Home() {
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-sm font-semibold text-slate-800">Total page <span className="text-red-500">*</span></label>
-                      <input 
+                      <input
                         type="number" placeholder="e.g. 500" value={formData.totalPages}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("totalPages", e.target.value)}
                         className={`px-4 py-3 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-medium border transition-all ${errors.totalPages ? 'border-red-400' : 'border-slate-200'}`}
@@ -252,7 +254,7 @@ export default function Home() {
 
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-semibold text-slate-800">Plot info</label>
-                    <textarea 
+                    <textarea
                       placeholder="Enter book plot or description..." rows={3} value={formData.plot}
                       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange("plot", e.target.value)}
                       className="px-4 py-3 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all font-medium border border-slate-200 resize-none"
@@ -262,7 +264,7 @@ export default function Home() {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                
+
                 {/* 1. Original Language */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-semibold text-slate-800">Original language <span className="text-red-500">*</span></label>
@@ -280,17 +282,17 @@ export default function Home() {
                         <ChevronDown className="w-4 h-4 text-slate-500" />
                       </Select.Indicator>
                     </Select.Trigger>
-                    <Select.Popover 
-                      placement="bottom" 
-                      shouldFlip={false} 
+                    <Select.Popover
+                      placement="bottom"
+                      shouldFlip={false}
                       className="w-(--trigger-width) bg-white text-slate-800 rounded-xl shadow-xl border border-slate-100 max-h-[140px] overflow-y-auto overflow-x-hidden"
                     >
                       <ListBox items={languages} aria-label="Original Language Options" className="p-1 flex flex-col gap-1 outline-none">
                         {(lang) => (
-                          <ListBox.Item 
-                            key={lang.value} 
-                            id={lang.value} 
-                            textValue={lang.label} 
+                          <ListBox.Item
+                            key={lang.value}
+                            id={lang.value}
+                            textValue={lang.label}
                             className="w-full px-3 py-2 rounded-lg text-slate-700 font-medium cursor-pointer hover:bg-slate-100 hover:text-blue-600 transition-colors outline-none"
                           >
                             {lang.label}
@@ -318,17 +320,17 @@ export default function Home() {
                         <ChevronDown className="w-4 h-4 text-slate-500" />
                       </Select.Indicator>
                     </Select.Trigger>
-                    <Select.Popover 
-                      placement="bottom" 
-                      shouldFlip={false} 
+                    <Select.Popover
+                      placement="bottom"
+                      shouldFlip={false}
                       className="w-(--trigger-width) bg-white text-slate-800 rounded-xl shadow-xl border border-slate-100 max-h-[140px] overflow-y-auto overflow-x-hidden"
                     >
                       <ListBox items={languages} aria-label="Translation Language Options" className="p-1 flex flex-col gap-1 outline-none">
                         {(lang) => (
-                          <ListBox.Item 
-                            key={lang.value} 
-                            id={lang.value} 
-                            textValue={lang.label} 
+                          <ListBox.Item
+                            key={lang.value}
+                            id={lang.value}
+                            textValue={lang.label}
                             className="w-full px-3 py-2 rounded-lg text-slate-700 font-medium cursor-pointer hover:bg-slate-100 hover:text-blue-600 transition-colors outline-none"
                           >
                             {lang.label}

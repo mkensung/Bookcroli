@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Select, ListBox } from "@heroui/react";
 import { 
   BookOpen, Book, LayoutGrid, Bookmark, Search, Bell, Settings, 
-  ChevronLeft, Edit3, Trash2, Plus, X, Eye, Image as ImageIcon, ChevronDown
+  ChevronLeft, Edit, Trash2, Plus, X, Eye, Image as ImageIcon, ChevronDown
 } from "lucide-react";
 import { useBooks, PageItem } from "../../context/BookContext";
 import { toast } from "@heroui/react";
@@ -179,7 +179,7 @@ export default function BookDetailsPage() {
 
         <div className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm mb-12 flex flex-col md:flex-row gap-8 relative">
           <div className="absolute top-8 right-8 flex items-center gap-1">
-            <button onClick={handleOpenEditModal} className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-full transition-colors border border-slate-200"><Edit3 className="w-4 h-4" /> Edit book</button>
+            <button onClick={handleOpenEditModal} className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 rounded-full transition-colors border border-slate-200"><Edit className="w-4 h-4" /> Edit book</button>
             <button onClick={() => setIsDeleteBookModalOpen(true)} className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 rounded-full transition-colors border border-slate-200"><Trash2 className="w-4 h-4" /> Delete</button>
           </div>
 
@@ -249,7 +249,7 @@ export default function BookDetailsPage() {
                       {editingPageId !== page.id && (
                         <>
                           <Link href={`/book/${book.id}/page/${page.id}`} className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors cursor-pointer"><Eye className="w-4 h-4" /></Link>
-                          <button onClick={() => startEditing(page)} className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"><Edit3 className="w-4 h-4" /></button>
+                          <button onClick={() => startEditing(page)} className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"><Edit className="w-4 h-4" /></button>
                         </>
                       )}
                       <button onClick={() => setPageToDelete(page.id)} className="w-8 h-8 flex items-center justify-center bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors"><Trash2 className="w-4 h-4" /></button>
@@ -264,7 +264,7 @@ export default function BookDetailsPage() {
                       <input autoFocus type="text" placeholder="Enter the content" value={newPageTitle} onChange={(e) => setNewPageTitle(e.target.value)} onKeyDown={handleKeyDownNew} onBlur={handleSaveNewPage} className="w-full px-4 py-2 bg-white border border-blue-200 rounded-xl outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm font-bold text-slate-800 transition-all placeholder:font-medium placeholder:text-slate-400"/>
                     </div>
                     <div className="flex items-center justify-end gap-2">
-                      <div className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-400 rounded-full"><Eye className="w-4 h-4" /></div><div className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-400 rounded-full"><Edit3 className="w-4 h-4" /></div><div className="w-8 h-8 flex items-center justify-center bg-red-50 text-red-300 rounded-full"><Trash2 className="w-4 h-4" /></div>
+                      <div className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-400 rounded-full"><Eye className="w-4 h-4" /></div><div className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-400 rounded-full"><Edit className="w-4 h-4" /></div><div className="w-8 h-8 flex items-center justify-center bg-red-50 text-red-300 rounded-full"><Trash2 className="w-4 h-4" /></div>
                     </div>
                   </div>
                 )}
