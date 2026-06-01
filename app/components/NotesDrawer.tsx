@@ -6,6 +6,10 @@ import { useBooks, VocabularyItem, NoteItem } from "../context/BookContext";
 import { Volume2, Edit, Trash2, Plus, X, Bold, Italic, Underline, Strikethrough, AlignLeft, AlignCenter, AlignRight, FileX, ChevronDown, ChevronUp, Notebook } from "lucide-react";
 import { toast, Spinner } from "@heroui/react";
 import { Roboto_Serif, Sarabun } from "next/font/google";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import UnderlineExtension from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
 
 const robotoSerif = Roboto_Serif({ subsets: ["latin"], weight: ["400"] });
 const sarabun = Sarabun({ subsets: ["thai"], weight: ["300"] });
@@ -40,6 +44,39 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
   const [deleteConfirm, setDeleteConfirm] = useState<{ type: 'note' | 'vocab', id: string } | null>(null);
 
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      UnderlineExtension,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+    ],
+    content: currentNoteText,
+    onUpdate: ({ editor }) => {
+      setCurrentNoteText(editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class: 'w-full h-full min-h-[300px] p-4 outline-none text-slate-800 leading-relaxed text-sm font-medium prose prose-sm max-w-none prose-p:my-1 prose-strong:font-bold prose-em:italic focus:outline-none',
+      },
+    },
+  });
+
+  // Sync editor content when editing starts or stops
+  useEffect(() => {
+    if (editor) {
+      if (editingNoteId) {
+        const note = notes.find(n => n.id === editingNoteId);
+        if (note) {
+          editor.commands.setContent(note.content);
+        }
+      } else if (isAddingNote) {
+        editor.commands.setContent("");
+      }
+    }
+  }, [editingNoteId, isAddingNote, editor, notes]);
 
   // 🚀 Auto-Translate Logic for Vocabulary
   useEffect(() => {
@@ -121,22 +158,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
     }
   };
 
-  const insertFormat = (prefix: string, suffix: string) => {
-    const textarea = document.getElementById("noteTextarea") as HTMLTextAreaElement;
-    if (!textarea) return;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selected = currentNoteText.substring(start, end);
-    const before = currentNoteText.substring(0, start);
-    const after = currentNoteText.substring(end);
-    const val = before + prefix + selected + suffix + after;
-    setCurrentNoteText(val);
 
-    setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(start + prefix.length, end + prefix.length);
-    }, 0);
-  };
 
   const handleSaveNote = () => {
     if (!currentNoteText.trim() || !book || !page) return;
@@ -171,22 +193,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
     toast.success("Note deleted!");
   };
 
-  const renderMarkdown = (text: string) => {
-    let html = text
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/__(.*?)__/g, '<u>$1</u>')
-      .replace(/~~(.*?)~~/g, '<del>$1</del>')
-      .replace(/\n/g, '<br />');
 
-    html = html.replace(/&lt;div align='left'&gt;(.*?)&lt;\/div&gt;/g, '<div style="text-align: left;">$1</div>');
-    html = html.replace(/&lt;div align='center'&gt;(.*?)&lt;\/div&gt;/g, '<div style="text-align: center;">$1</div>');
-    html = html.replace(/&lt;div align='right'&gt;(.*?)&lt;\/div&gt;/g, '<div style="text-align: right;">$1</div>');
-
-    return { __html: html };
-  };
 
   return (
     <>
@@ -223,9 +230,9 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                     {activeTab === "vocabulary" ? (
                       <button
                         onClick={() => setIsAddingVocab(true)}
-                        className="flex items-center gap-1 text-sm font-bold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-full shadow-sm transition-colors"
+                        className="flex items-center gap-1 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-full transition-colors"
                       >
-                        <Plus className="w-4 h-4" /> Add
+                        <Plus className="w-4 h-4 stroke-[2.5]" /> Add
                       </button>
                     ) : (
                       <button
@@ -233,9 +240,9 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                           setIsAddingNote(true);
                           setCurrentNoteText("");
                         }}
-                        className="flex items-center gap-1 text-sm font-bold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-full shadow-sm transition-colors"
+                        className="flex items-center gap-1 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-full transition-colors"
                       >
-                        <Plus className="w-4 h-4" /> Add
+                        <Plus className="w-4 h-4 stroke-[2.5]" /> Add
                       </button>
                     )}
                   </div>
@@ -298,23 +305,19 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                       <div className="flex-1 flex flex-col bg-[#f3f4f6] rounded-xl overflow-hidden min-h-[300px]">
                         {/* Toolbar inside gray container */}
                         <div className="px-3 py-2 flex items-center gap-1 shrink-0 overflow-x-auto">
-                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("**", "**")}><Bold className="w-4 h-4" /></button>
-                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("*", "*")}><Italic className="w-4 h-4" /></button>
-                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("__", "__")}><Underline className="w-4 h-4" /></button>
-                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("~~", "~~")}><Strikethrough className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive('bold') ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().toggleBold().run()}><Bold className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive('italic') ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().toggleItalic().run()}><Italic className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive('underline') ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().toggleUnderline().run()}><Underline className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive('strike') ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().toggleStrike().run()}><Strikethrough className="w-4 h-4" /></button>
                           <div className="w-px h-4 bg-slate-300 mx-1 shrink-0"></div>
-                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("<div align='left'>", "</div>")}><AlignLeft className="w-4 h-4" /></button>
-                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("<div align='center'>", "</div>")}><AlignCenter className="w-4 h-4" /></button>
-                          <button className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0" onClick={() => insertFormat("<div align='right'>", "</div>")}><AlignRight className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive({ textAlign: 'left' }) ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('left').run()}><AlignLeft className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive({ textAlign: 'center' }) ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('center').run()}><AlignCenter className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive({ textAlign: 'right' }) ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('right').run()}><AlignRight className="w-4 h-4" /></button>
                         </div>
-                        {/* Textarea inside gray container */}
-                        <textarea
-                          id="noteTextarea"
-                          className="flex-1 w-full p-4 resize-none outline-none text-slate-800 leading-relaxed placeholder:text-slate-400 bg-transparent text-sm font-medium"
-                          placeholder="Enter your note here (Markdown formatting supported)"
-                          value={currentNoteText}
-                          onChange={(e) => setCurrentNoteText(e.target.value)}
-                        />
+                        {/* Tiptap Editor inside gray container */}
+                        <div className="flex-1 w-full bg-transparent overflow-y-auto" onClick={() => editor?.commands.focus()}>
+                          <EditorContent editor={editor} />
+                        </div>
                       </div>
                     ) : notes.length === 0 ? (
                       <div className="flex flex-col items-center justify-center pt-20 text-center">
@@ -329,12 +332,12 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                         {notes.map(note => (
                           <div key={note.id} className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm relative group">
                             <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5">
-                              <button onClick={() => { setEditingNoteId(note.id); setCurrentNoteText(note.content); }} className="p-1.5 text-slate-400 hover:text-blue-600 bg-white shadow-sm border border-slate-100 hover:bg-blue-50 rounded-full transition-colors"><Edit className="w-3.5 h-3.5" /></button>
-                              <button onClick={() => setDeleteConfirm({ type: 'note', id: note.id })} className="p-1.5 text-slate-400 hover:text-red-600 bg-white shadow-sm border border-slate-100 hover:bg-red-50 rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                              <button onClick={() => { setEditingNoteId(note.id); setCurrentNoteText(note.content); }} className="p-1.5 text-slate-400 hover:text-blue-600 bg-slate-50 hover:bg-blue-50 rounded-full transition-colors"><Edit className="w-3.5 h-3.5" /></button>
+                              <button onClick={() => setDeleteConfirm({ type: 'note', id: note.id })} className="p-1.5 text-slate-400 hover:text-red-600 bg-slate-50 hover:bg-red-50 rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                             </div>
                             <div
                               className="text-slate-800 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-strong:font-bold prose-em:italic"
-                              dangerouslySetInnerHTML={renderMarkdown(note.content)}
+                              dangerouslySetInnerHTML={{ __html: note.content }}
                             />
                             <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-medium text-slate-400">
                               {new Date(note.createdAt).toLocaleDateString()} {new Date(note.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -362,12 +365,12 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                         {vocabList.map(vocab => {
                           const isExpanded = expandedVocabs[vocab.id];
                           return (
-                            <div key={vocab.id} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm relative">
-                              <div className="flex justify-between items-start mb-1">
+                            <div key={vocab.id} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm relative group">
+                              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5">
+                                <button onClick={() => setDeleteConfirm({ type: 'vocab', id: vocab.id })} className="p-1.5 text-slate-400 hover:text-red-600 bg-slate-50 hover:bg-red-50 rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                              </div>
+                              <div className="flex justify-between items-start mb-1 pr-6">
                                 <h4 className="text-[17px] font-bold text-slate-900 tracking-tight">{vocab.word}</h4>
-                                <div className="flex gap-1.5">
-                                  <button onClick={() => setDeleteConfirm({ type: 'vocab', id: vocab.id })} className="p-1.5 text-slate-400 hover:text-red-600 bg-slate-50 hover:bg-slate-100 rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
-                                </div>
                               </div>
 
                               <div className="flex items-center gap-1.5 mb-2">
