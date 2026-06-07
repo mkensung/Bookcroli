@@ -149,63 +149,63 @@ export default function BookDetailsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans pb-20">
+    <div className="min-h-screen bg-[var(--bg-surface-primary)] text-[var(--text-normal)] font-sans pb-20">
       <div className="pt-6 px-6 max-w-7xl mx-auto">
-        <header className="flex items-center justify-between px-6 py-3 bg-white border border-slate-200 rounded-full shadow-sm">
-          <div className="flex items-center gap-2 font-bold text-xl tracking-tight text-slate-900">
-            <BookOpen className="w-6 h-6 stroke-[2.5]" /> BookLator
-          </div>
-          <nav className="hidden md:flex items-center gap-2">
-            <Link href="/" className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"><LayoutGrid className="w-4 h-4" /> Overview</Link>
-            <button className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-slate-900 border border-slate-200 rounded-full shadow-sm bg-white cursor-default"><Book className="w-4 h-4" /> Library</button>
-            <button className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"><Bookmark className="w-4 h-4" /> Bookmark</button>
+        <header className="flex items-center justify-between px-6 py-3 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] shadow-sm">
+          <Link href="/" className="flex items-center gap-2 font-extrabold text-[22px] tracking-tight text-[var(--text-normal)] hover:opacity-80 transition-opacity">
+            ScriptArea
+          </Link>
+          <nav className="hidden md:flex items-center gap-1">
+            <Link href="/" className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-surface-primary)] rounded-full transition-all"><LayoutGrid className="w-4 h-4" /> Overview</Link>
+            <Link href="/" className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-[var(--text-normal)] bg-[var(--color-primary-default)] rounded-full transition-all"><Book className="w-4 h-4" /> Library</Link>
+            <button className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-surface-primary)] rounded-full transition-all"><Bookmark className="w-4 h-4" /> Bookmark</button>
           </nav>
           <div className="flex items-center gap-3">
-            <div className="relative hidden sm:flex items-center w-[260px] h-10 text-slate-400">
+            <div className="relative hidden sm:flex items-center w-[260px] h-10 text-[var(--text-light)]">
               <Search className="absolute left-3 w-4 h-4" />
-              <input type="text" placeholder="Search books" className="w-full h-full pl-10 pr-4 text-sm bg-transparent border border-slate-200 rounded-full outline-none focus:border-blue-500 transition-all" />
+              <input type="text" placeholder="Search books" className="w-full h-full pl-10 pr-4 text-sm bg-transparent border border-[var(--border-outline-light)] rounded-full outline-none focus:border-[var(--border-outline-darker)] transition-all text-[var(--text-normal)] placeholder-[var(--text-light)]" />
             </div>
-            <button className="w-10 h-10 flex items-center justify-center border border-slate-200 rounded-full bg-white hover:bg-slate-50 transition-colors"><Bell className="w-4 h-4" /></button>
-            <button className="w-10 h-10 flex items-center justify-center border border-slate-200 rounded-full bg-white hover:bg-slate-50 transition-colors"><Settings className="w-4 h-4" /></button>
-            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 text-slate-700 text-sm font-bold border border-slate-200 cursor-pointer">MK</div>
+            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border-outline-light)] rounded-full bg-transparent hover:bg-[#FFF5E1] transition-colors text-[var(--text-normal)]"><Bell className="w-4 h-4" /></button>
+            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border-outline-light)] rounded-full bg-transparent hover:bg-[#FFF5E1] transition-colors text-[var(--text-normal)]"><Settings className="w-4 h-4" /></button>
+            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-primary-default)] text-[var(--text-normal)] text-sm font-bold cursor-pointer hover:opacity-90 transition-opacity">MK</div>
           </div>
         </header>
       </div>
 
       <main className="max-w-[1000px] mx-auto px-6 pt-10">
         <div className="flex justify-between items-center mb-6">
-          <Link href="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-800 font-medium transition-colors"><ChevronLeft className="w-5 h-5" /> Back to Library</Link>
+          <Link href="/" className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-normal)] font-medium transition-colors"><ChevronLeft className="w-5 h-5" /> Back to Library</Link>
         </div>
 
-        <div className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm mb-12 flex flex-col md:flex-row gap-8 relative">
+        <div className="bg-[var(--bg-surface-light)] rounded-[32px] border border-[var(--border-outline-light)] p-8 shadow-sm mb-12 flex flex-col md:flex-row gap-8 relative">
           <div className="absolute top-8 right-8 flex items-center gap-1">
-            <button onClick={handleOpenEditModal} className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 rounded-full transition-colors border border-slate-200"><Edit className="w-4 h-4" /> Edit book</button>
-            <button onClick={() => setIsDeleteBookModalOpen(true)} className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 rounded-full transition-colors border border-slate-200"><Trash2 className="w-4 h-4" /> Delete</button>
+            <button onClick={handleOpenEditModal} className="flex items-center gap-1.5 px-4 py-2 text-[16px] font-bold text-[var(--text-normal)] hover:bg-[#FFF5E1] rounded-full transition-colors border border-[var(--border-outline-light)] bg-transparent"><Edit className="w-4 h-4" /> Edit book</button>
+            <button onClick={() => setIsDeleteBookModalOpen(true)} className="flex items-center gap-1.5 px-4 py-2 text-[16px] font-bold text-[var(--text-normal)] hover:bg-[#FFF5E1] rounded-full transition-colors border border-[var(--border-outline-light)] bg-transparent"><Trash2 className="w-4 h-4" /> Delete</button>
           </div>
 
           <div className="w-full md:w-[240px] shrink-0">
-            <div className="w-full aspect-2/3 bg-slate-50 rounded-[20px] flex items-center justify-center border border-slate-200 overflow-hidden shadow-sm relative">
-              {book.coverImage ? <img src={book.coverImage} alt="Cover" className="w-full h-full object-cover" /> : <BookOpen className="w-16 h-16 stroke-[1.5] text-slate-300" />}
+            <div className="w-full aspect-2/3 bg-[var(--bg-surface-primary)] rounded-[20px] flex items-center justify-center border border-[var(--border-outline-light)] overflow-hidden shadow-sm relative">
+              {book.coverImage ? <img src={book.coverImage} alt="Cover" className="w-full h-full object-cover" /> : <BookOpen className="w-16 h-16 stroke-[1.5] text-[var(--text-light)]" />}
             </div>
           </div>
 
           <div className="flex flex-col flex-1 py-2 pr-12">
-            <h1 className="text-[40px] font-bold text-slate-900 mb-1 leading-tight tracking-tight">{book.title}</h1>
-            <p className="text-xl text-slate-600 italic font-medium mb-6">{book.author}</p>
-            <p className="text-slate-500 leading-relaxed mb-8 max-w-3xl font-medium">{book.plot}</p>
+            <h1 className="text-[40px] font-bold text-[var(--text-normal)] mb-1 leading-tight tracking-tight">{book.title}</h1>
+            <p className="text-xl text-[var(--text-secondary)] italic font-medium mb-6">{book.author}</p>
+            <p className="text-[var(--text-secondary)] leading-relaxed mb-8 max-w-3xl font-medium">{book.plot}</p>
 
             <div className="flex gap-16 mb-auto">
-              <div><p className="text-sm font-bold text-slate-400 mb-1">Original language</p><p className="font-bold text-slate-800 text-lg">{book.originalLang}</p></div>
-              <div><p className="text-sm font-bold text-slate-400 mb-1">Translate language</p><p className="font-bold text-slate-800 text-lg">{book.translationLang}</p></div>
+              <div><p className="text-sm font-bold text-[var(--text-light)] mb-1">Original language</p><p className="font-bold text-[var(--text-normal)] text-lg">{book.originalLang}</p></div>
+              <div><p className="text-sm font-bold text-[var(--text-light)] mb-1">Translate language</p><p className="font-bold text-[var(--text-normal)] text-lg">{book.translationLang}</p></div>
             </div>
 
             <div className="mt-10 pt-6">
               <div className="flex justify-between items-end mb-2">
-                <span className="text-xs font-bold text-slate-800">{pages.length}/{book.totalPages} Pages</span>
-                <span className="text-xs font-bold text-blue-600">{progressPercentage}%</span>
+                <span className="text-xs font-bold text-[var(--text-normal)]">{pages.length}/{book.totalPages} Pages</span>
+                <span className="text-xs font-bold text-[var(--text-normal)]">{progressPercentage}%</span>
               </div>
-              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-600 rounded-full transition-all duration-500" style={{ width: `${progressPercentage}%` }}></div>
+              <div className="w-full h-2 bg-[var(--border-outline-default)] rounded-full overflow-hidden">
+                <div className="h-full bg-[var(--color-primary-default)] rounded-full transition-all duration-500" style={{ width: `${progressPercentage}%` }}></div>
               </div>
             </div>
           </div>
@@ -214,57 +214,57 @@ export default function BookDetailsPage() {
         <div>
           {(pages.length > 0 || isAddingPage) && (
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-slate-900">Table of Contents</h2>
-              <button onClick={() => setIsAddingPage(true)} className="bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold px-6 py-2.5 flex items-center gap-2 transition-colors shadow-sm text-sm"><Plus className="w-4 h-4 stroke-[2.5]" /> Add page</button>
+              <h2 className="text-2xl font-bold text-[var(--text-normal)]">Table of Contents</h2>
+              <button onClick={() => setIsAddingPage(true)} className="bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] rounded-full font-bold px-6 py-2.5 flex items-center gap-2 transition-colors shadow-sm text-sm"><Plus className="w-4 h-4 stroke-[2.5]" /> Add page</button>
             </div>
           )}
 
           {pages.length === 0 && !isAddingPage ? (
-            <div className="bg-white border border-slate-200 rounded-[32px] flex flex-col items-center justify-center py-20 text-center shadow-sm">
-              <div className="w-20 h-20 bg-slate-100 rounded-[24px] flex items-center justify-center text-slate-400 mb-6 -rotate-6"><X className="w-8 h-8" /></div>
-              <h3 className="text-xl font-bold text-slate-800 mb-2">No page added!</h3>
-              <p className="text-slate-500 font-medium mb-8">You can add a new page in your book.</p>
-              <button onClick={() => setIsAddingPage(true)} className="bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold px-6 py-2.5 flex items-center gap-2 transition-colors shadow-sm text-sm"><Plus className="w-4 h-4 stroke-2" /> Add page</button>
+            <div className="bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] flex flex-col items-center justify-center py-20 text-center shadow-sm">
+              <div className="w-20 h-20 bg-[var(--bg-surface-primary)] rounded-[24px] flex items-center justify-center text-[var(--text-light)] mb-6 -rotate-6"><X className="w-8 h-8" /></div>
+              <h3 className="text-xl font-bold text-[var(--text-normal)] mb-2">No page added!</h3>
+              <p className="text-[var(--text-secondary)] font-medium mb-8">You can add a new page in your book.</p>
+              <button onClick={() => setIsAddingPage(true)} className="bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] rounded-full font-bold px-6 py-2.5 flex items-center gap-2 transition-colors shadow-sm text-sm"><Plus className="w-4 h-4 stroke-2" /> Add page</button>
             </div>
           ) : (
-            <div className="bg-white rounded-[24px] border border-slate-200 overflow-hidden shadow-sm mb-20">
-              <div className="grid grid-cols-[80px_1fr_160px] gap-4 px-6 py-4 bg-slate-50/80 border-b border-slate-200 text-sm font-bold text-slate-400">
+            <div className="bg-[var(--bg-surface-light)] rounded-[24px] border border-[var(--border-outline-light)] overflow-hidden shadow-sm mb-20">
+              <div className="grid grid-cols-[80px_1fr_160px] gap-4 px-6 py-3 bg-[var(--bg-surface-primary)] border-b border-[var(--border-outline-light)] text-sm font-bold text-[var(--text-light)]">
                 <div className="text-center">No.</div><div>Name</div><div></div>
               </div>
 
               <div className="flex flex-col">
                 {pages.map((page, index) => (
-                  <div key={page.id} className="grid grid-cols-[80px_1fr_160px] gap-4 px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors group items-center">
-                    <div className="text-center font-bold text-slate-400"><div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center mx-auto text-xs">{index + 1}</div></div>
+                  <div key={page.id} className="grid grid-cols-[80px_1fr_160px] gap-4 px-6 py-3 border-b border-[var(--border-outline-light)] group items-center">
+                    <div className="text-center font-bold text-[var(--text-light)]"><div className="w-6 h-6 rounded-md bg-[var(--bg-surface-primary)] border border-[var(--border-outline-light)] flex items-center justify-center mx-auto text-xs">{index + 1}</div></div>
 
                     {editingPageId === page.id ? (
                       <div>
-                        <input autoFocus type="text" value={editPageTitle} onChange={(e) => setEditPageTitle(e.target.value)} onKeyDown={handleKeyDownEdit} onBlur={handleSaveEdit} className="w-full px-4 py-2 bg-white border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm font-bold text-slate-800 transition-all"/>
+                        <input autoFocus type="text" value={editPageTitle} onChange={(e) => setEditPageTitle(e.target.value)} onKeyDown={handleKeyDownEdit} onBlur={handleSaveEdit} className="w-full px-4 py-2 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-xl outline-none focus:border-[var(--border-outline-darker)] focus:ring-1 focus:ring-transparent text-sm font-bold text-[var(--text-normal)] transition-all"/>
                       </div>
                     ) : (
-                      <div className="font-bold text-slate-800">{page.title}</div>
+                      <div className="font-bold text-[var(--text-normal)]">{page.title}</div>
                     )}
                     
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       {editingPageId !== page.id && (
                         <>
-                          <Link href={`/book/${book.id}/page/${page.id}`} className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors cursor-pointer"><Eye className="w-4 h-4" /></Link>
-                          <button onClick={() => startEditing(page)} className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"><Edit className="w-4 h-4" /></button>
+                          <Link href={`/book/${book.id}/page/${page.id}`} className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[#FFF5E1] rounded-full transition-colors cursor-pointer"><Eye className="w-4 h-4" /></Link>
+                          <button onClick={() => startEditing(page)} className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[#FFF5E1] rounded-full transition-colors"><Edit className="w-4 h-4" /></button>
                         </>
                       )}
-                      <button onClick={() => setPageToDelete(page.id)} className="w-8 h-8 flex items-center justify-center bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors"><Trash2 className="w-4 h-4" /></button>
+                      <button onClick={() => setPageToDelete(page.id)} className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[var(--status-error-hover)] hover:border-[var(--status-error-default)] hover:text-[var(--status-error-default)] rounded-full transition-colors"><Trash2 className="w-4 h-4" /></button>
                     </div>
                   </div>
                 ))}
 
                 {isAddingPage && (
-                  <div className="grid grid-cols-[80px_1fr_160px] gap-4 px-6 py-4 border-b border-blue-100 bg-blue-50/30 items-center">
-                    <div className="text-center font-bold text-slate-400"><div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center mx-auto text-xs">{pages.length + 1}</div></div>
+                  <div className="grid grid-cols-[80px_1fr_160px] gap-4 px-6 py-3 border-b border-[var(--border-outline-darker)] bg-[var(--bg-surface-primary)] items-center">
+                    <div className="text-center font-bold text-[var(--text-light)]"><div className="w-6 h-6 rounded-md bg-[var(--bg-surface-primary)] border border-[var(--border-outline-light)] flex items-center justify-center mx-auto text-xs">{pages.length + 1}</div></div>
                     <div>
-                      <input autoFocus type="text" placeholder="Enter the content" value={newPageTitle} onChange={(e) => setNewPageTitle(e.target.value)} onKeyDown={handleKeyDownNew} onBlur={handleSaveNewPage} className="w-full px-4 py-2 bg-white border border-blue-200 rounded-xl outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm font-bold text-slate-800 transition-all placeholder:font-medium placeholder:text-slate-400"/>
+                      <input autoFocus type="text" placeholder="Enter the content" value={newPageTitle} onChange={(e) => setNewPageTitle(e.target.value)} onKeyDown={handleKeyDownNew} onBlur={handleSaveNewPage} className="w-full px-4 py-2 bg-[var(--bg-surface-light)] border border-[var(--border-outline-darker)] rounded-xl outline-none focus:border-[var(--border-outline-darker)] focus:ring-1 focus:ring-transparent text-sm font-bold text-[var(--text-normal)] transition-all placeholder:font-medium placeholder-[var(--text-light)]"/>
                     </div>
                     <div className="flex items-center justify-end gap-2">
-                      <div className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-400 rounded-full"><Eye className="w-4 h-4" /></div><div className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-400 rounded-full"><Edit className="w-4 h-4" /></div><div className="w-8 h-8 flex items-center justify-center bg-red-50 text-red-300 rounded-full"><Trash2 className="w-4 h-4" /></div>
+                      <div className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--text-light)] rounded-full"><Eye className="w-4 h-4" /></div><div className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--text-light)] rounded-full"><Edit className="w-4 h-4" /></div><div className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--status-error-default)] opacity-50 rounded-full"><Trash2 className="w-4 h-4" /></div>
                     </div>
                   </div>
                 )}
@@ -277,26 +277,26 @@ export default function BookDetailsPage() {
       {/* --- Edit Modal --- */}
       {isEditBookModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-[32px] w-full max-w-3xl shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-[var(--bg-surface-light)] rounded-[32px] w-full max-w-3xl shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex justify-between items-start mb-6">
-              <div><h2 className="text-2xl font-bold text-slate-900">Edit book details</h2><p className="text-sm text-slate-500 mt-1">Update book details and languages.</p></div>
-              <button onClick={() => setIsEditBookModalOpen(false)} className="p-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors bg-slate-50"><X className="w-5 h-5" /></button>
+              <div><h2 className="text-2xl font-bold text-[var(--text-normal)]">Edit book details</h2><p className="text-sm text-[var(--text-secondary)] mt-1">Update book details and languages.</p></div>
+              <button onClick={() => setIsEditBookModalOpen(false)} className="p-2 text-[var(--text-light)] hover:bg-[var(--bg-surface-primary)] rounded-full transition-colors bg-[var(--bg-surface-primary)]"><X className="w-5 h-5" /></button>
             </div>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col md:flex-row gap-8 items-stretch">
                 <div className="w-full md:w-1/3 flex flex-col">
-                  <div onClick={() => fileInputRef.current?.click()} className="flex-1 w-full bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-slate-500 cursor-pointer hover:bg-slate-100 transition-all p-4 text-center min-h-[240px] relative overflow-hidden group">
-                    {editFormData.coverImage ? <img src={editFormData.coverImage} alt="Preview" className="w-full h-full object-cover rounded-xl" /> : <><ImageIcon className="w-10 h-10 mb-2 stroke-[1.5] text-slate-400 group-hover:text-blue-500 transition-colors" /><span className="text-sm font-bold text-slate-700 group-hover:text-blue-600">Choose a file</span><span className="text-[10px] font-medium text-slate-400 mt-1">JPEG and PNG, up to 2 MB</span></>}
+                  <div onClick={() => fileInputRef.current?.click()} className="flex-1 w-full bg-[var(--bg-surface-primary)] border-2 border-dashed border-[var(--border-outline-light)] rounded-2xl flex flex-col items-center justify-center text-[var(--text-secondary)] cursor-pointer hover:bg-[var(--bg-surface-light)] hover:border-[var(--color-primary-default)] hover:text-[var(--color-primary-default)] transition-all p-4 text-center min-h-[240px] relative overflow-hidden group">
+                    {editFormData.coverImage ? <img src={editFormData.coverImage} alt="Preview" className="w-full h-full object-cover rounded-xl" /> : <><ImageIcon className="w-10 h-10 mb-2 stroke-[1.5] text-[var(--text-light)] group-hover:text-[var(--color-primary-default)] transition-colors" /><span className="text-sm font-bold text-[var(--text-secondary)] group-hover:text-[var(--color-primary-default)]">Choose a file</span><span className="text-[10px] font-medium text-[var(--text-light)] mt-1">JPEG and PNG, up to 2 MB</span></>}
                     <input type="file" ref={fileInputRef} onChange={handleEditImageUpload} accept="image/*" className="hidden" />
                   </div>
                 </div>
                 <div className="w-full md:w-2/3 flex flex-col gap-4">
-                  <div className="flex flex-col gap-1.5"><label className="text-sm font-semibold text-slate-800">Book name <span className="text-red-500">*</span></label><input type="text" value={editFormData.title} onChange={e => setEditFormData({...editFormData, title: e.target.value})} className="px-4 py-3 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-medium border border-slate-200 transition-all" /></div>
+                  <div className="flex flex-col gap-1.5"><label className="text-sm font-semibold text-[var(--text-normal)]">Book name <span className="text-[var(--status-error-default)]">*</span></label><input type="text" value={editFormData.title} onChange={e => setEditFormData({...editFormData, title: e.target.value})} className="px-4 py-3 bg-[var(--bg-surface-primary)] rounded-xl outline-none focus:ring-2 focus:ring-transparent focus:border-[var(--border-outline-darker)] font-medium border border-[var(--border-outline-light)] transition-all text-[var(--text-normal)]" /></div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1.5"><label className="text-sm font-semibold text-slate-800">Author name <span className="text-red-500">*</span></label><input type="text" value={editFormData.author} onChange={e => setEditFormData({...editFormData, author: e.target.value})} className="px-4 py-3 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-medium border border-slate-200 transition-all" /></div>
-                    <div className="flex flex-col gap-1.5"><label className="text-sm font-semibold text-slate-800">Total page <span className="text-red-500">*</span></label><input type="number" value={editFormData.totalPages} onChange={e => setEditFormData({...editFormData, totalPages: Number(e.target.value)})} className="px-4 py-3 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-medium border border-slate-200 transition-all" /></div>
+                    <div className="flex flex-col gap-1.5"><label className="text-sm font-semibold text-[var(--text-normal)]">Author name <span className="text-[var(--status-error-default)]">*</span></label><input type="text" value={editFormData.author} onChange={e => setEditFormData({...editFormData, author: e.target.value})} className="px-4 py-3 bg-[var(--bg-surface-primary)] rounded-xl outline-none focus:ring-2 focus:ring-transparent focus:border-[var(--border-outline-darker)] font-medium border border-[var(--border-outline-light)] transition-all text-[var(--text-normal)]" /></div>
+                    <div className="flex flex-col gap-1.5"><label className="text-sm font-semibold text-[var(--text-normal)]">Total page <span className="text-[var(--status-error-default)]">*</span></label><input type="number" value={editFormData.totalPages} onChange={e => setEditFormData({...editFormData, totalPages: Number(e.target.value)})} className="px-4 py-3 bg-[var(--bg-surface-primary)] rounded-xl outline-none focus:ring-2 focus:ring-transparent focus:border-[var(--border-outline-darker)] font-medium border border-[var(--border-outline-light)] transition-all text-[var(--text-normal)]" /></div>
                   </div>
-                  <div className="flex flex-col gap-1.5"><label className="text-sm font-semibold text-slate-800">Plot info</label><textarea rows={3} value={editFormData.plot} onChange={e => setEditFormData({...editFormData, plot: e.target.value})} className="px-4 py-3 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-medium border border-slate-200 resize-none transition-all"></textarea></div>
+                  <div className="flex flex-col gap-1.5"><label className="text-sm font-semibold text-[var(--text-normal)]">Plot info</label><textarea rows={3} value={editFormData.plot} onChange={e => setEditFormData({...editFormData, plot: e.target.value})} className="px-4 py-3 bg-[var(--bg-surface-primary)] rounded-xl outline-none focus:ring-2 focus:ring-transparent focus:border-[var(--border-outline-darker)] font-medium border border-[var(--border-outline-light)] resize-none transition-all text-[var(--text-normal)]"></textarea></div>
                 </div>
               </div>
               
@@ -305,7 +305,7 @@ export default function BookDetailsPage() {
                 
                 {/* 1. Original Language */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-slate-800">Original language <span className="text-red-500">*</span></label>
+                  <label className="text-sm font-semibold text-[var(--text-normal)]">Original language <span className="text-[var(--status-error-default)]">*</span></label>
                   <Select
                     className="w-full"
                     aria-label="Original Language"
@@ -313,14 +313,14 @@ export default function BookDetailsPage() {
                     selectedKey={editFormData.originalLang}
                     onSelectionChange={(key) => setEditFormData({...editFormData, originalLang: key ? String(key) : ""})}
                   >
-                    <Select.Trigger className="w-full min-h-[48px] px-4 rounded-xl bg-slate-50 hover:bg-slate-100 shadow-none border border-slate-200 transition-all flex items-center justify-between">
-                      <Select.Value className="text-slate-800 font-medium text-left" />
-                      <Select.Indicator><ChevronDown className="w-4 h-4 text-slate-500" /></Select.Indicator>
+                    <Select.Trigger className="w-full min-h-[48px] px-4 rounded-xl bg-[var(--bg-surface-primary)] hover:bg-[var(--bg-surface-light)] shadow-none border border-[var(--border-outline-light)] transition-all flex items-center justify-between">
+                      <Select.Value className="text-[var(--text-normal)] font-medium text-left" />
+                      <Select.Indicator><ChevronDown className="w-4 h-4 text-[var(--text-light)]" /></Select.Indicator>
                     </Select.Trigger>
-                    <Select.Popover placement="bottom" shouldFlip={false} className="w-(--trigger-width) bg-white text-slate-800 rounded-xl shadow-xl border border-slate-100 max-h-[140px] overflow-y-auto overflow-x-hidden">
+                    <Select.Popover placement="bottom" shouldFlip={false} className="w-(--trigger-width) bg-[var(--bg-surface-light)] text-[var(--text-normal)] rounded-xl shadow-xl border border-[var(--border-outline-light)] max-h-[140px] overflow-y-auto overflow-x-hidden">
                       <ListBox items={languages} aria-label="Original Language Options" className="p-1 flex flex-col gap-1 outline-none">
                         {(lang) => (
-                          <ListBox.Item key={lang.value} id={lang.value} textValue={lang.label} className="w-full px-3 py-2 rounded-lg text-slate-700 font-medium cursor-pointer hover:bg-slate-100 hover:text-blue-600 transition-colors outline-none">
+                          <ListBox.Item key={lang.value} id={lang.value} textValue={lang.label} className="w-full px-3 py-2 rounded-lg text-[var(--text-normal)] font-medium cursor-pointer hover:bg-[var(--color-primary-hover)] hover:text-[var(--text-normal)] transition-colors outline-none">
                             {lang.label}
                           </ListBox.Item>
                         )}
@@ -331,7 +331,7 @@ export default function BookDetailsPage() {
 
                 {/* 2. Translation Language */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-slate-800">Translation language <span className="text-red-500">*</span></label>
+                  <label className="text-sm font-semibold text-[var(--text-normal)]">Translation language <span className="text-[var(--status-error-default)]">*</span></label>
                   <Select
                     className="w-full"
                     aria-label="Translation Language"
@@ -339,14 +339,14 @@ export default function BookDetailsPage() {
                     selectedKey={editFormData.translationLang}
                     onSelectionChange={(key) => setEditFormData({...editFormData, translationLang: key ? String(key) : ""})}
                   >
-                    <Select.Trigger className="w-full min-h-[48px] px-4 rounded-xl bg-slate-50 hover:bg-slate-100 shadow-none border border-slate-200 transition-all flex items-center justify-between">
-                      <Select.Value className="text-slate-800 font-medium text-left" />
-                      <Select.Indicator><ChevronDown className="w-4 h-4 text-slate-500" /></Select.Indicator>
+                    <Select.Trigger className="w-full min-h-[48px] px-4 rounded-xl bg-[var(--bg-surface-primary)] hover:bg-[var(--bg-surface-light)] shadow-none border border-[var(--border-outline-light)] transition-all flex items-center justify-between">
+                      <Select.Value className="text-[var(--text-normal)] font-medium text-left" />
+                      <Select.Indicator><ChevronDown className="w-4 h-4 text-[var(--text-light)]" /></Select.Indicator>
                     </Select.Trigger>
-                    <Select.Popover placement="bottom" shouldFlip={false} className="w-(--trigger-width) bg-white text-slate-800 rounded-xl shadow-xl border border-slate-100 max-h-[140px] overflow-y-auto overflow-x-hidden">
+                    <Select.Popover placement="bottom" shouldFlip={false} className="w-(--trigger-width) bg-[var(--bg-surface-light)] text-[var(--text-normal)] rounded-xl shadow-xl border border-[var(--border-outline-light)] max-h-[140px] overflow-y-auto overflow-x-hidden">
                       <ListBox items={languages} aria-label="Translation Language Options" className="p-1 flex flex-col gap-1 outline-none">
                         {(lang) => (
-                          <ListBox.Item key={lang.value} id={lang.value} textValue={lang.label} className="w-full px-3 py-2 rounded-lg text-slate-700 font-medium cursor-pointer hover:bg-slate-100 hover:text-blue-600 transition-colors outline-none">
+                          <ListBox.Item key={lang.value} id={lang.value} textValue={lang.label} className="w-full px-3 py-2 rounded-lg text-[var(--text-normal)] font-medium cursor-pointer hover:bg-[var(--color-primary-hover)] hover:text-[var(--text-normal)] transition-colors outline-none">
                             {lang.label}
                           </ListBox.Item>
                         )}
@@ -357,7 +357,7 @@ export default function BookDetailsPage() {
 
               </div>
             </div>
-            <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-slate-100"><button onClick={() => setIsEditBookModalOpen(false)} className="px-8 py-2.5 rounded-full font-bold text-slate-500 hover:bg-slate-100 bg-white border border-slate-200 shadow-sm transition-all">Cancel</button><button onClick={handleUpdateBook} className="px-10 py-2.5 rounded-full font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition-all">Update</button></div>
+            <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-[var(--border-outline-light)]"><button onClick={() => setIsEditBookModalOpen(false)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] hover:bg-[var(--bg-surface-primary)] bg-transparent border border-[var(--border-outline-light)] shadow-sm transition-all">Cancel</button><button onClick={handleUpdateBook} className="px-10 py-2.5 rounded-full font-bold bg-[var(--color-primary-default)] text-[var(--text-normal)] hover:bg-[var(--color-primary-hover)] shadow-sm transition-all">Update</button></div>
           </div>
         </div>
       )}
@@ -365,20 +365,20 @@ export default function BookDetailsPage() {
       {/* --- Delete Confirmation Modal --- */}
       {isDeleteBookModalOpen && (
          <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-           <div className="bg-white rounded-[32px] w-full max-w-[460px] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
-             <div className="flex justify-between items-start mb-4"><div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center text-red-500"><Trash2 className="w-6 h-6" /></div><button onClick={() => setIsDeleteBookModalOpen(false)} className="p-2 text-slate-400 hover:bg-slate-100 rounded-full bg-slate-50 transition-colors"><X className="w-5 h-5" /></button></div>
-             <div className="mb-8"><h3 className="text-2xl font-bold text-slate-900 mb-2">Delete book</h3><p className="text-base text-slate-500 font-medium leading-relaxed">Are you sure you want to delete this book? This action cannot be undone.</p></div>
-             <div className="flex justify-end gap-3"><button onClick={() => setIsDeleteBookModalOpen(false)} className="px-8 py-2.5 rounded-full font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 shadow-sm transition-all">Cancel</button><button onClick={handleConfirmDeleteBook} className="px-10 py-2.5 rounded-full font-bold text-white bg-red-500 hover:bg-red-600 shadow-sm transition-all">Delete</button></div>
+           <div className="bg-[var(--bg-surface-light)] rounded-[32px] w-full max-w-[460px] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+             <div className="flex justify-between items-start mb-4"><div className="w-12 h-12 rounded-full bg-[var(--status-error-surface)] flex items-center justify-center text-[var(--status-error-default)]"><Trash2 className="w-6 h-6" /></div><button onClick={() => setIsDeleteBookModalOpen(false)} className="p-2 text-[var(--text-light)] hover:bg-[var(--bg-surface-primary)] rounded-full bg-[var(--bg-surface-primary)] transition-colors"><X className="w-5 h-5" /></button></div>
+             <div className="mb-8"><h3 className="text-2xl font-bold text-[var(--text-normal)] mb-2">Delete book</h3><p className="text-base text-[var(--text-secondary)] font-medium leading-relaxed">Are you sure you want to delete this book? This action cannot be undone.</p></div>
+             <div className="flex justify-end gap-3"><button onClick={() => setIsDeleteBookModalOpen(false)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] bg-transparent border border-[var(--border-outline-light)] hover:bg-[var(--bg-surface-primary)] shadow-sm transition-all">Cancel</button><button onClick={handleConfirmDeleteBook} className="px-10 py-2.5 rounded-full font-bold text-white bg-[var(--status-error-default)] hover:bg-[var(--status-error-hover)] shadow-sm transition-all">Delete</button></div>
            </div>
          </div>
       )}
 
       {pageToDelete !== null && (
          <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-           <div className="bg-white rounded-[32px] w-full max-w-[460px] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
-             <div className="flex justify-between items-start mb-4"><div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center text-red-500"><Trash2 className="w-6 h-6" /></div><button onClick={() => setPageToDelete(null)} className="p-2 text-slate-400 hover:bg-slate-100 rounded-full bg-slate-50 transition-colors"><X className="w-5 h-5" /></button></div>
-             <div className="mb-8"><h3 className="text-2xl font-bold text-slate-900 mb-2">Delete page</h3><p className="text-base text-slate-500 font-medium leading-relaxed">Are you sure you want to delete this page? This action cannot be undone.</p></div>
-             <div className="flex justify-end gap-3"><button onClick={() => setPageToDelete(null)} className="px-8 py-2.5 rounded-full font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 shadow-sm transition-all">Cancel</button><button onClick={handleConfirmDeletePage} className="px-10 py-2.5 rounded-full font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all">Delete</button></div>
+           <div className="bg-[var(--bg-surface-light)] rounded-[32px] w-full max-w-[460px] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+             <div className="flex justify-between items-start mb-4"><div className="w-12 h-12 rounded-full bg-[var(--status-error-surface)] flex items-center justify-center text-[var(--status-error-default)]"><Trash2 className="w-6 h-6" /></div><button onClick={() => setPageToDelete(null)} className="p-2 text-[var(--text-light)] hover:bg-[var(--bg-surface-primary)] rounded-full bg-[var(--bg-surface-primary)] transition-colors"><X className="w-5 h-5" /></button></div>
+             <div className="mb-8"><h3 className="text-2xl font-bold text-[var(--text-normal)] mb-2">Delete page</h3><p className="text-base text-[var(--text-secondary)] font-medium leading-relaxed">Are you sure you want to delete this page? This action cannot be undone.</p></div>
+             <div className="flex justify-end gap-3"><button onClick={() => setPageToDelete(null)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] bg-transparent border border-[var(--border-outline-light)] hover:bg-[var(--bg-surface-primary)] shadow-sm transition-all">Cancel</button><button onClick={handleConfirmDeletePage} className="px-10 py-2.5 rounded-full font-bold text-white bg-[var(--status-error-default)] hover:bg-[var(--status-error-hover)] shadow-sm transition-all">Delete</button></div>
            </div>
          </div>
       )}

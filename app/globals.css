@@ -1,9 +1,57 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+:root {
+  /* 🟡 MAIN / PRIMARY (Interactive Accent) */
+  --color-primary-default:      #F2DCB1; /* Main primary theme color for major accents and actions */
+  --color-primary-hover:        #FFEBC5; /* Light hover highlight state for primary elements */
+  --color-primary-surface:      #F2DCB1; /* Flat surface fill for branding targets */
+
+  /* 🟠 MAIN / SECONDARY (Action Accent) */
+  --color-secondary-default:    #E8A562; /* Focused secondary interactive actions & badges */
+  --color-secondary-hover:      #FFE4C9; /* Warm hover state for secondary components */
+
+  /* 📜 MAIN / SURFACE (Surfaces & Background Canvas) */
+  --bg-surface-primary:         #F5F3ED; /* Global application backdrop (Soft Warm Cream) */
+  --bg-surface-light:           #FFFCF3; /* Elevated cards, sidebar panels, and dialog canvases */
+  --bg-surface-lighter:         #FFFCF3; /* Inner interactive block surfaces */
+  --bg-surface-background:      #FFFFFF; /* Contrast clean background panels */
+
+  /* 🔲 MAIN / OUTLINE (Borders & Structural Separators) */
+  --border-outline-primary:     #F2DCB1; /* Accent container outlines */
+  --border-outline-default:     #F5F3ED; /* Invisible low-contrast dividers */
+  --border-outline-darker:      #BEB8A8; /* High-contrast borders for focused input frames */
+  --border-outline-light:       #D7D1C0; /* Standard thin component outlines */
+
+  /* 🖋️ MAIN / DESCRIPTIVE-TEXT (Editorial Typography) */
+  --text-normal:                 #392A1B; /* Primary ink - Deep velvet brown for headers & readable text */
+  --text-secondary:              #9F7B56; /* Accent medium brown for subtexts & labels */
+  --text-dark-gray:              #67645B; /* Neutral dim slate-brown for technical metadata */
+  --text-light:                  #A29D8F; /* Placeholders, disabled actions, and inactive markers */
+
+  /* 🚥 MAIN / SEMANTIC STATUS FEEDBACK */
+  --status-success-default:     #6EDA96;
+  --status-success-hover:       #ECFFED;
+  --status-success-surface:     #F1FFF6;
+  --status-error-default:       #FA7676;
+  --status-error-hover:         #FFE8E8;
+  --status-error-surface:       #FFF4F4;
+  --status-warning-default:     #FFC376;
+  --status-warning-hover:       #FFF4E6;
+  --status-warning-surface:     #FFFBF5;
+  --status-info-default:        #6EB2FF;
+  --status-info-hover:          #E7F2FF;
+  --status-info-surface:        #F6FAFF;
+}
+
+body {
+  background-color: var(--bg-surface-primary);
+  color: var(--text-normal);
+}
+
 /* Default toast shell is z-50 (same as app modals); lift so toasts stay centered and above the page. */
 @layer utilities {
   .toast-region {
-    @apply z-10050!;
+    z-index: 10050 !important;
   }
 }

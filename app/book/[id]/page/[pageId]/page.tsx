@@ -32,6 +32,71 @@ export default function TranslatePage() {
   const [aiPreviewText, setAiPreviewText] = useState("");
   const [isAiTranslating, setIsAiTranslating] = useState(false);
 
+  // --- Text Selection Popup State ---
+  const [selectedText, setSelectedText] = useState("");
+  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0, isFlippedY: false, isFlippedX: 'center' as 'center' | 'left' | 'right' });
+  const [activeTextarea, setActiveTextarea] = useState<"original" | "translated" | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("#selection-popup") && !target.closest("textarea")) {
+        setSelectedText("");
+        setActiveTextarea(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleTextareaSelect = (e: React.SyntheticEvent<HTMLTextAreaElement>, type: "original" | "translated") => {
+    const textarea = e.currentTarget;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    
+    if (start !== end) {
+      const text = textarea.value.substring(start, end);
+      setSelectedText(text);
+      setActiveTextarea(type);
+      if (popupPosition.x === 0) {
+        const rect = textarea.getBoundingClientRect();
+        const y = rect.top + rect.height / 2;
+        const x = rect.left + rect.width / 2;
+        let isFlippedX: 'center' | 'left' | 'right' = 'center';
+        if (x < 160) isFlippedX = 'left';
+        else if (x > window.innerWidth - 160) isFlippedX = 'right';
+        setPopupPosition({ x, y, isFlippedY: y < 140, isFlippedX });
+      }
+    } else {
+      setSelectedText("");
+      setActiveTextarea(null);
+    }
+  };
+  
+  const handleTextareaMouseUp = (e: React.MouseEvent<HTMLTextAreaElement>, type: "original" | "translated") => {
+    const textarea = e.currentTarget;
+    if (textarea.selectionStart !== textarea.selectionEnd) {
+      const isTooHigh = e.clientY < 140; // Avoid popping up out of bounds at the top
+      let isFlippedX: 'center' | 'left' | 'right' = 'center';
+      if (e.clientX < 160) isFlippedX = 'left';
+      else if (e.clientX > window.innerWidth - 160) isFlippedX = 'right';
+      
+      setPopupPosition({ x: e.clientX, y: e.clientY, isFlippedY: isTooHigh, isFlippedX });
+      handleTextareaSelect(e, type);
+    }
+  };
+
+  const handlePopupAction = async (action: 'vocabulary' | 'notes') => {
+    if (action === 'vocabulary') {
+      window.dispatchEvent(new CustomEvent('open-notes-drawer', { detail: { tab: 'vocabulary', text: selectedText } }));
+    } else if (action === 'notes') {
+      window.dispatchEvent(new CustomEvent('open-notes-drawer', { detail: { tab: 'notes', text: selectedText } }));
+    }
+    
+    setSelectedText("");
+    setActiveTextarea(null);
+  };
+
   useEffect(() => {
     if (page) {
       const initialOriginal = page.originalText || "";
@@ -205,26 +270,26 @@ export default function TranslatePage() {
   };
 
   return (
-    <div className="h-screen bg-slate-50 flex flex-col font-sans overflow-hidden">
-      <header className="h-20 px-6 flex items-center justify-between bg-white border-b border-slate-200 shrink-0 shadow-sm relative z-10">
+    <div className="h-screen bg-[var(--bg-surface-primary)] flex flex-col font-sans overflow-hidden">
+      <header className="h-20 px-6 flex items-center justify-between shrink-0 relative z-10">
         <div className="flex items-center gap-4">
-          <Link href={`/book/${bookId}`} className="w-10 h-10 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-sm">
-            <ChevronLeft className="w-5 h-5" />
+          <Link href={`/book/${bookId}`} className="flex items-center gap-2 text-[var(--text-normal)] hover:opacity-70 transition-opacity">
+            <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+            <h1 className="text-2xl font-bold tracking-tight">{page.title}</h1>
           </Link>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">{page.title}</h1>
         </div>
         <div className="flex items-center gap-3">
           <NotesDrawer bookId={bookId} pageId={pageId} />
-          <button type="button" onClick={handleSave} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full font-bold shadow-sm transition-colors text-sm">
+          <button type="button" onClick={handleSave} className="flex items-center gap-2 bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] px-6 py-2.5 rounded-full font-bold shadow-sm transition-colors text-sm">
             <Save className="w-4 h-4" /> Save
           </button>
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col md:flex-row gap-4 p-6 overflow-hidden">
-        <div className="flex-1 bg-white border border-slate-200 rounded-2xl p-8 shadow-sm flex flex-col transition-all relative">
+      <main className="flex-1 flex flex-col md:flex-row gap-4 px-6 py-4 overflow-hidden">
+        <div className="flex-1 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-2xl px-8 py-6 shadow-sm flex flex-col transition-all relative">
           <div className="flex justify-between items-center mb-6 shrink-0">
-            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-slate-100 text-[13px] font-bold text-slate-600">
+            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[var(--border-outline-default)] text-[13px] font-bold text-[var(--text-secondary)]">
               {book.originalLang}
             </div>
 
@@ -241,19 +306,19 @@ export default function TranslatePage() {
 
                     {/* ฝั่งข้อความ */}
                     <div className="flex flex-col items-end select-none text-right">
-                      <span className="text-[13px] font-bold text-slate-800 leading-tight">AI Translation</span>
-                      <span className="text-[11px] font-medium text-slate-400">Let AI enhance your translation</span>
+                      <span className="text-[13px] font-bold text-[var(--text-normal)] leading-tight">AI Translation</span>
+                      <span className="text-[11px] font-medium text-[var(--text-light)]">Let AI enhance your translation</span>
                     </div>
 
                     {/* ฝั่งปุ่มสวิตช์ */}
-                    <Switch.Control className={`transition-colors duration-300 ${isSelected ? "bg-blue-600" : "bg-slate-200"}`}>
+                    <Switch.Control className={`transition-colors duration-300 ${isSelected ? "bg-[var(--color-primary-default)]" : "bg-[var(--border-outline-light)]"}`}>
                       <Switch.Thumb className="bg-white shadow-sm flex items-center justify-center">
                         <Switch.Icon>
                           {isSelected ? (
                             // 🚀 ใช้ StarFill (แบบทึบ) แทน Sparkles เส้นจะได้ไม่บางและไม่ดูแตกครับ
-                            <Sparkles className="w-3.5 h-3.5 text-blue-600 opacity-100" />
+                            <Sparkles className="w-3.5 h-3.5 text-[var(--color-primary-default)] opacity-100" />
                           ) : (
-                            <Power className="w-3.5 h-3.5 text-slate-400 opacity-70" />
+                            <Power className="w-3.5 h-3.5 text-[var(--text-light)] opacity-70" />
                           )}
                         </Switch.Icon>
                       </Switch.Thumb>
@@ -269,11 +334,13 @@ export default function TranslatePage() {
             placeholder="Original language"
             value={originalText}
             onChange={(e) => setOriginalText(e.target.value)}
-            className={`flex-1 w-full resize-none outline-none text-slate-700 text-lg leading-loose placeholder:text-slate-400 bg-transparent mb-4 ${robotoSerif.className}`}
+            onSelect={(e) => handleTextareaSelect(e, "original")}
+            onMouseUp={(e) => handleTextareaMouseUp(e, "original")}
+            className={`flex-1 w-full resize-none outline-none text-[var(--text-normal)] text-lg leading-loose placeholder-[var(--text-light)] bg-transparent mb-4 ${robotoSerif.className}`}
           />
 
           {isAiMode && (
-            <div className="shrink-0 mt-4 border-t border-slate-100 pt-6 flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300">
+            <div className="shrink-0 mt-4 border-t border-[var(--border-outline-light)] pt-6 flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300">
               <TextArea
                 value={aiInputText}
                 onChange={(e) => {
@@ -285,14 +352,14 @@ export default function TranslatePage() {
                 }}
                 placeholder="Type a sentence to translate with AI..."
                 variant="secondary"
-                className={`w-full min-h-[64px] resize-y text-slate-700 bg-slate-50 border border-slate-200 focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-100 rounded-2xl transition-all ${robotoSerif.className}`}
+                className={`w-full min-h-[64px] resize-y text-[var(--text-normal)] bg-[var(--bg-surface-primary)] border border-[var(--border-outline-light)] focus-within:border-[var(--border-outline-darker)] focus-within:ring-4 focus-within:ring-transparent rounded-2xl transition-all ${robotoSerif.className}`}
               />
               <div className="flex justify-end">
                 <Button
                   onPress={handleAiTranslate}
                   isDisabled={isAiTranslating}
                   variant="secondary"
-                  className="font-bold px-5 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center gap-2"
+                  className="font-bold px-5 rounded-full bg-[var(--color-primary-surface)] text-[var(--color-primary-hover)] hover:bg-[var(--color-primary-default)] hover:text-[var(--text-normal)] flex items-center gap-2"
                 >
                   <Sparkles className="w-4 h-4" />
                   AI Translate
@@ -302,8 +369,8 @@ export default function TranslatePage() {
           )}
         </div>
 
-        <div className={`flex-1 rounded-2xl p-8 shadow-sm flex flex-col transition-all duration-500 ease-in-out relative ${isAiMode ? "bg-blue-50/50 border-2 border-blue-400" : "bg-white border border-slate-200"}`}>
-          <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-100 text-[13px] font-bold text-blue-600 w-fit mb-6 shrink-0">
+        <div className={`flex-1 rounded-2xl px-8 py-6 shadow-sm flex flex-col transition-all duration-500 ease-in-out relative ${isAiMode ? "bg-[#EFE8D8] border border-[var(--border-outline-light)]" : "bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)]"}`}>
+          <div className={`inline-flex items-center px-4 py-1.5 rounded-full text-[13px] font-bold w-fit mb-6 shrink-0 ${isAiMode ? "bg-[#E3D3B1] text-[var(--text-normal)]" : "bg-[var(--color-primary-surface)] text-[var(--color-primary-hover)]"}`}>
             {book.translationLang}
           </div>
 
@@ -311,28 +378,30 @@ export default function TranslatePage() {
             placeholder="Translation language."
             value={translatedText}
             onChange={handleTranslationChange}
-            className={`flex-1 w-full resize-none outline-none text-slate-800 text-lg leading-loose placeholder:text-slate-400 bg-transparent mb-4 ${sarabun.className}`}
+            onSelect={(e) => handleTextareaSelect(e, "translated")}
+            onMouseUp={(e) => handleTextareaMouseUp(e, "translated")}
+            className={`flex-1 w-full resize-none outline-none text-[var(--text-normal)] text-lg leading-loose placeholder-[var(--text-light)] bg-transparent mb-4 ${sarabun.className}`}
           />
 
           {isAiMode && (isAiTranslating || aiPreviewText) && (
-            <div className="shrink-0 mt-4 p-5 bg-white border border-blue-200 rounded-2xl shadow-lg shadow-blue-100/50 flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
+            <div className="shrink-0 mt-4 p-5 bg-[var(--bg-surface-light)] border border-[var(--color-primary-default)] rounded-2xl shadow-sm flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
               <div className="flex items-center gap-2">
                 {isAiTranslating ? (
-                  <Spinner size="sm" color="current" className="text-blue-600" />
+                  <Spinner size="sm" color="current" className="text-[var(--color-primary-default)]" />
                 ) : (
-                  <Sparkles className="w-4 h-4 text-blue-500" />
+                  <Sparkles className="w-4 h-4 text-[var(--color-primary-default)]" />
                 )}
-                <span className="text-xs font-bold text-blue-500 uppercase tracking-wider">
+                <span className="text-xs font-bold text-[var(--color-primary-default)] uppercase tracking-wider">
                   {isAiTranslating ? "AI Translating..." : "AI Translation Preview"}
                 </span>
               </div>
               {aiPreviewText && (
-                <p className={`text-slate-800 text-lg leading-relaxed ${sarabun.className}`}>{aiPreviewText}</p>
+                <p className={`text-[var(--text-normal)] text-lg leading-relaxed ${sarabun.className}`}>{aiPreviewText}</p>
               )}
               {!isAiTranslating && aiPreviewText && (
-                <div className="flex justify-end gap-2 mt-2 border-t border-slate-50 pt-4">
-                  <button type="button" onClick={handleCancelTranslation} className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"><X className="w-4 h-4" /> Cancel</button>
-                  <button type="button" onClick={handleAcceptTranslation} className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-200 transition-all active:scale-95"><Check className="w-4 h-4" /> Commit</button>
+                <div className="flex justify-end gap-2 mt-2 border-t border-[var(--border-outline-light)] pt-4">
+                  <button type="button" onClick={handleCancelTranslation} className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-surface-primary)] hover:text-[var(--text-normal)] transition-colors"><X className="w-4 h-4" /> Cancel</button>
+                  <button type="button" onClick={handleAcceptTranslation} className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-[var(--text-normal)] bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] shadow-sm transition-all active:scale-95"><Check className="w-4 h-4" /> Commit</button>
                 </div>
               )}
             </div>
@@ -340,12 +409,36 @@ export default function TranslatePage() {
 
           {!isAiTranslating && !aiPreviewText && (
             <div className="flex justify-end gap-3 shrink-0 mt-4">
-              <button type="button" onClick={handleUndo} disabled={historyIndex <= 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex <= 0 ? "bg-slate-100 text-slate-400 cursor-not-allowed border border-transparent" : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shadow-sm"}`}><Undo className="w-4 h-4" /> Undo</button>
-              <button type="button" onClick={handleRedo} disabled={historyIndex >= history.length - 1} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex >= history.length - 1 ? "bg-slate-100 text-slate-400 cursor-not-allowed border border-transparent" : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shadow-sm"}`}><Redo className="w-4 h-4" /> Redo</button>
+              <button type="button" onClick={handleUndo} disabled={historyIndex <= 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex <= 0 ? "bg-[var(--bg-surface-primary)] text-[var(--text-light)] cursor-not-allowed border border-transparent" : "bg-[var(--bg-surface-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-primary)] border border-[var(--border-outline-light)] shadow-sm"}`}><Undo className="w-4 h-4" /> Undo</button>
+              <button type="button" onClick={handleRedo} disabled={historyIndex >= history.length - 1} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex >= history.length - 1 ? "bg-[var(--bg-surface-primary)] text-[var(--text-light)] cursor-not-allowed border border-transparent" : "bg-[var(--bg-surface-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-primary)] border border-[var(--border-outline-light)] shadow-sm"}`}><Redo className="w-4 h-4" /> Redo</button>
             </div>
           )}
         </div>
       </main>
+
+      {/* --- Text Selection Popup --- */}
+      {selectedText && popupPosition.x > 0 && (
+        <div
+          id="selection-popup"
+          className="fixed z-50 bg-[var(--bg-surface-light)] rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-[var(--border-outline-light)] flex flex-col w-[280px] animate-in fade-in zoom-in-95 duration-200 overflow-hidden"
+          style={{
+            top: popupPosition.y,
+            left: popupPosition.x,
+            transform: `translate(${popupPosition.isFlippedX === 'left' ? '0%' : popupPosition.isFlippedX === 'right' ? '-100%' : '-50%'}, ${popupPosition.isFlippedY ? '0%' : '-100%'})`,
+            marginTop: popupPosition.isFlippedY ? '15px' : '-15px',
+            marginLeft: popupPosition.isFlippedX === 'left' ? '15px' : popupPosition.isFlippedX === 'right' ? '-15px' : '0px'
+          }}
+        >
+          <div className="flex flex-col p-2 gap-0.5">
+            <button onClick={() => handlePopupAction('vocabulary')} className="w-full px-4 py-3 hover:bg-[var(--bg-surface-primary)] transition-colors text-left rounded-xl text-[15px] font-medium text-[var(--text-normal)]">
+              Add to vocabulary
+            </button>
+            <button onClick={() => handlePopupAction('notes')} className="w-full px-4 py-3 hover:bg-[var(--bg-surface-primary)] transition-colors text-left rounded-xl text-[15px] font-medium text-[var(--text-normal)]">
+              Add to notes
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

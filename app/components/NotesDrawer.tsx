@@ -73,10 +73,34 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
           editor.commands.setContent(note.content);
         }
       } else if (isAddingNote) {
-        editor.commands.setContent("");
+        editor.commands.setContent(currentNoteText || "");
       }
     }
   }, [editingNoteId, isAddingNote, editor, notes]);
+
+  // 🚀 Listen for Text Selection Popup Actions
+  useEffect(() => {
+    const handleOpenNotesDrawer = (e: Event) => {
+      const customEvent = e as CustomEvent<{ tab: "vocabulary" | "notes", text: string }>;
+      setIsOpen(true);
+      setActiveTab(customEvent.detail.tab);
+      
+      if (customEvent.detail.tab === "vocabulary") {
+        setIsAddingVocab(true);
+        setNewVocabWord(customEvent.detail.text);
+      } else if (customEvent.detail.tab === "notes") {
+        setIsAddingNote(true);
+        const newText = `<p>${customEvent.detail.text}</p>`;
+        setCurrentNoteText(newText);
+        if (editor) {
+          editor.commands.setContent(newText);
+        }
+      }
+    };
+    
+    window.addEventListener("open-notes-drawer", handleOpenNotesDrawer);
+    return () => window.removeEventListener("open-notes-drawer", handleOpenNotesDrawer);
+  }, [editor]);
 
   // 🚀 Auto-Translate Logic for Vocabulary
   useEffect(() => {
@@ -200,9 +224,9 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-5 py-2.5 rounded-full font-bold shadow-sm transition-colors text-sm"
+        className="flex items-center justify-center gap-2 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[var(--bg-surface-primary)] px-5 py-2.5 rounded-full font-bold shadow-sm transition-colors text-sm"
       >
-        <Notebook className="w-4 h-4 text-slate-600" /> Notebook
+        <Notebook className="w-4 h-4 text-[var(--text-secondary)]" /> Notebook
       </button>
 
       <AnimatePresence>
