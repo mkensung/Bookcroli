@@ -60,7 +60,7 @@ export default function BookDetailsPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!book) {
-    return <div className="min-h-screen flex items-center justify-center text-slate-500 font-medium">Book not found or loading...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-[var(--text-secondary)] font-medium">Book not found or loading...</div>;
   }
 
   const handleEditImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,7 +151,7 @@ export default function BookDetailsPage() {
   return (
     <div className="min-h-screen bg-[var(--bg-surface-primary)] text-[var(--text-normal)] font-sans pb-20">
       <div className="pt-6 px-6 max-w-7xl mx-auto">
-        <header className="flex items-center justify-between px-6 py-3 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] shadow-sm">
+        <header className="flex items-center justify-between px-6 py-3 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] ">
           <Link href="/" className="flex items-center gap-2 font-extrabold text-[22px] tracking-tight text-[var(--text-normal)] hover:opacity-80 transition-opacity">
             ScriptArea
           </Link>
@@ -165,8 +165,8 @@ export default function BookDetailsPage() {
               <Search className="absolute left-3 w-4 h-4" />
               <input type="text" placeholder="Search books" className="w-full h-full pl-10 pr-4 text-sm bg-transparent border border-[var(--border-outline-light)] rounded-full outline-none focus:border-[var(--border-outline-darker)] transition-all text-[var(--text-normal)] placeholder-[var(--text-light)]" />
             </div>
-            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border-outline-light)] rounded-full bg-transparent hover:bg-[#FFF5E1] transition-colors text-[var(--text-normal)]"><Bell className="w-4 h-4" /></button>
-            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border-outline-light)] rounded-full bg-transparent hover:bg-[#FFF5E1] transition-colors text-[var(--text-normal)]"><Settings className="w-4 h-4" /></button>
+            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border-outline-light)] rounded-full bg-transparent hover:bg-[var(--bg-surface-light)] transition-colors text-[var(--text-normal)]"><Bell className="w-4 h-4" /></button>
+            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border-outline-light)] rounded-full bg-transparent hover:bg-[var(--bg-surface-light)] transition-colors text-[var(--text-normal)]"><Settings className="w-4 h-4" /></button>
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-primary-default)] text-[var(--text-normal)] text-sm font-bold cursor-pointer hover:opacity-90 transition-opacity">MK</div>
           </div>
         </header>
@@ -177,14 +177,14 @@ export default function BookDetailsPage() {
           <Link href="/" className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-normal)] font-medium transition-colors"><ChevronLeft className="w-5 h-5" /> Back to Library</Link>
         </div>
 
-        <div className="bg-[var(--bg-surface-light)] rounded-[32px] border border-[var(--border-outline-light)] p-8 shadow-sm mb-12 flex flex-col md:flex-row gap-8 relative">
-          <div className="absolute top-8 right-8 flex items-center gap-1">
-            <button onClick={handleOpenEditModal} className="flex items-center gap-1.5 px-4 py-2 text-[16px] font-bold text-[var(--text-normal)] hover:bg-[#FFF5E1] rounded-full transition-colors border border-[var(--border-outline-light)] bg-transparent"><Edit className="w-4 h-4" /> Edit book</button>
-            <button onClick={() => setIsDeleteBookModalOpen(true)} className="flex items-center gap-1.5 px-4 py-2 text-[16px] font-bold text-[var(--text-normal)] hover:bg-[#FFF5E1] rounded-full transition-colors border border-[var(--border-outline-light)] bg-transparent"><Trash2 className="w-4 h-4" /> Delete</button>
+        <div className="bg-[var(--bg-surface-light)] rounded-[32px] border border-[var(--border-outline-light)] p-6  mb-12 flex flex-col md:flex-row gap-8 relative">
+          <div className="absolute top-6 right-6 flex items-center gap-1">
+            <button onClick={handleOpenEditModal} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-normal text-[var(--text-normal)] hover:bg-[var(--bg-surface-light)] rounded-full transition-colors border border-[var(--border-outline-light)] bg-transparent"><Edit className="w-4 h-4" /> Edit book</button>
+            <button onClick={() => setIsDeleteBookModalOpen(true)} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-normal text-[var(--text-normal)] hover:bg-[var(--bg-surface-light)] rounded-full transition-colors border border-[var(--border-outline-light)] bg-transparent"><Trash2 className="w-4 h-4" /> Delete</button>
           </div>
 
           <div className="w-full md:w-[240px] shrink-0">
-            <div className="w-full aspect-2/3 bg-[var(--bg-surface-primary)] rounded-[20px] flex items-center justify-center border border-[var(--border-outline-light)] overflow-hidden shadow-sm relative">
+            <div className="w-full aspect-2/3 bg-[var(--bg-surface-primary)] rounded-[20px] flex items-center justify-center border border-[var(--border-outline-light)] overflow-hidden  relative">
               {book.coverImage ? <img src={book.coverImage} alt="Cover" className="w-full h-full object-cover" /> : <BookOpen className="w-16 h-16 stroke-[1.5] text-[var(--text-light)]" />}
             </div>
           </div>
@@ -215,19 +215,19 @@ export default function BookDetailsPage() {
           {(pages.length > 0 || isAddingPage) && (
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-[var(--text-normal)]">Table of Contents</h2>
-              <button onClick={() => setIsAddingPage(true)} className="bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] rounded-full font-bold px-6 py-2.5 flex items-center gap-2 transition-colors shadow-sm text-sm"><Plus className="w-4 h-4 stroke-[2.5]" /> Add page</button>
+              <button onClick={() => setIsAddingPage(true)} className="bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] rounded-full font-bold px-6 py-2.5 flex items-center gap-2 transition-colors  text-sm"><Plus className="w-4 h-4 stroke-[2.5]" /> Add page</button>
             </div>
           )}
 
           {pages.length === 0 && !isAddingPage ? (
-            <div className="bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] flex flex-col items-center justify-center py-20 text-center shadow-sm">
+            <div className="bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] flex flex-col items-center justify-center py-20 text-center ">
               <div className="w-20 h-20 bg-[var(--bg-surface-primary)] rounded-[24px] flex items-center justify-center text-[var(--text-light)] mb-6 -rotate-6"><X className="w-8 h-8" /></div>
               <h3 className="text-xl font-bold text-[var(--text-normal)] mb-2">No page added!</h3>
               <p className="text-[var(--text-secondary)] font-medium mb-8">You can add a new page in your book.</p>
-              <button onClick={() => setIsAddingPage(true)} className="bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] rounded-full font-bold px-6 py-2.5 flex items-center gap-2 transition-colors shadow-sm text-sm"><Plus className="w-4 h-4 stroke-2" /> Add page</button>
+              <button onClick={() => setIsAddingPage(true)} className="bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] rounded-full font-bold px-6 py-2.5 flex items-center gap-2 transition-colors  text-sm"><Plus className="w-4 h-4 stroke-2" /> Add page</button>
             </div>
           ) : (
-            <div className="bg-[var(--bg-surface-light)] rounded-[24px] border border-[var(--border-outline-light)] overflow-hidden shadow-sm mb-20">
+            <div className="bg-[var(--bg-surface-light)] rounded-[24px] border border-[var(--border-outline-light)] overflow-hidden  mb-20">
               <div className="grid grid-cols-[80px_1fr_160px] gap-4 px-6 py-3 bg-[var(--bg-surface-primary)] border-b border-[var(--border-outline-light)] text-sm font-bold text-[var(--text-light)]">
                 <div className="text-center">No.</div><div>Name</div><div></div>
               </div>
@@ -248,8 +248,8 @@ export default function BookDetailsPage() {
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       {editingPageId !== page.id && (
                         <>
-                          <Link href={`/book/${book.id}/page/${page.id}`} className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[#FFF5E1] rounded-full transition-colors cursor-pointer"><Eye className="w-4 h-4" /></Link>
-                          <button onClick={() => startEditing(page)} className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[#FFF5E1] rounded-full transition-colors"><Edit className="w-4 h-4" /></button>
+                          <Link href={`/book/${book.id}/page/${page.id}`} className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[var(--bg-surface-light)] rounded-full transition-colors cursor-pointer"><Eye className="w-4 h-4" /></Link>
+                          <button onClick={() => startEditing(page)} className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[var(--bg-surface-light)] rounded-full transition-colors"><Edit className="w-4 h-4" /></button>
                         </>
                       )}
                       <button onClick={() => setPageToDelete(page.id)} className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[var(--status-error-hover)] hover:border-[var(--status-error-default)] hover:text-[var(--status-error-default)] rounded-full transition-colors"><Trash2 className="w-4 h-4" /></button>
@@ -276,8 +276,8 @@ export default function BookDetailsPage() {
 
       {/* --- Edit Modal --- */}
       {isEditBookModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-          <div className="bg-[var(--bg-surface-light)] rounded-[32px] w-full max-w-3xl shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--text-normal)]/40 backdrop-blur-sm p-4">
+          <div className="bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] w-full max-w-3xl  p-8 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex justify-between items-start mb-6">
               <div><h2 className="text-2xl font-bold text-[var(--text-normal)]">Edit book details</h2><p className="text-sm text-[var(--text-secondary)] mt-1">Update book details and languages.</p></div>
               <button onClick={() => setIsEditBookModalOpen(false)} className="p-2 text-[var(--text-light)] hover:bg-[var(--bg-surface-primary)] rounded-full transition-colors bg-[var(--bg-surface-primary)]"><X className="w-5 h-5" /></button>
@@ -313,11 +313,11 @@ export default function BookDetailsPage() {
                     selectedKey={editFormData.originalLang}
                     onSelectionChange={(key) => setEditFormData({...editFormData, originalLang: key ? String(key) : ""})}
                   >
-                    <Select.Trigger className="w-full min-h-[48px] px-4 rounded-xl bg-[var(--bg-surface-primary)] hover:bg-[var(--bg-surface-light)] shadow-none border border-[var(--border-outline-light)] transition-all flex items-center justify-between">
+                    <Select.Trigger className="w-full min-h-[48px] px-4 rounded-xl bg-[var(--bg-surface-primary)] hover:bg-[var(--bg-surface-light)]  border border-[var(--border-outline-light)] transition-all flex items-center justify-between">
                       <Select.Value className="text-[var(--text-normal)] font-medium text-left" />
                       <Select.Indicator><ChevronDown className="w-4 h-4 text-[var(--text-light)]" /></Select.Indicator>
                     </Select.Trigger>
-                    <Select.Popover placement="bottom" shouldFlip={false} className="w-(--trigger-width) bg-[var(--bg-surface-light)] text-[var(--text-normal)] rounded-xl shadow-xl border border-[var(--border-outline-light)] max-h-[140px] overflow-y-auto overflow-x-hidden">
+                    <Select.Popover placement="bottom" shouldFlip={false} className="w-(--trigger-width) bg-[var(--bg-surface-light)] text-[var(--text-normal)] rounded-xl  border border-[var(--border-outline-light)] max-h-[140px] overflow-y-auto overflow-x-hidden">
                       <ListBox items={languages} aria-label="Original Language Options" className="p-1 flex flex-col gap-1 outline-none">
                         {(lang) => (
                           <ListBox.Item key={lang.value} id={lang.value} textValue={lang.label} className="w-full px-3 py-2 rounded-lg text-[var(--text-normal)] font-medium cursor-pointer hover:bg-[var(--color-primary-hover)] hover:text-[var(--text-normal)] transition-colors outline-none">
@@ -339,11 +339,11 @@ export default function BookDetailsPage() {
                     selectedKey={editFormData.translationLang}
                     onSelectionChange={(key) => setEditFormData({...editFormData, translationLang: key ? String(key) : ""})}
                   >
-                    <Select.Trigger className="w-full min-h-[48px] px-4 rounded-xl bg-[var(--bg-surface-primary)] hover:bg-[var(--bg-surface-light)] shadow-none border border-[var(--border-outline-light)] transition-all flex items-center justify-between">
+                    <Select.Trigger className="w-full min-h-[48px] px-4 rounded-xl bg-[var(--bg-surface-primary)] hover:bg-[var(--bg-surface-light)]  border border-[var(--border-outline-light)] transition-all flex items-center justify-between">
                       <Select.Value className="text-[var(--text-normal)] font-medium text-left" />
                       <Select.Indicator><ChevronDown className="w-4 h-4 text-[var(--text-light)]" /></Select.Indicator>
                     </Select.Trigger>
-                    <Select.Popover placement="bottom" shouldFlip={false} className="w-(--trigger-width) bg-[var(--bg-surface-light)] text-[var(--text-normal)] rounded-xl shadow-xl border border-[var(--border-outline-light)] max-h-[140px] overflow-y-auto overflow-x-hidden">
+                    <Select.Popover placement="bottom" shouldFlip={false} className="w-(--trigger-width) bg-[var(--bg-surface-light)] text-[var(--text-normal)] rounded-xl  border border-[var(--border-outline-light)] max-h-[140px] overflow-y-auto overflow-x-hidden">
                       <ListBox items={languages} aria-label="Translation Language Options" className="p-1 flex flex-col gap-1 outline-none">
                         {(lang) => (
                           <ListBox.Item key={lang.value} id={lang.value} textValue={lang.label} className="w-full px-3 py-2 rounded-lg text-[var(--text-normal)] font-medium cursor-pointer hover:bg-[var(--color-primary-hover)] hover:text-[var(--text-normal)] transition-colors outline-none">
@@ -357,28 +357,28 @@ export default function BookDetailsPage() {
 
               </div>
             </div>
-            <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-[var(--border-outline-light)]"><button onClick={() => setIsEditBookModalOpen(false)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] hover:bg-[var(--bg-surface-primary)] bg-transparent border border-[var(--border-outline-light)] shadow-sm transition-all">Cancel</button><button onClick={handleUpdateBook} className="px-10 py-2.5 rounded-full font-bold bg-[var(--color-primary-default)] text-[var(--text-normal)] hover:bg-[var(--color-primary-hover)] shadow-sm transition-all">Update</button></div>
+            <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-[var(--border-outline-light)]"><button onClick={() => setIsEditBookModalOpen(false)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] hover:bg-[var(--bg-surface-primary)] bg-transparent border border-[var(--border-outline-light)]  transition-all">Cancel</button><button onClick={handleUpdateBook} className="px-10 py-2.5 rounded-full font-bold bg-[var(--color-primary-default)] text-[var(--text-normal)] hover:bg-[var(--color-primary-hover)]  transition-all">Update</button></div>
           </div>
         </div>
       )}
 
       {/* --- Delete Confirmation Modal --- */}
       {isDeleteBookModalOpen && (
-         <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-           <div className="bg-[var(--bg-surface-light)] rounded-[32px] w-full max-w-[460px] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+         <div className="fixed inset-0 z-60 flex items-center justify-center bg-[var(--text-normal)]/40 backdrop-blur-sm p-4">
+           <div className="bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] w-full max-w-[460px]  p-8 animate-in fade-in zoom-in-95 duration-200">
              <div className="flex justify-between items-start mb-4"><div className="w-12 h-12 rounded-full bg-[var(--status-error-surface)] flex items-center justify-center text-[var(--status-error-default)]"><Trash2 className="w-6 h-6" /></div><button onClick={() => setIsDeleteBookModalOpen(false)} className="p-2 text-[var(--text-light)] hover:bg-[var(--bg-surface-primary)] rounded-full bg-[var(--bg-surface-primary)] transition-colors"><X className="w-5 h-5" /></button></div>
              <div className="mb-8"><h3 className="text-2xl font-bold text-[var(--text-normal)] mb-2">Delete book</h3><p className="text-base text-[var(--text-secondary)] font-medium leading-relaxed">Are you sure you want to delete this book? This action cannot be undone.</p></div>
-             <div className="flex justify-end gap-3"><button onClick={() => setIsDeleteBookModalOpen(false)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] bg-transparent border border-[var(--border-outline-light)] hover:bg-[var(--bg-surface-primary)] shadow-sm transition-all">Cancel</button><button onClick={handleConfirmDeleteBook} className="px-10 py-2.5 rounded-full font-bold text-white bg-[var(--status-error-default)] hover:bg-[var(--status-error-hover)] shadow-sm transition-all">Delete</button></div>
+             <div className="flex justify-end gap-3"><button onClick={() => setIsDeleteBookModalOpen(false)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] bg-transparent border border-[var(--border-outline-light)] hover:bg-[var(--bg-surface-primary)]  transition-all">Cancel</button><button onClick={handleConfirmDeleteBook} className="px-10 py-2.5 rounded-full font-bold text-white hover:text-[var(--status-error-default)] bg-[var(--status-error-default)] hover:bg-[var(--status-error-hover)]  transition-all">Delete</button></div>
            </div>
          </div>
       )}
 
       {pageToDelete !== null && (
-         <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-           <div className="bg-[var(--bg-surface-light)] rounded-[32px] w-full max-w-[460px] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+         <div className="fixed inset-0 z-60 flex items-center justify-center bg-[var(--text-normal)]/40 backdrop-blur-sm p-4">
+           <div className="bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] w-full max-w-[460px]  p-8 animate-in fade-in zoom-in-95 duration-200">
              <div className="flex justify-between items-start mb-4"><div className="w-12 h-12 rounded-full bg-[var(--status-error-surface)] flex items-center justify-center text-[var(--status-error-default)]"><Trash2 className="w-6 h-6" /></div><button onClick={() => setPageToDelete(null)} className="p-2 text-[var(--text-light)] hover:bg-[var(--bg-surface-primary)] rounded-full bg-[var(--bg-surface-primary)] transition-colors"><X className="w-5 h-5" /></button></div>
              <div className="mb-8"><h3 className="text-2xl font-bold text-[var(--text-normal)] mb-2">Delete page</h3><p className="text-base text-[var(--text-secondary)] font-medium leading-relaxed">Are you sure you want to delete this page? This action cannot be undone.</p></div>
-             <div className="flex justify-end gap-3"><button onClick={() => setPageToDelete(null)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] bg-transparent border border-[var(--border-outline-light)] hover:bg-[var(--bg-surface-primary)] shadow-sm transition-all">Cancel</button><button onClick={handleConfirmDeletePage} className="px-10 py-2.5 rounded-full font-bold text-white bg-[var(--status-error-default)] hover:bg-[var(--status-error-hover)] shadow-sm transition-all">Delete</button></div>
+             <div className="flex justify-end gap-3"><button onClick={() => setPageToDelete(null)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] bg-transparent border border-[var(--border-outline-light)] hover:bg-[var(--bg-surface-primary)]  transition-all">Cancel</button><button onClick={handleConfirmDeletePage} className="px-10 py-2.5 rounded-full font-bold text-white hover:text-[var(--status-error-default)] bg-[var(--status-error-default)] hover:bg-[var(--status-error-hover)]  transition-all">Delete</button></div>
            </div>
          </div>
       )}

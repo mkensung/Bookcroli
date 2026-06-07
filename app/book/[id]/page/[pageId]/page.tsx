@@ -109,7 +109,7 @@ export default function TranslatePage() {
   }, [page]);
 
   if (!book || !page) {
-    return <div className="h-screen flex items-center justify-center text-slate-400">Loading or Page not found...</div>;
+    return <div className="h-screen flex items-center justify-center text-[var(--text-light)]">Loading or Page not found...</div>;
   }
 
   // ---------------------------------------------------------
@@ -280,14 +280,14 @@ export default function TranslatePage() {
         </div>
         <div className="flex items-center gap-3">
           <NotesDrawer bookId={bookId} pageId={pageId} />
-          <button type="button" onClick={handleSave} className="flex items-center gap-2 bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] px-6 py-2.5 rounded-full font-bold shadow-sm transition-colors text-sm">
+          <button type="button" onClick={handleSave} className="flex items-center gap-2 bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] px-6 py-2.5 rounded-full font-bold  transition-colors text-sm">
             <Save className="w-4 h-4" /> Save
           </button>
         </div>
       </header>
 
       <main className="flex-1 flex flex-col md:flex-row gap-4 px-6 py-4 overflow-hidden">
-        <div className="flex-1 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-2xl px-8 py-6 shadow-sm flex flex-col transition-all relative">
+        <div className="flex-1 bg-white border border-[var(--border-outline-light)] rounded-2xl px-8 py-6 flex flex-col transition-all relative">
           <div className="flex justify-between items-center mb-6 shrink-0">
             <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[var(--border-outline-default)] text-[13px] font-bold text-[var(--text-secondary)]">
               {book.originalLang}
@@ -312,7 +312,7 @@ export default function TranslatePage() {
 
                     {/* ฝั่งปุ่มสวิตช์ */}
                     <Switch.Control className={`transition-colors duration-300 ${isSelected ? "bg-[var(--color-primary-default)]" : "bg-[var(--border-outline-light)]"}`}>
-                      <Switch.Thumb className="bg-white shadow-sm flex items-center justify-center">
+                      <Switch.Thumb className="bg-white  flex items-center justify-center">
                         <Switch.Icon>
                           {isSelected ? (
                             // 🚀 ใช้ StarFill (แบบทึบ) แทน Sparkles เส้นจะได้ไม่บางและไม่ดูแตกครับ
@@ -352,14 +352,14 @@ export default function TranslatePage() {
                 }}
                 placeholder="Type a sentence to translate with AI..."
                 variant="secondary"
-                className={`w-full min-h-[64px] resize-y text-[var(--text-normal)] bg-[var(--bg-surface-primary)] border border-[var(--border-outline-light)] focus-within:border-[var(--border-outline-darker)] focus-within:ring-4 focus-within:ring-transparent rounded-2xl transition-all ${robotoSerif.className}`}
+                className={`w-full min-h-[64px] resize-y text-[var(--text-normal)] bg-white border border-[var(--color-primary-surface)] focus-within:border-[var(--text-secondary)] focus-within:ring-4 focus-within:ring-transparent rounded-2xl transition-all ${robotoSerif.className}`}
               />
               <div className="flex justify-end">
                 <Button
                   onPress={handleAiTranslate}
                   isDisabled={isAiTranslating}
                   variant="secondary"
-                  className="font-bold px-5 rounded-full bg-[var(--color-primary-surface)] text-[var(--color-primary-hover)] hover:bg-[var(--color-primary-default)] hover:text-[var(--text-normal)] flex items-center gap-2"
+                  className="font-bold px-5 rounded-full bg-[var(--color-primary-default)] text-[var(--text-normal)] hover:bg-[var(--color-primary-hover)] flex items-center gap-2"
                 >
                   <Sparkles className="w-4 h-4" />
                   AI Translate
@@ -369,8 +369,8 @@ export default function TranslatePage() {
           )}
         </div>
 
-        <div className={`flex-1 rounded-2xl px-8 py-6 shadow-sm flex flex-col transition-all duration-500 ease-in-out relative ${isAiMode ? "bg-[#EFE8D8] border border-[var(--border-outline-light)]" : "bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)]"}`}>
-          <div className={`inline-flex items-center px-4 py-1.5 rounded-full text-[13px] font-bold w-fit mb-6 shrink-0 ${isAiMode ? "bg-[#E3D3B1] text-[var(--text-normal)]" : "bg-[var(--color-primary-surface)] text-[var(--color-primary-hover)]"}`}>
+        <div className={`flex-1 rounded-2xl px-8 py-6 flex flex-col transition-all duration-500 ease-in-out relative ${isAiMode ? "bg-[#FFFCF3] border border-[var(--text-secondary)]" : "bg-white border border-[var(--border-outline-light)]"}`}>
+          <div className={`inline-flex items-center px-4 py-1.5 rounded-full text-[13px] font-bold w-fit mb-6 shrink-0 ${isAiMode ? "bg-[var(--color-primary-surface)] text-[var(--text-normal)]" : "bg-[var(--border-outline-default)] text-[var(--text-secondary)]"}`}>
             {book.translationLang}
           </div>
 
@@ -384,14 +384,14 @@ export default function TranslatePage() {
           />
 
           {isAiMode && (isAiTranslating || aiPreviewText) && (
-            <div className="shrink-0 mt-4 p-5 bg-[var(--bg-surface-light)] border border-[var(--color-primary-default)] rounded-2xl shadow-sm flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
+            <div className="shrink-0 mt-4 p-5 bg-white border border-[var(--color-primary-surface)] rounded-2xl  flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
               <div className="flex items-center gap-2">
                 {isAiTranslating ? (
-                  <Spinner size="sm" color="current" className="text-[var(--color-primary-default)]" />
+                  <Spinner size="sm" color="current" className="text-[var(--text-secondary)]" />
                 ) : (
-                  <Sparkles className="w-4 h-4 text-[var(--color-primary-default)]" />
+                  <Sparkles className="w-4 h-4 text-[var(--text-secondary)]" />
                 )}
-                <span className="text-xs font-bold text-[var(--color-primary-default)] uppercase tracking-wider">
+                <span className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">
                   {isAiTranslating ? "AI Translating..." : "AI Translation Preview"}
                 </span>
               </div>
@@ -401,7 +401,7 @@ export default function TranslatePage() {
               {!isAiTranslating && aiPreviewText && (
                 <div className="flex justify-end gap-2 mt-2 border-t border-[var(--border-outline-light)] pt-4">
                   <button type="button" onClick={handleCancelTranslation} className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-surface-primary)] hover:text-[var(--text-normal)] transition-colors"><X className="w-4 h-4" /> Cancel</button>
-                  <button type="button" onClick={handleAcceptTranslation} className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-[var(--text-normal)] bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] shadow-sm transition-all active:scale-95"><Check className="w-4 h-4" /> Commit</button>
+                  <button type="button" onClick={handleAcceptTranslation} className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-[var(--text-normal)] bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)]  transition-all active:scale-95"><Check className="w-4 h-4" /> Commit</button>
                 </div>
               )}
             </div>
@@ -409,8 +409,8 @@ export default function TranslatePage() {
 
           {!isAiTranslating && !aiPreviewText && (
             <div className="flex justify-end gap-3 shrink-0 mt-4">
-              <button type="button" onClick={handleUndo} disabled={historyIndex <= 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex <= 0 ? "bg-[var(--bg-surface-primary)] text-[var(--text-light)] cursor-not-allowed border border-transparent" : "bg-[var(--bg-surface-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-primary)] border border-[var(--border-outline-light)] shadow-sm"}`}><Undo className="w-4 h-4" /> Undo</button>
-              <button type="button" onClick={handleRedo} disabled={historyIndex >= history.length - 1} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex >= history.length - 1 ? "bg-[var(--bg-surface-primary)] text-[var(--text-light)] cursor-not-allowed border border-transparent" : "bg-[var(--bg-surface-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-primary)] border border-[var(--border-outline-light)] shadow-sm"}`}><Redo className="w-4 h-4" /> Redo</button>
+              <button type="button" onClick={handleUndo} disabled={historyIndex <= 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex <= 0 ? "bg-[var(--bg-surface-primary)] text-[var(--text-light)] cursor-not-allowed border border-transparent" : "bg-[var(--bg-surface-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-primary)] border border-[var(--border-outline-light)] "}`}><Undo className="w-4 h-4" /> Undo</button>
+              <button type="button" onClick={handleRedo} disabled={historyIndex >= history.length - 1} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex >= history.length - 1 ? "bg-[var(--bg-surface-primary)] text-[var(--text-light)] cursor-not-allowed border border-transparent" : "bg-[var(--bg-surface-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-primary)] border border-[var(--border-outline-light)] "}`}><Redo className="w-4 h-4" /> Redo</button>
             </div>
           )}
         </div>
@@ -420,7 +420,7 @@ export default function TranslatePage() {
       {selectedText && popupPosition.x > 0 && (
         <div
           id="selection-popup"
-          className="fixed z-50 bg-[var(--bg-surface-light)] rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-[var(--border-outline-light)] flex flex-col w-[280px] animate-in fade-in zoom-in-95 duration-200 overflow-hidden"
+          className="fixed z-50 bg-[var(--bg-surface-light)] rounded-3xl border border-[var(--border-outline-light)] flex flex-col w-[280px] animate-in fade-in zoom-in-95 duration-200 overflow-hidden"
           style={{
             top: popupPosition.y,
             left: popupPosition.x,

@@ -59,7 +59,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
     },
     editorProps: {
       attributes: {
-        class: 'w-full h-full min-h-[300px] p-4 outline-none text-slate-800 leading-relaxed text-sm font-medium prose prose-sm max-w-none prose-p:my-1 prose-strong:font-bold prose-em:italic focus:outline-none',
+        class: 'w-full h-full min-h-[300px] p-4 outline-none text-[var(--text-normal)] leading-relaxed text-sm font-medium prose prose-sm max-w-none prose-p:my-1 prose-strong:font-bold prose-em:italic focus:outline-none',
       },
     },
   });
@@ -224,7 +224,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="flex items-center justify-center gap-2 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[var(--bg-surface-primary)] px-5 py-2.5 rounded-full font-bold shadow-sm transition-colors text-sm"
+        className="flex items-center justify-center gap-2 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] text-[var(--text-normal)] hover:bg-[var(--bg-surface-primary)] px-5 py-2.5 rounded-full font-bold  transition-colors text-sm"
       >
         <Notebook className="w-4 h-4 text-[var(--text-secondary)]" /> Notebook
       </button>
@@ -237,24 +237,24 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-[100]"
+              className="fixed inset-0 bg-[var(--text-normal)]/20 backdrop-blur-sm z-[100]"
             />
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 h-[100dvh] w-[400px] max-w-[90vw] bg-white shadow-2xl border-l border-slate-200 z-[101] flex flex-col overflow-hidden"
+              className="fixed right-0 top-0 bottom-0 h-[100dvh] w-[400px] max-w-[90vw] bg-white  border-l border-[var(--border-outline-light)] z-[101] flex flex-col overflow-hidden"
             >
               {/* Header */}
-              <div className="p-0 shrink-0 border-b border-slate-100 flex flex-col">
+              <div className="p-0 shrink-0 border-b border-[var(--border-outline-light)] flex flex-col">
                 {!isAddingVocab && !isAddingNote && !editingNoteId ? (
                   <div className="px-5 py-4 flex justify-between items-center">
-                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">Notebook</h2>
+                    <h2 className="text-xl font-bold text-[var(--text-normal)] tracking-tight">Notebook</h2>
                     {activeTab === "vocabulary" ? (
                       <button
                         onClick={() => setIsAddingVocab(true)}
-                        className="flex items-center gap-1 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-full transition-colors"
+                        className="flex items-center gap-1 text-sm font-bold text-white bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] px-4 py-1.5 rounded-full transition-colors"
                       >
                         <Plus className="w-4 h-4 stroke-[2.5]" /> Add
                       </button>
@@ -264,7 +264,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                           setIsAddingNote(true);
                           setCurrentNoteText("");
                         }}
-                        className="flex items-center gap-1 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-full transition-colors"
+                        className="flex items-center gap-1 text-sm font-bold text-white bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] px-4 py-1.5 rounded-full transition-colors"
                       >
                         <Plus className="w-4 h-4 stroke-[2.5]" /> Add
                       </button>
@@ -272,7 +272,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                   </div>
                 ) : (
                   <div className="px-5 py-4 flex justify-between items-center bg-white">
-                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+                    <h2 className="text-xl font-bold text-[var(--text-normal)] tracking-tight">
                       {isAddingVocab ? "Add vocabulary" : (editingNoteId ? "Edit note" : "Add note")}
                     </h2>
                     <div className="flex items-center gap-3">
@@ -285,14 +285,14 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                           setNewVocabRemarks("");
                           setPreviewVocab(null);
                         }}
-                        className="text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors"
+                        className="text-sm font-bold text-[var(--text-secondary)] hover:text-[var(--text-normal)] transition-colors"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={activeTab === "vocabulary" ? handleSaveVocab : handleSaveNote}
                         disabled={activeTab === "vocabulary" ? (!newVocabWord || !previewVocab || isTranslating) : !currentNoteText.trim()}
-                        className={`bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded-full font-bold text-sm transition-colors ${(activeTab === "vocabulary" && (!newVocabWord || !previewVocab || isTranslating)) || (activeTab === "notes" && !currentNoteText.trim()) ? "opacity-50 cursor-not-allowed" : ""}`}
+                        className={`bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-default)] text-white px-4 py-1.5 rounded-full font-bold text-sm transition-colors ${(activeTab === "vocabulary" && (!newVocabWord || !previewVocab || isTranslating)) || (activeTab === "notes" && !currentNoteText.trim()) ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         Done
                       </button>
@@ -303,15 +303,15 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                 {/* Tab Switcher */}
                 {!isAddingVocab && !isAddingNote && !editingNoteId && (
                   <div className="px-5 pb-4">
-                    <div className="flex bg-slate-100 p-1 rounded-full w-full">
+                    <div className="flex bg-[var(--bg-surface-light)] p-1 rounded-full w-full">
                       <button
-                        className={`flex-1 py-1.5 text-sm font-bold rounded-full transition-all ${activeTab === "notes" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                        className={`flex-1 py-1.5 text-sm font-bold rounded-full transition-all ${activeTab === "notes" ? "bg-white text-[var(--text-normal)] " : "text-[var(--text-secondary)] hover:text-[var(--text-normal)]"}`}
                         onClick={() => setActiveTab("notes")}
                       >
                         Notes
                       </button>
                       <button
-                        className={`flex-1 py-1.5 text-sm font-bold rounded-full transition-all ${activeTab === "vocabulary" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                        className={`flex-1 py-1.5 text-sm font-bold rounded-full transition-all ${activeTab === "vocabulary" ? "bg-white text-[var(--text-normal)] " : "text-[var(--text-secondary)] hover:text-[var(--text-normal)]"}`}
                         onClick={() => setActiveTab("vocabulary")}
                       >
                         Vocabulary
@@ -326,17 +326,17 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                 {!isAddingVocab && activeTab === "notes" && (
                   <div className="flex-1 h-full flex flex-col px-5 py-5 overflow-y-auto">
                     {(isAddingNote || editingNoteId) ? (
-                      <div className="flex-1 flex flex-col bg-[#f3f4f6] rounded-xl overflow-hidden min-h-[300px]">
+                      <div className="flex-1 flex flex-col bg-[var(--bg-surface-primary)] rounded-xl overflow-hidden min-h-[300px]">
                         {/* Toolbar inside gray container */}
                         <div className="px-3 py-2 flex items-center gap-1 shrink-0 overflow-x-auto">
-                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive('bold') ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().toggleBold().run()}><Bold className="w-4 h-4" /></button>
-                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive('italic') ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().toggleItalic().run()}><Italic className="w-4 h-4" /></button>
-                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive('underline') ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().toggleUnderline().run()}><Underline className="w-4 h-4" /></button>
-                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive('strike') ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().toggleStrike().run()}><Strikethrough className="w-4 h-4" /></button>
-                          <div className="w-px h-4 bg-slate-300 mx-1 shrink-0"></div>
-                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive({ textAlign: 'left' }) ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('left').run()}><AlignLeft className="w-4 h-4" /></button>
-                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive({ textAlign: 'center' }) ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('center').run()}><AlignCenter className="w-4 h-4" /></button>
-                          <button className={`p-1.5 rounded-md hover:bg-slate-200 text-slate-600 transition-colors shrink-0 ${editor?.isActive({ textAlign: 'right' }) ? 'bg-slate-200' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('right').run()}><AlignRight className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-[var(--border-outline-light)] text-[var(--text-secondary)] transition-colors shrink-0 ${editor?.isActive('bold') ? 'bg-[var(--border-outline-light)]' : ''}`} onClick={() => editor?.chain().focus().toggleBold().run()}><Bold className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-[var(--border-outline-light)] text-[var(--text-secondary)] transition-colors shrink-0 ${editor?.isActive('italic') ? 'bg-[var(--border-outline-light)]' : ''}`} onClick={() => editor?.chain().focus().toggleItalic().run()}><Italic className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-[var(--border-outline-light)] text-[var(--text-secondary)] transition-colors shrink-0 ${editor?.isActive('underline') ? 'bg-[var(--border-outline-light)]' : ''}`} onClick={() => editor?.chain().focus().toggleUnderline().run()}><Underline className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-[var(--border-outline-light)] text-[var(--text-secondary)] transition-colors shrink-0 ${editor?.isActive('strike') ? 'bg-[var(--border-outline-light)]' : ''}`} onClick={() => editor?.chain().focus().toggleStrike().run()}><Strikethrough className="w-4 h-4" /></button>
+                          <div className="w-px h-4 bg-[var(--border-outline-darker)] mx-1 shrink-0"></div>
+                          <button className={`p-1.5 rounded-md hover:bg-[var(--border-outline-light)] text-[var(--text-secondary)] transition-colors shrink-0 ${editor?.isActive({ textAlign: 'left' }) ? 'bg-[var(--border-outline-light)]' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('left').run()}><AlignLeft className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-[var(--border-outline-light)] text-[var(--text-secondary)] transition-colors shrink-0 ${editor?.isActive({ textAlign: 'center' }) ? 'bg-[var(--border-outline-light)]' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('center').run()}><AlignCenter className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-md hover:bg-[var(--border-outline-light)] text-[var(--text-secondary)] transition-colors shrink-0 ${editor?.isActive({ textAlign: 'right' }) ? 'bg-[var(--border-outline-light)]' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('right').run()}><AlignRight className="w-4 h-4" /></button>
                         </div>
                         {/* Tiptap Editor inside gray container */}
                         <div className="flex-1 w-full bg-transparent overflow-y-auto" onClick={() => editor?.commands.focus()}>
@@ -345,25 +345,25 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                       </div>
                     ) : notes.length === 0 ? (
                       <div className="flex flex-col items-center justify-center pt-20 text-center">
-                        <div className="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-4">
-                          <FileX className="w-6 h-6 text-slate-400" strokeWidth={1.5} />
+                        <div className="w-14 h-14 bg-[var(--bg-surface-light)] rounded-xl flex items-center justify-center mb-4">
+                          <FileX className="w-6 h-6 text-[var(--text-light)]" strokeWidth={1.5} />
                         </div>
-                        <p className="text-slate-800 font-bold text-base mb-1">No notes added!</p>
-                        <p className="text-slate-500 text-sm">You can click add note to create a new note.</p>
+                        <p className="text-[var(--text-normal)] font-bold text-base mb-1">No notes added!</p>
+                        <p className="text-[var(--text-secondary)] text-sm">You can click add note to create a new note.</p>
                       </div>
                     ) : (
                       <div className="flex flex-col gap-4 pb-8">
                         {notes.map(note => (
-                          <div key={note.id} className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm relative group">
+                          <div key={note.id} className="bg-white border border-[var(--border-outline-light)] rounded-xl p-5  relative group">
                             <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5">
-                              <button onClick={() => { setEditingNoteId(note.id); setCurrentNoteText(note.content); }} className="p-1.5 text-slate-400 hover:text-blue-600 bg-slate-50 hover:bg-blue-50 rounded-full transition-colors"><Edit className="w-3.5 h-3.5" /></button>
-                              <button onClick={() => setDeleteConfirm({ type: 'note', id: note.id })} className="p-1.5 text-slate-400 hover:text-red-600 bg-slate-50 hover:bg-red-50 rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                              <button onClick={() => { setEditingNoteId(note.id); setCurrentNoteText(note.content); }} className="p-1.5 text-[var(--text-light)] hover:text-[var(--color-primary-default)] bg-[var(--bg-surface-primary)] hover:bg-[var(--color-primary-surface)] rounded-full transition-colors"><Edit className="w-3.5 h-3.5" /></button>
+                              <button onClick={() => setDeleteConfirm({ type: 'note', id: note.id })} className="p-1.5 text-[var(--text-light)] hover:text-[var(--status-error-hover)] bg-[var(--bg-surface-primary)] hover:bg-[var(--status-error-surface)] rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                             </div>
                             <div
-                              className="text-slate-800 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-strong:font-bold prose-em:italic"
+                              className="text-[var(--text-normal)] text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-strong:font-bold prose-em:italic"
                               dangerouslySetInnerHTML={{ __html: note.content }}
                             />
-                            <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-medium text-slate-400">
+                            <div className="mt-4 pt-3 border-t border-[var(--border-outline-light)] text-[11px] font-medium text-[var(--text-light)]">
                               {new Date(note.createdAt).toLocaleDateString()} {new Date(note.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </div>
                           </div>
@@ -378,52 +378,52 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                   <div className="flex-1 h-full flex flex-col px-5 py-5 overflow-y-auto">
                     {vocabList.length === 0 ? (
                       <div className="flex flex-col items-center justify-center pt-20 text-center">
-                        <div className="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-4">
-                          <FileX className="w-6 h-6 text-slate-400" strokeWidth={1.5} />
+                        <div className="w-14 h-14 bg-[var(--bg-surface-light)] rounded-xl flex items-center justify-center mb-4">
+                          <FileX className="w-6 h-6 text-[var(--text-light)]" strokeWidth={1.5} />
                         </div>
-                        <p className="text-slate-800 font-bold text-base mb-1">No vocabulary added!</p>
-                        <p className="text-slate-500 text-sm">You can click add a new vocabulary.</p>
+                        <p className="text-[var(--text-normal)] font-bold text-base mb-1">No vocabulary added!</p>
+                        <p className="text-[var(--text-secondary)] text-sm">You can click add a new vocabulary.</p>
                       </div>
                     ) : (
                       <div className="flex flex-col gap-4 pb-8">
                         {vocabList.map(vocab => {
                           const isExpanded = expandedVocabs[vocab.id];
                           return (
-                            <div key={vocab.id} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm relative group">
+                            <div key={vocab.id} className="bg-white border border-[var(--border-outline-light)] rounded-xl p-4  relative group">
                               <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5">
-                                <button onClick={() => setDeleteConfirm({ type: 'vocab', id: vocab.id })} className="p-1.5 text-slate-400 hover:text-red-600 bg-slate-50 hover:bg-red-50 rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                                <button onClick={() => setDeleteConfirm({ type: 'vocab', id: vocab.id })} className="p-1.5 text-[var(--text-light)] hover:text-[var(--status-error-hover)] bg-[var(--bg-surface-primary)] hover:bg-[var(--status-error-surface)] rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                               </div>
                               <div className="flex justify-between items-start mb-1 pr-6">
-                                <h4 className="text-[17px] font-bold text-slate-900 tracking-tight">{vocab.word}</h4>
+                                <h4 className="text-[17px] font-bold text-[var(--text-normal)] tracking-tight">{vocab.word}</h4>
                               </div>
 
                               <div className="flex items-center gap-1.5 mb-2">
-                                <span className="text-slate-500 text-[13px]">{vocab.partOfSpeech}</span>
-                                <span className="text-slate-500 text-[13px]">/{vocab.phonetic}/</span>
-                                <button onClick={() => handleSpeech(vocab.word)} className="p-1 text-slate-400 hover:text-blue-600 transition-colors ml-1">
+                                <span className="text-[var(--text-secondary)] text-[13px]">{vocab.partOfSpeech}</span>
+                                <span className="text-[var(--text-secondary)] text-[13px]">/{vocab.phonetic}/</span>
+                                <button onClick={() => handleSpeech(vocab.word)} className="p-1 text-[var(--text-light)] hover:text-[var(--color-primary-default)] transition-colors ml-1">
                                   <Volume2 className="w-3.5 h-3.5" />
                                 </button>
                               </div>
 
-                              <div className="text-slate-700 text-sm font-medium leading-relaxed mb-3">
-                                <span className="text-slate-500 mr-1.5">({vocab.thaiReading})</span>
+                              <div className="text-[var(--text-normal)] text-sm font-medium leading-relaxed mb-3">
+                                <span className="text-[var(--text-secondary)] mr-1.5">({vocab.thaiReading})</span>
                                 {vocab.translation}
                               </div>
 
                               {isExpanded && (
-                                <div className="mt-4 pt-3 border-t border-slate-100">
+                                <div className="mt-4 pt-3 border-t border-[var(--border-outline-light)]">
                                   {vocab.examples && vocab.examples.length > 0 && (
                                     <div className="mb-4">
-                                      <span className="text-[12px] font-bold text-slate-900 block mb-2">Example sentences</span>
-                                      <ol className="list-decimal list-inside text-sm text-slate-600 space-y-1.5">
+                                      <span className="text-[12px] font-bold text-[var(--text-normal)] block mb-2">Example sentences</span>
+                                      <ol className="list-decimal list-inside text-sm text-[var(--text-secondary)] space-y-1.5">
                                         {vocab.examples.map((ex, i) => <li key={i}>{ex}</li>)}
                                       </ol>
                                     </div>
                                   )}
                                   {vocab.remarks && (
                                     <div>
-                                      <span className="text-[12px] font-bold text-slate-900 block mb-2">Remarks</span>
-                                      <p className="text-sm text-slate-600 leading-relaxed">{vocab.remarks}</p>
+                                      <span className="text-[12px] font-bold text-[var(--text-normal)] block mb-2">Remarks</span>
+                                      <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{vocab.remarks}</p>
                                     </div>
                                   )}
                                 </div>
@@ -431,7 +431,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
 
                               <div className="flex justify-end mt-1">
                                 <button
-                                  className="flex items-center gap-1 text-[13px] text-slate-500 font-semibold hover:text-slate-800 transition-colors"
+                                  className="flex items-center gap-1 text-[13px] text-[var(--text-secondary)] font-semibold hover:text-[var(--text-normal)] transition-colors"
                                   onClick={() => toggleExpand(vocab.id)}
                                 >
                                   {isExpanded ? "See less" : "See more"}
@@ -450,11 +450,11 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                 {isAddingVocab && (
                   <div className="flex-1 h-full flex flex-col px-5 py-5 overflow-y-auto">
                     <div className="mb-4">
-                      <label className="text-[13px] font-bold text-slate-900 block mb-2">Vocabulary name</label>
+                      <label className="text-[13px] font-bold text-[var(--text-normal)] block mb-2">Vocabulary name</label>
                       <div className="relative">
                         <input
                           type="text"
-                          className="w-full bg-[#f8fafc] border border-slate-200 rounded-xl py-2.5 px-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium placeholder:text-slate-400"
+                          className="w-full bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-xl py-2.5 px-3 text-[var(--text-normal)] focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium placeholder:text-[var(--text-light)]"
                           placeholder="Enter vocabulary name"
                           value={newVocabWord}
                           onChange={(e) => setNewVocabWord(e.target.value)}
@@ -463,9 +463,9 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                     </div>
 
                     <div className="mb-5">
-                      <label className="text-[13px] font-bold text-slate-900 block mb-2">Remarks</label>
+                      <label className="text-[13px] font-bold text-[var(--text-normal)] block mb-2">Remarks</label>
                       <textarea
-                        className="w-full bg-[#f8fafc] border border-slate-200 rounded-xl p-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all min-h-[100px] resize-y text-sm placeholder:text-slate-400"
+                        className="w-full bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-xl p-3 text-[var(--text-normal)] focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all min-h-[100px] resize-y text-sm placeholder:text-[var(--text-light)]"
                         placeholder="Enter remarks"
                         value={newVocabRemarks}
                         onChange={(e) => setNewVocabRemarks(e.target.value)}
@@ -473,24 +473,24 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                     </div>
 
                     {isTranslating && (
-                      <div className="bg-white border border-blue-200 rounded-xl p-6 shadow-sm mb-4 flex flex-col items-center justify-center gap-3">
-                        <Spinner size="md" color="current" className="text-blue-600" />
-                        <span className="text-sm font-bold text-blue-600">Translating vocabulary...</span>
+                      <div className="bg-white border border-[var(--color-primary-default)] rounded-xl p-6  mb-4 flex flex-col items-center justify-center gap-3">
+                        <Spinner size="md" color="current" className="text-[var(--color-primary-default)]" />
+                        <span className="text-sm font-bold text-[var(--color-primary-default)]">Translating vocabulary...</span>
                       </div>
                     )}
 
                     {previewVocab && !isTranslating && (
-                      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-4">
+                      <div className="bg-white border border-[var(--border-outline-light)] rounded-xl p-4  mb-4">
                         <div className="flex items-center gap-1.5 mb-2">
-                          <span className="text-slate-500 text-[13px] font-medium">{previewVocab.partOfSpeech}</span>
-                          <span className="text-slate-500 text-[13px]">/{previewVocab.phonetic}/</span>
+                          <span className="text-[var(--text-secondary)] text-[13px] font-medium">{previewVocab.partOfSpeech}</span>
+                          <span className="text-[var(--text-secondary)] text-[13px]">/{previewVocab.phonetic}/</span>
                         </div>
-                        <div className="text-slate-800 text-sm font-bold mb-2">
-                          <span className="text-slate-500 mr-1.5 font-medium">({previewVocab.thaiReading})</span>
+                        <div className="text-[var(--text-normal)] text-sm font-bold mb-2">
+                          <span className="text-[var(--text-secondary)] mr-1.5 font-medium">({previewVocab.thaiReading})</span>
                           {previewVocab.translation}
                         </div>
                         {previewVocab.examples && previewVocab.examples.length > 0 && (
-                          <div className="text-[13px] text-slate-500 italic border-t border-slate-100 pt-2 mt-2">
+                          <div className="text-[13px] text-[var(--text-secondary)] italic border-t border-[var(--border-outline-light)] pt-2 mt-2">
                             "{previewVocab.examples[0]}"
                           </div>
                         )}
@@ -512,24 +512,24 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+              className="absolute inset-0 bg-[var(--text-normal)]/40 backdrop-blur-sm"
               onClick={() => setDeleteConfirm(null)}
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative bg-white rounded-2xl shadow-2xl w-[90%] max-w-[320px] p-6 text-center z-10"
+              className="relative bg-white rounded-2xl  w-[90%] max-w-[320px] p-6 text-center z-10"
             >
-              <div className="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-[var(--status-error-surface)] text-[var(--status-error-default)] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Trash2 className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Delete this item?</h3>
-              <p className="text-sm text-slate-500 mb-6">This action cannot be undone. Are you sure you want to delete it?</p>
+              <h3 className="text-lg font-bold text-[var(--text-normal)] mb-2">Delete this item?</h3>
+              <p className="text-sm text-[var(--text-secondary)] mb-6">This action cannot be undone. Are you sure you want to delete it?</p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setDeleteConfirm(null)}
-                  className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-[var(--bg-surface-light)] text-[var(--text-normal)] hover:bg-[var(--border-outline-light)] transition-colors"
                 >
                   Cancel
                 </button>
@@ -542,7 +542,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                     }
                     setDeleteConfirm(null);
                   }}
-                  className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-red-500 text-white hover:bg-red-600 transition-colors shadow-sm shadow-red-500/20"
+                  className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-[var(--status-error-default)] text-white hover:bg-[var(--status-error-hover)] transition-colors  shadow-red-500/20"
                 >
                   Delete
                 </button>

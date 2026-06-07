@@ -106,7 +106,7 @@ export default function Home() {
 
       {/* --- Floating Navigation Bar --- */}
       <div className="pt-6 px-6 max-w-7xl mx-auto">
-        <header className="flex items-center justify-between px-6 py-3 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] shadow-sm">
+        <header className="flex items-center justify-between px-6 py-3 bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] ">
           <div className="flex items-center gap-2 font-extrabold text-[22px] tracking-tight text-[var(--text-normal)]">
             ScriptArea
           </div>
@@ -136,8 +136,8 @@ export default function Home() {
               <Search className="absolute left-3 w-4 h-4" />
               <input type="text" placeholder="Search books" className="w-full h-full pl-10 pr-4 text-sm bg-transparent border border-[var(--border-outline-light)] rounded-full outline-none focus:border-[var(--border-outline-darker)] transition-all text-[var(--text-normal)] placeholder-[var(--text-light)]" />
             </div>
-            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border-outline-light)] rounded-full bg-transparent hover:bg-[#FFF5E1] transition-colors text-[var(--text-normal)]"><Bell className="w-4 h-4" /></button>
-            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border-outline-light)] rounded-full bg-transparent hover:bg-[#FFF5E1] transition-colors text-[var(--text-normal)]"><Settings className="w-4 h-4" /></button>
+            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border-outline-light)] rounded-full bg-transparent hover:bg-[var(--bg-surface-light)] transition-colors text-[var(--text-normal)]"><Bell className="w-4 h-4" /></button>
+            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border-outline-light)] rounded-full bg-transparent hover:bg-[var(--bg-surface-light)] transition-colors text-[var(--text-normal)]"><Settings className="w-4 h-4" /></button>
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-primary-default)] text-[var(--text-normal)] text-sm font-bold cursor-pointer hover:opacity-90 transition-opacity">MK</div>
           </div>
         </header>
@@ -149,14 +149,14 @@ export default function Home() {
         {activeTab === "overview" && (
           <div className="flex flex-col gap-10">
             {/* Banner */}
-            <div className="bg-[var(--color-primary-surface)] rounded-[32px] p-10 flex justify-between relative overflow-hidden shadow-sm">
+            <div className="bg-[var(--color-primary-surface)] rounded-[32px] p-10 flex justify-between relative overflow-hidden ">
               <div className="relative z-10 flex flex-col justify-center">
                 <h1 className="text-[34px] font-extrabold text-[var(--text-normal)] tracking-tight">Welcome back, Mean!</h1>
                 <p className="text-[17px] text-[var(--text-secondary)] mt-2 font-medium">You have {inProgressBooks} books in translation progress.</p>
                 
                 <div className="flex gap-4 mt-8">
-                  <div className="bg-[var(--bg-surface-light)] rounded-2xl p-4 flex items-center gap-4 min-w-[200px] shadow-sm">
-                    <div className="w-12 h-12 rounded-xl bg-[#E8F2FB] text-[#3B82F6] flex items-center justify-center shrink-0">
+                  <div className="bg-[var(--bg-surface-light)] rounded-2xl p-4 flex items-center gap-4 min-w-[200px] ">
+                    <div className="w-12 h-12 rounded-xl bg-[var(--status-info-surface)] text-[var(--status-info-default)] flex items-center justify-center shrink-0">
                       <Book className="w-6 h-6 stroke-[2.5]" />
                     </div>
                     <div>
@@ -164,8 +164,8 @@ export default function Home() {
                       <p className="text-[26px] font-black text-[var(--text-normal)] leading-none mt-1">{totalBooks}</p>
                     </div>
                   </div>
-                  <div className="bg-[var(--bg-surface-light)] rounded-2xl p-4 flex items-center gap-4 min-w-[200px] shadow-sm">
-                    <div className="w-12 h-12 rounded-xl bg-[#FDEFE3] text-[#F97316] flex items-center justify-center shrink-0">
+                  <div className="bg-[var(--bg-surface-light)] rounded-2xl p-4 flex items-center gap-4 min-w-[200px] ">
+                    <div className="w-12 h-12 rounded-xl bg-[var(--status-warning-surface)] text-[var(--status-warning-default)] flex items-center justify-center shrink-0">
                       <RefreshCw className="w-6 h-6 stroke-[2.5]" />
                     </div>
                     <div>
@@ -173,8 +173,8 @@ export default function Home() {
                       <p className="text-[26px] font-black text-[var(--text-normal)] leading-none mt-1">{inProgressBooks}</p>
                     </div>
                   </div>
-                  <div className="bg-[var(--bg-surface-light)] rounded-2xl p-4 flex items-center gap-4 min-w-[200px] shadow-sm">
-                    <div className="w-12 h-12 rounded-xl bg-[#EAF5EC] text-[#22C55E] flex items-center justify-center shrink-0">
+                  <div className="bg-[var(--bg-surface-light)] rounded-2xl p-4 flex items-center gap-4 min-w-[200px] ">
+                    <div className="w-12 h-12 rounded-xl bg-[var(--status-success-surface)] text-[var(--status-success-default)] flex items-center justify-center shrink-0">
                       <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
                     </div>
                     <div>
@@ -208,7 +208,7 @@ export default function Home() {
               </div>
               
               {inProgressBooksList.length === 0 ? (
-                <div className="bg-[var(--bg-surface-light)] rounded-2xl p-10 text-center text-[var(--text-secondary)] shadow-sm border border-[var(--border-outline-light)] font-medium">
+                <div className="bg-[var(--bg-surface-light)] rounded-2xl p-10 text-center text-[var(--text-secondary)]  border border-[var(--border-outline-light)] font-medium">
                   No books in progress. Start translating from your library!
                 </div>
               ) : (
@@ -217,7 +217,7 @@ export default function Home() {
                     const progressPercent = book.totalPages > 0 ? Math.round((book.translatedPages / book.totalPages) * 100) : 0;
                     return (
                       <Link href={`/book/${book.id}`} key={book.id} className="block w-full">
-                        <div className="bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex gap-5 h-[210px] group cursor-pointer">
+                        <div className="bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-2xl p-5 transition-all flex gap-5 h-[210px] group cursor-pointer">
                           <div className="w-[130px] h-full shrink-0 bg-[var(--bg-surface-primary)] rounded-[16px] flex items-center justify-center border border-[var(--border-outline-light)] overflow-hidden">
                             {book.coverImage ? (
                               <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
@@ -259,7 +259,7 @@ export default function Home() {
                 <Book className="w-7 h-7 text-[var(--text-normal)] stroke-2" />
                 <h1 className="text-2xl font-bold text-[var(--text-normal)]">Library</h1>
               </div>
-              <button onClick={() => setIsModalOpen(true)} className="bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] rounded-full font-bold px-6 py-2.5 flex items-center gap-2 transition-colors shadow-sm">
+              <button onClick={() => setIsModalOpen(true)} className="bg-[var(--color-primary-default)] hover:bg-[var(--color-primary-hover)] text-[var(--text-normal)] rounded-full font-bold px-6 py-2.5 flex items-center gap-2 transition-colors ">
                 <Plus className="w-4 h-4" /> Add new book
               </button>
             </div>
@@ -276,7 +276,7 @@ export default function Home() {
                   const progressPercent = book.totalPages > 0 ? Math.round((book.translatedPages / book.totalPages) * 100) : 0;
                   return (
                     <Link href={`/book/${book.id}`} key={book.id} className="block w-full">
-                      <div className="group bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-2xl p-4 shadow-sm hover:shadow-md transition-all relative flex flex-col gap-4 cursor-pointer h-full">
+                      <div className="group bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-2xl p-4 transition-all relative flex flex-col gap-4 cursor-pointer h-full">
                         <div className="relative">
                           <div className="w-full aspect-2/3 bg-[var(--bg-surface-primary)] rounded-xl flex items-center justify-center border border-[var(--border-outline-light)] overflow-hidden">
                             {book.coverImage ? (
@@ -287,7 +287,7 @@ export default function Home() {
                           </div>
                           <button
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setBookToDelete(book.id); }}
-                            className="absolute -top-3 -right-3 w-11 h-11 bg-[var(--status-error-default)] hover:bg-[var(--status-error-hover)] text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10"
+                            className="absolute -top-3 -right-3 w-11 h-11 bg-[var(--status-error-default)] hover:bg-[var(--status-error-hover)] text-white hover:text-[var(--status-error-default)] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10"
                           >
                             <Trash2 className="w-5 h-5" />
                           </button>
@@ -317,8 +317,8 @@ export default function Home() {
 
       {/* --- Add New Book Modal --- */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-          <div className="bg-[var(--bg-surface-light)] rounded-[32px] w-full max-w-3xl shadow-2xl overflow-hidden flex flex-col p-8 animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--text-normal)]/40 backdrop-blur-sm p-4">
+          <div className="bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] w-full max-w-3xl  overflow-hidden flex flex-col p-8 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-[var(--text-normal)]">Add new book</h2>
@@ -400,7 +400,7 @@ export default function Home() {
                     onSelectionChange={(key) => handleInputChange("originalLang", key ? String(key) : "")}
                     isInvalid={!!errors.originalLang}
                   >
-                    <Select.Trigger className={`w-full min-h-[48px] px-4 rounded-xl bg-[var(--bg-surface-primary)] hover:bg-[var(--bg-surface-light)] shadow-none border transition-all flex items-center justify-between ${errors.originalLang ? 'border-[var(--status-error-default)]' : 'border-[var(--border-outline-light)]'}`}>
+                    <Select.Trigger className={`w-full min-h-[48px] px-4 rounded-xl bg-[var(--bg-surface-primary)] hover:bg-[var(--bg-surface-light)]  border transition-all flex items-center justify-between ${errors.originalLang ? 'border-[var(--status-error-default)]' : 'border-[var(--border-outline-light)]'}`}>
                       <Select.Value className="text-[var(--text-normal)] font-medium text-left" />
                       <Select.Indicator>
                         <ChevronDown className="w-4 h-4 text-[var(--text-light)]" />
@@ -409,7 +409,7 @@ export default function Home() {
                     <Select.Popover
                       placement="bottom"
                       shouldFlip={false}
-                      className="w-(--trigger-width) bg-[var(--bg-surface-light)] text-[var(--text-normal)] rounded-xl shadow-xl border border-[var(--border-outline-light)] max-h-[140px] overflow-y-auto overflow-x-hidden"
+                      className="w-(--trigger-width) bg-[var(--bg-surface-light)] text-[var(--text-normal)] rounded-xl  border border-[var(--border-outline-light)] max-h-[140px] overflow-y-auto overflow-x-hidden"
                     >
                       <ListBox items={languages} aria-label="Original Language Options" className="p-1 flex flex-col gap-1 outline-none">
                         {(lang) => (
@@ -437,7 +437,7 @@ export default function Home() {
                     onSelectionChange={(key) => handleInputChange("translationLang", key ? String(key) : "")}
                     isInvalid={!!errors.translationLang}
                   >
-                    <Select.Trigger className={`w-full min-h-[48px] px-4 rounded-xl bg-[var(--bg-surface-primary)] hover:bg-[var(--bg-surface-light)] shadow-none border transition-all flex items-center justify-between ${errors.translationLang ? 'border-[var(--status-error-default)]' : 'border-[var(--border-outline-light)]'}`}>
+                    <Select.Trigger className={`w-full min-h-[48px] px-4 rounded-xl bg-[var(--bg-surface-primary)] hover:bg-[var(--bg-surface-light)]  border transition-all flex items-center justify-between ${errors.translationLang ? 'border-[var(--status-error-default)]' : 'border-[var(--border-outline-light)]'}`}>
                       <Select.Value className="text-[var(--text-normal)] font-medium text-left" />
                       <Select.Indicator>
                         <ChevronDown className="w-4 h-4 text-[var(--text-light)]" />
@@ -446,7 +446,7 @@ export default function Home() {
                     <Select.Popover
                       placement="bottom"
                       shouldFlip={false}
-                      className="w-(--trigger-width) bg-[var(--bg-surface-light)] text-[var(--text-normal)] rounded-xl shadow-xl border border-[var(--border-outline-light)] max-h-[140px] overflow-y-auto overflow-x-hidden"
+                      className="w-(--trigger-width) bg-[var(--bg-surface-light)] text-[var(--text-normal)] rounded-xl  border border-[var(--border-outline-light)] max-h-[140px] overflow-y-auto overflow-x-hidden"
                     >
                       <ListBox items={languages} aria-label="Translation Language Options" className="p-1 flex flex-col gap-1 outline-none">
                         {(lang) => (
@@ -467,8 +467,8 @@ export default function Home() {
             </div>
 
             <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-[var(--border-outline-default)]">
-              <button onClick={handleCloseModal} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] hover:bg-[var(--bg-surface-primary)] transition-all bg-transparent border border-[var(--border-outline-light)] shadow-sm">Cancel</button>
-              <button onClick={handleConfirmAddBook} className="px-10 py-2.5 rounded-full font-bold bg-[var(--color-primary-default)] text-[var(--text-normal)] hover:bg-[var(--color-primary-hover)] shadow-sm transition-all">Confirm</button>
+              <button onClick={handleCloseModal} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] hover:bg-[var(--bg-surface-primary)] transition-all bg-transparent border border-[var(--border-outline-light)] ">Cancel</button>
+              <button onClick={handleConfirmAddBook} className="px-10 py-2.5 rounded-full font-bold bg-[var(--color-primary-default)] text-[var(--text-normal)] hover:bg-[var(--color-primary-hover)]  transition-all">Confirm</button>
             </div>
           </div>
         </div>
@@ -476,8 +476,8 @@ export default function Home() {
 
       {/* --- Delete Confirmation Modal --- */}
       {bookToDelete !== null && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-          <div className="bg-[var(--bg-surface-light)] rounded-[32px] w-full max-w-[460px] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-[var(--text-normal)]/40 backdrop-blur-sm p-4">
+          <div className="bg-[var(--bg-surface-light)] border border-[var(--border-outline-light)] rounded-[32px] w-full max-w-[460px]  p-8 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex justify-between items-start mb-4">
               <div className="w-12 h-12 rounded-full bg-[var(--status-error-surface)] flex items-center justify-center text-[var(--status-error-default)]">
                 <Trash2 className="w-6 h-6" />
@@ -489,8 +489,8 @@ export default function Home() {
               <p className="text-base text-[var(--text-secondary)] font-medium leading-relaxed">Are you sure you want to delete this book? This action cannot be undone.</p>
             </div>
             <div className="flex justify-end gap-3">
-              <button onClick={() => setBookToDelete(null)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] bg-transparent border border-[var(--border-outline-light)] hover:bg-[var(--bg-surface-primary)] shadow-sm transition-all">Cancel</button>
-              <button onClick={handleConfirmDelete} className="px-10 py-2.5 rounded-full font-bold text-white bg-[var(--status-error-default)] hover:bg-[var(--status-error-hover)] shadow-sm transition-all">Delete</button>
+              <button onClick={() => setBookToDelete(null)} className="px-8 py-2.5 rounded-full font-bold text-[var(--text-normal)] bg-transparent border border-[var(--border-outline-light)] hover:bg-[var(--bg-surface-primary)]  transition-all">Cancel</button>
+              <button onClick={handleConfirmDelete} className="px-10 py-2.5 rounded-full font-bold text-white hover:text-[var(--status-error-default)] bg-[var(--status-error-default)] hover:bg-[var(--status-error-hover)]  transition-all">Delete</button>
             </div>
           </div>
         </div>
