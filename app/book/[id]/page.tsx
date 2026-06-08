@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Select, ListBox, Button, TextField, Label, Input, TextArea, Card } from "@heroui/react";
 import { 
   BookOpen, Book, LayoutGrid, Bookmark, Search, Bell, Settings, 
-  ChevronLeft, Edit, Trash2, Plus, X, Eye, Image as ImageIcon, ChevronDown
+  ChevronLeft, Edit, Trash2, Plus, X, Eye, Image as ImageIcon, ChevronDown, Check
 } from "lucide-react";
 import { useBooks, PageItem } from "../../context/BookContext";
 import { toast } from "@heroui/react";
@@ -136,6 +136,10 @@ export default function BookDetailsPage() {
   const handleKeyDownEdit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') handleSaveEdit();
     if (e.key === 'Escape') setEditingPageId(null);
+  };
+
+  const cancelEditing = () => {
+    setEditingPageId(null);
   };
 
   const handleConfirmDeletePage = () => {
