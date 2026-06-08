@@ -289,7 +289,7 @@ export default function TranslatePage() {
       <main className="flex-1 flex flex-col md:flex-row gap-4 px-6 py-4 overflow-hidden">
         <div className="flex-1 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] px-8 py-6 flex flex-col transition-all relative">
           <div className="flex justify-between items-center mb-6 shrink-0">
-            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[var(--separator)] text-[13px] font-bold text-[var(--muted)]">
+            <div className="inline-flex items-center px-4 py-1.5 rounded-[var(--radius)] bg-[var(--separator)] text-[13px] font-bold text-[var(--muted)]">
               {book.originalLang}
             </div>
 
@@ -369,8 +369,8 @@ export default function TranslatePage() {
           )}
         </div>
 
-        <div className={`flex-1 rounded-[var(--radius)] px-8 py-6 flex flex-col transition-all duration-500 ease-in-out relative ${isAiMode ? "bg-[var(--warning)]/10 border border-[var(--warning)]/30" : "bg-[var(--surface)] border border-[var(--border)]"}`}>
-          <div className={`inline-flex items-center px-4 py-1.5 rounded-full text-[13px] font-bold w-fit mb-6 shrink-0 ${isAiMode ? "bg-[var(--surface-tertiary)] text-[var(--foreground)]" : "bg-[var(--separator)] text-[var(--muted)]"}`}>
+        <div className={`flex-1 rounded-[var(--radius)] px-8 py-6 flex flex-col transition-all duration-500 ease-in-out relative ${isAiMode ? "bg-[var(--accent)]/10 border border-[var(--accent)]/20" : "bg-[var(--surface)] border border-[var(--border)]"}`}>
+          <div className={`inline-flex items-center px-4 py-1.5 rounded-[var(--radius)] text-[13px] font-bold w-fit mb-6 shrink-0 ${isAiMode ? "bg-[var(--accent)]/15 text-[var(--accent)]" : "bg-[var(--separator)] text-[var(--muted)]"}`}>
             {book.translationLang}
           </div>
 
