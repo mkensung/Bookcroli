@@ -1,57 +1,93 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
-:root {
-  /* 🟡 MAIN / PRIMARY (Interactive Accent) */
-  --color-primary-default:      #F2DCB1; /* Main primary theme color for major accents and actions */
-  --color-primary-hover:        #FFEBC5; /* Light hover highlight state for primary elements */
-  --color-primary-surface:      #F2DCB1; /* Flat surface fill for branding targets */
+/*
+ * HeroUI Theme Customization
+ * Add this to your global.css after importing @heroui/styles
+ * Only includes variables users need to customize
+ * @see https://heroui.com/docs/react/getting-started/theming
+ */
 
-  /* 🟠 MAIN / SECONDARY (Action Accent) */
-  --color-secondary-default:    #E8A562; /* Focused secondary interactive actions & badges */
-  --color-secondary-hover:      #FFE4C9; /* Warm hover state for secondary components */
+:root,
+.light,
+.default,
+[data-theme="light"],
+[data-theme="default"] {
+  /* Theme Colors (Light Mode) */
+  --accent: oklch(86.86% 0.0537 80.57);
+  --accent-foreground: oklch(15% 0.0107 80.57);
+  --background: oklch(97.02% 0.0000 80.57);
+  --border: oklch(90.00% 0.0000 80.57);
+  --danger: oklch(65.32% 0.2328 4.95);
+  --danger-foreground: oklch(99.11% 0 0);
+  --default: oklch(94.00% 0.0000 80.57);
+  --default-foreground: oklch(21.03% 0.0059 80.57);
+  --field-background: oklch(100.00% 0.0000 80.57);
+  --field-border: transparent;
+  --field-foreground: oklch(21.03% 0.0000 80.57);
+  --field-placeholder: oklch(55.17% 0.0000 80.57);
+  --focus: oklch(86.86% 0.0537 80.57);
+  --foreground: oklch(21.03% 0.0000 80.57);
+  --muted: oklch(55.17% 0.0000 80.57);
+  --overlay: oklch(100.00% 0.0000 80.57);
+  --overlay-foreground: oklch(21.03% 0.0000 80.57);
+  --scrollbar: oklch(87.10% 0.0000 80.57);
+  --segment: oklch(100.00% 0.0000 80.57);
+  --segment-foreground: oklch(21.03% 0.0000 80.57);
+  --separator: oklch(92.00% 0.0000 80.57);
+  --success: oklch(73.29% 0.1935 130.02);
+  --success-foreground: oklch(21.03% 0.0059 130.02);
+  --surface: oklch(100.00% 0.0000 80.57);
+  --surface-foreground: oklch(21.03% 0.0000 80.57);
+  --surface-secondary: oklch(95.24% 0.0000 80.57);
+  --surface-secondary-foreground: oklch(21.03% 0.0000 80.57);
+  --surface-tertiary: oklch(93.73% 0.0000 80.57);
+  --surface-tertiary-foreground: oklch(21.03% 0.0000 80.57);
+  --warning: oklch(78.19% 0.1585 51.54);
+  --warning-foreground: oklch(21.03% 0.0059 51.54);
 
-  /* 📜 MAIN / SURFACE (Surfaces & Background Canvas) */
-  --bg-surface-primary:         #F5F3ED; /* Global application backdrop (Soft Warm Cream) */
-  --bg-surface-light:           #FFFCF3; /* Elevated cards, sidebar panels, and dialog canvases */
-  --bg-surface-lighter:         #FFFCF3; /* Inner interactive block surfaces */
-  --bg-surface-background:      #FFFFFF; /* Contrast clean background panels */
+  /* Border Radius */
+  --radius: 1rem;
+  --field-radius: 1rem;
 
-  /* 🔲 MAIN / OUTLINE (Borders & Structural Separators) */
-  --border-outline-primary:     #F2DCB1; /* Accent container outlines */
-  --border-outline-default:     #F5F3ED; /* Invisible low-contrast dividers */
-  --border-outline-darker:      #BEB8A8; /* High-contrast borders for focused input frames */
-  --border-outline-light:       #D7D1C0; /* Standard thin component outlines */
-
-  /* 🖋️ MAIN / DESCRIPTIVE-TEXT (Editorial Typography) */
-  --text-normal:                 #392A1B; /* Primary ink - Deep velvet brown for headers & readable text */
-  --text-secondary:              #9F7B56; /* Accent medium brown for subtexts & labels */
-  --text-dark-gray:              #67645B; /* Neutral dim slate-brown for technical metadata */
-  --text-light:                  #A29D8F; /* Placeholders, disabled actions, and inactive markers */
-
-  /* 🚥 MAIN / SEMANTIC STATUS FEEDBACK */
-  --status-success-default:     #6EDA96;
-  --status-success-hover:       #ECFFED;
-  --status-success-surface:     #F1FFF6;
-  --status-error-default:       #FA7676;
-  --status-error-hover:         #FFE8E8;
-  --status-error-surface:       #FFF4F4;
-  --status-warning-default:     #FFC376;
-  --status-warning-hover:       #FFF4E6;
-  --status-warning-surface:     #FFFBF5;
-  --status-info-default:        #6EB2FF;
-  --status-info-hover:          #E7F2FF;
-  --status-info-surface:        #F6FAFF;
+  /* Font Family */
+  /* Make sure to load IBM Plex Mono font in your app */
+  --font-sans: var(--font-ibm-plex-mono);
 }
 
-body {
-  background-color: var(--bg-surface-primary);
-  color: var(--text-normal);
-}
-
-/* Default toast shell is z-50 (same as app modals); lift so toasts stay centered and above the page. */
-@layer utilities {
-  .toast-region {
-    z-index: 10050 !important;
-  }
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+  /* Theme Colors (Dark Mode) */
+  --accent: oklch(86.86% 0.0537 80.57);
+  --accent-foreground: oklch(15% 0.0107 80.57);
+  --background: oklch(12.00% 0.0000 80.57);
+  --border: oklch(28.00% 0.0000 80.57);
+  --danger: oklch(59.40% 0.1967 3.84);
+  --danger-foreground: oklch(99.11% 0 0);
+  --default: oklch(27.40% 0.0000 80.57);
+  --default-foreground: oklch(99.11% 0 0);
+  --field-background: oklch(21.03% 0.0000 80.57);
+  --field-border: transparent;
+  --field-foreground: oklch(99.11% 0.0000 80.57);
+  --field-placeholder: oklch(70.50% 0.0000 80.57);
+  --focus: oklch(86.86% 0.0537 80.57);
+  --foreground: oklch(99.11% 0.0000 80.57);
+  --muted: oklch(70.50% 0.0000 80.57);
+  --overlay: oklch(21.03% 0.0000 80.57);
+  --overlay-foreground: oklch(99.11% 0.0000 80.57);
+  --scrollbar: oklch(70.50% 0.0000 80.57);
+  --segment: oklch(39.64% 0.0000 80.57);
+  --segment-foreground: oklch(99.11% 0.0000 80.57);
+  --separator: oklch(25.00% 0.0000 80.57);
+  --success: oklch(73.29% 0.1935 130.02);
+  --success-foreground: oklch(21.03% 0.0059 130.02);
+  --surface: oklch(21.03% 0.0000 80.57);
+  --surface-foreground: oklch(99.11% 0.0000 80.57);
+  --surface-secondary: oklch(25.70% 0.0000 80.57);
+  --surface-secondary-foreground: oklch(99.11% 0.0000 80.57);
+  --surface-tertiary: oklch(27.21% 0.0000 80.57);
+  --surface-tertiary-foreground: oklch(99.11% 0.0000 80.57);
+  --warning: oklch(82.03% 0.1388 55.55);
+  --warning-foreground: oklch(21.03% 0.0059 55.55);
 }

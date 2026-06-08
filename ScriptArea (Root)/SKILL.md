@@ -14,8 +14,9 @@ You MUST adhere to these absolute rules. Violation is strictly prohibited.
 ## 🚦 3. AGENT ROUTING (Skill Triggers)
 Depending on the user's prompt, you MUST fetch and read the following context files before writing any code:
 
-* **IF asked to create/modify UI or layout:**
-  -> READ: `/DESIGN.md` (For strict Hex colors & Warm Editorial theme)
+* **IF asked to create/modify UI, layout, or components:**
+  -> READ: `/.agent/skills/heroui-docs.md` (CRITICAL: For correct HeroUI imports and component props)
+  -> READ: `/DESIGN.md` (For native OKLCH CSS variables and architecture)
   -> READ: `/.agent/taste/ui-principles.md` (For typography hierarchy & consistency)
 * **IF asked to review, check contrast, or find UI bugs:**
   -> READ: `/.agent/skills/design-review.md`
