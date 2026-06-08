@@ -224,7 +224,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="flex items-center justify-center gap-2 bg-[var(--surface-secondary)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--surface)] px-5 py-2.5 rounded-full font-bold  transition-colors text-sm"
+        className="flex items-center justify-center gap-2 bg-[var(--surface-secondary)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--surface)] px-5 py-2.5 rounded-[var(--radius)] font-bold  transition-colors text-sm"
       >
         <Notebook className="w-4 h-4 text-[var(--muted)]" /> Notebook
       </button>
@@ -254,7 +254,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                     {activeTab === "vocabulary" ? (
                       <button
                         onClick={() => setIsAddingVocab(true)}
-                        className="flex items-center gap-1 text-sm font-bold text-[var(--accent-foreground)] bg-[var(--accent)] hover:opacity-90 px-4 py-1.5 rounded-full transition-colors"
+                        className="flex items-center gap-1 text-sm font-bold text-[var(--accent-foreground)] bg-[var(--accent)] hover:opacity-90 px-4 py-1.5 rounded-[var(--radius)] transition-colors"
                       >
                         <Plus className="w-4 h-4 stroke-[2.5]" /> Add
                       </button>
@@ -264,7 +264,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                           setIsAddingNote(true);
                           setCurrentNoteText("");
                         }}
-                        className="flex items-center gap-1 text-sm font-bold text-[var(--accent-foreground)] bg-[var(--accent)] hover:opacity-90 px-4 py-1.5 rounded-full transition-colors"
+                        className="flex items-center gap-1 text-sm font-bold text-[var(--accent-foreground)] bg-[var(--accent)] hover:opacity-90 px-4 py-1.5 rounded-[var(--radius)] transition-colors"
                       >
                         <Plus className="w-4 h-4 stroke-[2.5]" /> Add
                       </button>
@@ -292,7 +292,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                       <button
                         onClick={activeTab === "vocabulary" ? handleSaveVocab : handleSaveNote}
                         disabled={activeTab === "vocabulary" ? (!newVocabWord || !previewVocab || isTranslating) : !currentNoteText.trim()}
-                        className={`bg-[var(--accent)] hover:opacity-90 text-[var(--accent-foreground)] px-4 py-1.5 rounded-full font-bold text-sm transition-colors ${(activeTab === "vocabulary" && (!newVocabWord || !previewVocab || isTranslating)) || (activeTab === "notes" && !currentNoteText.trim()) ? "opacity-50 cursor-not-allowed" : ""}`}
+                        className={`bg-[var(--accent)] hover:opacity-90 text-[var(--accent-foreground)] px-4 py-1.5 rounded-[var(--radius)] font-bold text-sm transition-colors ${(activeTab === "vocabulary" && (!newVocabWord || !previewVocab || isTranslating)) || (activeTab === "notes" && !currentNoteText.trim()) ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         Done
                       </button>
@@ -320,17 +320,17 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                 {!isAddingVocab && activeTab === "notes" && (
                   <div className="flex-1 h-full flex flex-col px-5 py-5 overflow-y-auto">
                     {(isAddingNote || editingNoteId) ? (
-                      <div className="flex-1 flex flex-col bg-[var(--surface)] rounded-xl overflow-hidden min-h-[300px]">
+                      <div className="flex-1 flex flex-col bg-[var(--surface)] rounded-[var(--radius)] overflow-hidden min-h-[300px]">
                         {/* Toolbar inside gray container */}
                         <div className="px-3 py-2 flex items-center gap-1 shrink-0 overflow-x-auto">
-                          <button className={`p-1.5 rounded-md hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive('bold') ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().toggleBold().run()}><Bold className="w-4 h-4" /></button>
-                          <button className={`p-1.5 rounded-md hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive('italic') ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().toggleItalic().run()}><Italic className="w-4 h-4" /></button>
-                          <button className={`p-1.5 rounded-md hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive('underline') ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().toggleUnderline().run()}><Underline className="w-4 h-4" /></button>
-                          <button className={`p-1.5 rounded-md hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive('strike') ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().toggleStrike().run()}><Strikethrough className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-[var(--radius)] hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive('bold') ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().toggleBold().run()}><Bold className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-[var(--radius)] hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive('italic') ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().toggleItalic().run()}><Italic className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-[var(--radius)] hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive('underline') ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().toggleUnderline().run()}><Underline className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-[var(--radius)] hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive('strike') ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().toggleStrike().run()}><Strikethrough className="w-4 h-4" /></button>
                           <div className="w-px h-4 bg-[var(--focus)] mx-1 shrink-0"></div>
-                          <button className={`p-1.5 rounded-md hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive({ textAlign: 'left' }) ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('left').run()}><AlignLeft className="w-4 h-4" /></button>
-                          <button className={`p-1.5 rounded-md hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive({ textAlign: 'center' }) ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('center').run()}><AlignCenter className="w-4 h-4" /></button>
-                          <button className={`p-1.5 rounded-md hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive({ textAlign: 'right' }) ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('right').run()}><AlignRight className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-[var(--radius)] hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive({ textAlign: 'left' }) ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('left').run()}><AlignLeft className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-[var(--radius)] hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive({ textAlign: 'center' }) ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('center').run()}><AlignCenter className="w-4 h-4" /></button>
+                          <button className={`p-1.5 rounded-[var(--radius)] hover:bg-[var(--border)] text-[var(--muted)] transition-colors shrink-0 ${editor?.isActive({ textAlign: 'right' }) ? 'bg-[var(--border)]' : ''}`} onClick={() => editor?.chain().focus().setTextAlign('right').run()}><AlignRight className="w-4 h-4" /></button>
                         </div>
                         {/* Tiptap Editor inside gray container */}
                         <div className="flex-1 w-full bg-transparent overflow-y-auto" onClick={() => editor?.commands.focus()}>
@@ -339,7 +339,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                       </div>
                     ) : notes.length === 0 ? (
                       <div className="flex flex-col items-center justify-center pt-20 text-center">
-                        <div className="w-14 h-14 bg-[var(--surface-secondary)] rounded-xl flex items-center justify-center mb-4">
+                        <div className="w-14 h-14 bg-[var(--surface-secondary)] rounded-[var(--radius)] flex items-center justify-center mb-4">
                           <FileX className="w-6 h-6 text-[var(--muted)]" strokeWidth={1.5} />
                         </div>
                         <p className="text-[var(--foreground)] font-bold text-base mb-1">No notes added!</p>
@@ -348,10 +348,10 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                     ) : (
                       <div className="flex flex-col gap-4 pb-8">
                         {notes.map(note => (
-                          <div key={note.id} className="bg-[var(--surface)] border border-[var(--border)] rounded-xl p-5  relative group">
+                          <div key={note.id} className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-5  relative group">
                             <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5">
-                              <button onClick={() => { setEditingNoteId(note.id); setCurrentNoteText(note.content); }} className="p-1.5 text-[var(--muted)] hover:text-[var(--accent)] bg-[var(--surface)] hover:bg-[var(--surface-tertiary)] rounded-full transition-colors"><Edit className="w-3.5 h-3.5" /></button>
-                              <button onClick={() => setDeleteConfirm({ type: 'note', id: note.id })} className="p-1.5 text-[var(--muted)] hover:text-[var(--danger)] bg-[var(--surface)] hover:bg-[var(--danger)] rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                              <button onClick={() => { setEditingNoteId(note.id); setCurrentNoteText(note.content); }} className="p-1.5 text-[var(--muted)] hover:text-[var(--accent)] bg-[var(--surface)] hover:bg-[var(--surface-tertiary)] rounded-[var(--radius)] transition-colors"><Edit className="w-3.5 h-3.5" /></button>
+                              <button onClick={() => setDeleteConfirm({ type: 'note', id: note.id })} className="p-1.5 text-[var(--muted)] hover:text-[var(--danger)] bg-[var(--surface)] hover:bg-[var(--danger)] rounded-[var(--radius)] transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                             </div>
                             <div
                               className="text-[var(--foreground)] text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-strong:font-bold prose-em:italic"
@@ -372,7 +372,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                   <div className="flex-1 h-full flex flex-col px-5 py-5 overflow-y-auto">
                     {vocabList.length === 0 ? (
                       <div className="flex flex-col items-center justify-center pt-20 text-center">
-                        <div className="w-14 h-14 bg-[var(--surface-secondary)] rounded-xl flex items-center justify-center mb-4">
+                        <div className="w-14 h-14 bg-[var(--surface-secondary)] rounded-[var(--radius)] flex items-center justify-center mb-4">
                           <FileX className="w-6 h-6 text-[var(--muted)]" strokeWidth={1.5} />
                         </div>
                         <p className="text-[var(--foreground)] font-bold text-base mb-1">No vocabulary added!</p>
@@ -383,9 +383,9 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                         {vocabList.map(vocab => {
                           const isExpanded = expandedVocabs[vocab.id];
                           return (
-                            <div key={vocab.id} className="bg-[var(--surface)] border border-[var(--border)] rounded-xl p-4  relative group">
+                            <div key={vocab.id} className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-4  relative group">
                               <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5">
-                                <button onClick={() => setDeleteConfirm({ type: 'vocab', id: vocab.id })} className="p-1.5 text-[var(--muted)] hover:text-[var(--danger)] bg-[var(--surface)] hover:bg-[var(--danger)] rounded-full transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                                <button onClick={() => setDeleteConfirm({ type: 'vocab', id: vocab.id })} className="p-1.5 text-[var(--muted)] hover:text-[var(--danger)] bg-[var(--surface)] hover:bg-[var(--danger)] rounded-[var(--radius)] transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                               </div>
                               <div className="flex justify-between items-start mb-1 pr-6">
                                 <h4 className="text-[17px] font-bold text-[var(--foreground)] tracking-tight">{vocab.word}</h4>
@@ -447,7 +447,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                       <Label className="text-[13px] font-bold text-[var(--foreground)]">Vocabulary name</Label>
                       <Input
                         type="text"
-                        className="w-full bg-[var(--surface-secondary)] border border-[var(--border)] rounded-xl py-2.5 px-3 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-transparent focus:border-[var(--focus)] transition-all text-sm font-medium placeholder:text-[var(--muted)]"
+                        className="w-full bg-[var(--surface-secondary)] border border-[var(--border)] rounded-[var(--field-radius)] py-2.5 px-3 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-transparent focus:border-[var(--focus)] transition-all text-sm font-medium placeholder:text-[var(--muted)]"
                         placeholder="Enter vocabulary name"
                         value={newVocabWord}
                         onChange={(e) => setNewVocabWord(e.target.value)}
@@ -457,7 +457,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                     <TextField className="mb-5">
                       <Label className="text-[13px] font-bold text-[var(--foreground)]">Remarks</Label>
                       <TextArea
-                        className="w-full bg-[var(--surface-secondary)] border border-[var(--border)] rounded-xl p-3 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-transparent focus:border-[var(--focus)] transition-all min-h-[100px] resize-y text-sm placeholder:text-[var(--muted)]"
+                        className="w-full bg-[var(--surface-secondary)] border border-[var(--border)] rounded-[var(--field-radius)] p-3 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-transparent focus:border-[var(--focus)] transition-all min-h-[100px] resize-y text-sm placeholder:text-[var(--muted)]"
                         placeholder="Enter remarks"
                         value={newVocabRemarks}
                         onChange={(e) => setNewVocabRemarks(e.target.value)}
@@ -465,14 +465,14 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                     </TextField>
 
                     {isTranslating && (
-                      <div className="bg-[var(--surface)] border border-[var(--accent)] rounded-xl p-6  mb-4 flex flex-col items-center justify-center gap-3">
+                      <div className="bg-[var(--surface)] border border-[var(--accent)] rounded-[var(--radius)] p-6  mb-4 flex flex-col items-center justify-center gap-3">
                         <Spinner size="md" color="current" className="text-[var(--accent)]" />
                         <span className="text-sm font-bold text-[var(--accent)]">Translating vocabulary...</span>
                       </div>
                     )}
 
                     {previewVocab && !isTranslating && (
-                      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-xl p-4  mb-4">
+                      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-4  mb-4">
                         <div className="flex items-center gap-1.5 mb-2">
                           <span className="text-[var(--muted)] text-[13px] font-medium">{previewVocab.partOfSpeech}</span>
                           <span className="text-[var(--muted)] text-[13px]">/{previewVocab.phonetic}/</span>
@@ -511,9 +511,9 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative bg-[var(--surface)] rounded-2xl  w-[90%] max-w-[320px] p-6 text-center z-10"
+              className="relative bg-[var(--surface)] rounded-[var(--radius)]  w-[90%] max-w-[320px] p-6 text-center z-10"
             >
-              <div className="w-12 h-12 bg-[var(--danger)] text-[var(--danger)] rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-[var(--danger)]/15 text-[var(--danger)] rounded-[var(--radius)] flex items-center justify-center mx-auto mb-4">
                 <Trash2 className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-[var(--foreground)] mb-2">Delete this item?</h3>
@@ -521,7 +521,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
               <div className="flex gap-3">
                 <button
                   onClick={() => setDeleteConfirm(null)}
-                  className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-[var(--surface-secondary)] text-[var(--foreground)] hover:bg-[var(--border)] transition-colors"
+                  className="flex-1 py-2.5 rounded-[var(--radius)] font-bold text-sm bg-[var(--surface-secondary)] text-[var(--foreground)] hover:bg-[var(--border)] transition-colors"
                 >
                   Cancel
                 </button>
@@ -534,7 +534,7 @@ export function NotesDrawer({ bookId, pageId }: NotesDrawerProps) {
                     }
                     setDeleteConfirm(null);
                   }}
-                  className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-[var(--danger)] text-white hover:bg-[var(--danger)] transition-colors  shadow-red-500/20"
+                  className="flex-1 py-2.5 rounded-[var(--radius)] font-bold text-sm bg-[var(--danger)] text-white hover:bg-[var(--danger)] transition-colors  shadow-red-500/20"
                 >
                   Delete
                 </button>

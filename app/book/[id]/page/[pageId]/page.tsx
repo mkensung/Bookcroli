@@ -280,14 +280,14 @@ export default function TranslatePage() {
         </div>
         <div className="flex items-center gap-3">
           <NotesDrawer bookId={bookId} pageId={pageId} />
-          <button type="button" onClick={handleSave} className="flex items-center gap-2 bg-[var(--accent)] hover:opacity-90 text-[var(--accent-foreground)] px-6 py-2.5 rounded-full font-bold  transition-colors text-sm">
-            <Save className="w-4 h-4" /> Save
+          <button type="button" onClick={handleSave} className="flex items-center gap-2 bg-[var(--accent)] hover:opacity-90 text-[var(--accent-foreground)] px-6 py-2.5 rounded-[var(--radius)] font-bold  transition-colors text-sm">
+            <Save className="w-4 h-4" /> Save changes
           </button>
         </div>
       </header>
 
       <main className="flex-1 flex flex-col md:flex-row gap-4 px-6 py-4 overflow-hidden">
-        <div className="flex-1 bg-white border border-[var(--border)] rounded-2xl px-8 py-6 flex flex-col transition-all relative">
+        <div className="flex-1 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] px-8 py-6 flex flex-col transition-all relative">
           <div className="flex justify-between items-center mb-6 shrink-0">
             <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[var(--separator)] text-[13px] font-bold text-[var(--muted)]">
               {book.originalLang}
@@ -352,14 +352,14 @@ export default function TranslatePage() {
                 }}
                 placeholder="Type a sentence to translate with AI..."
                 variant="secondary"
-                className={`w-full min-h-[64px] resize-y text-[var(--foreground)] bg-white border border-[var(--surface-tertiary)] focus-within:border-[var(--muted)] focus-within:ring-4 focus-within:ring-transparent rounded-2xl transition-all ${robotoSerif.className}`}
+                className={`w-full min-h-[64px] resize-y text-[var(--foreground)] bg-[var(--surface)] border border-[var(--surface-tertiary)] focus-within:border-[var(--muted)] focus-within:ring-4 focus-within:ring-transparent rounded-[var(--radius)] transition-all ${robotoSerif.className}`}
               />
               <div className="flex justify-end">
                 <Button
                   onPress={handleAiTranslate}
                   isDisabled={isAiTranslating}
                   variant="secondary"
-                  className="font-bold px-5 rounded-full bg-[var(--accent)] text-[var(--accent-foreground)] hover:opacity-90 flex items-center gap-2"
+                  className="font-bold px-5 rounded-[var(--radius)] bg-[var(--accent)] text-[var(--accent-foreground)] hover:opacity-90 flex items-center gap-2"
                 >
                   <Sparkles className="w-4 h-4" />
                   AI Translate
@@ -369,7 +369,7 @@ export default function TranslatePage() {
           )}
         </div>
 
-        <div className={`flex-1 rounded-2xl px-8 py-6 flex flex-col transition-all duration-500 ease-in-out relative ${isAiMode ? "bg-[#FFFCF3] border border-[var(--muted)]" : "bg-white border border-[var(--border)]"}`}>
+        <div className={`flex-1 rounded-[var(--radius)] px-8 py-6 flex flex-col transition-all duration-500 ease-in-out relative ${isAiMode ? "bg-[var(--warning)]/10 border border-[var(--warning)]/30" : "bg-[var(--surface)] border border-[var(--border)]"}`}>
           <div className={`inline-flex items-center px-4 py-1.5 rounded-full text-[13px] font-bold w-fit mb-6 shrink-0 ${isAiMode ? "bg-[var(--surface-tertiary)] text-[var(--foreground)]" : "bg-[var(--separator)] text-[var(--muted)]"}`}>
             {book.translationLang}
           </div>
@@ -384,7 +384,7 @@ export default function TranslatePage() {
           />
 
           {isAiMode && (isAiTranslating || aiPreviewText) && (
-            <div className="shrink-0 mt-4 p-5 bg-white border border-[var(--surface-tertiary)] rounded-2xl  flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
+            <div className="shrink-0 mt-4 p-5 bg-[var(--surface)] border border-[var(--surface-tertiary)] rounded-[var(--radius)]  flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
               <div className="flex items-center gap-2">
                 {isAiTranslating ? (
                   <Spinner size="sm" color="current" className="text-[var(--muted)]" />
@@ -400,8 +400,8 @@ export default function TranslatePage() {
               )}
               {!isAiTranslating && aiPreviewText && (
                 <div className="flex justify-end gap-2 mt-2 border-t border-[var(--border)] pt-4">
-                  <button type="button" onClick={handleCancelTranslation} className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--foreground)] transition-colors"><X className="w-4 h-4" /> Cancel</button>
-                  <button type="button" onClick={handleAcceptTranslation} className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-[var(--accent-foreground)] bg-[var(--accent)] hover:opacity-90  transition-all active:scale-95"><Check className="w-4 h-4" /> Commit</button>
+                  <button type="button" onClick={handleCancelTranslation} className="flex items-center gap-1.5 px-4 py-2 rounded-[var(--radius)] text-sm font-bold text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--foreground)] transition-colors"><X className="w-4 h-4" /> Cancel</button>
+                  <button type="button" onClick={handleAcceptTranslation} className="flex items-center gap-1.5 px-5 py-2 rounded-[var(--radius)] text-sm font-bold text-[var(--accent-foreground)] bg-[var(--accent)] hover:opacity-90  transition-all active:scale-95"><Check className="w-4 h-4" /> Commit</button>
                 </div>
               )}
             </div>
@@ -409,8 +409,8 @@ export default function TranslatePage() {
 
           {!isAiTranslating && !aiPreviewText && (
             <div className="flex justify-end gap-3 shrink-0 mt-4">
-              <button type="button" onClick={handleUndo} disabled={historyIndex <= 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex <= 0 ? "bg-[var(--surface)] text-[var(--muted)] cursor-not-allowed border border-transparent" : "bg-[var(--surface-secondary)] text-[var(--muted)] hover:bg-[var(--surface)] border border-[var(--border)] "}`}><Undo className="w-4 h-4" /> Undo</button>
-              <button type="button" onClick={handleRedo} disabled={historyIndex >= history.length - 1} className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${historyIndex >= history.length - 1 ? "bg-[var(--surface)] text-[var(--muted)] cursor-not-allowed border border-transparent" : "bg-[var(--surface-secondary)] text-[var(--muted)] hover:bg-[var(--surface)] border border-[var(--border)] "}`}><Redo className="w-4 h-4" /> Redo</button>
+              <button type="button" onClick={handleUndo} disabled={historyIndex <= 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius)] text-[14px] font-bold transition-all ${historyIndex <= 0 ? "bg-[var(--surface)] text-[var(--muted)] cursor-not-allowed border border-transparent" : "bg-[var(--surface-secondary)] text-[var(--muted)] hover:bg-[var(--surface)] border border-[var(--border)] "}`}><Undo className="w-4 h-4" /> Undo</button>
+              <button type="button" onClick={handleRedo} disabled={historyIndex >= history.length - 1} className={`flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius)] text-[14px] font-bold transition-all ${historyIndex >= history.length - 1 ? "bg-[var(--surface)] text-[var(--muted)] cursor-not-allowed border border-transparent" : "bg-[var(--surface-secondary)] text-[var(--muted)] hover:bg-[var(--surface)] border border-[var(--border)] "}`}><Redo className="w-4 h-4" /> Redo</button>
             </div>
           )}
         </div>
@@ -430,10 +430,10 @@ export default function TranslatePage() {
           }}
         >
           <div className="flex flex-col p-2 gap-0.5">
-            <button onClick={() => handlePopupAction('vocabulary')} className="w-full px-4 py-3 hover:bg-[var(--surface)] transition-colors text-left rounded-xl text-[15px] font-medium text-[var(--foreground)]">
+            <button onClick={() => handlePopupAction('vocabulary')} className="w-full px-4 py-3 hover:bg-[var(--surface)] transition-colors text-left rounded-[var(--radius)] text-[15px] font-medium text-[var(--foreground)]">
               Add to vocabulary
             </button>
-            <button onClick={() => handlePopupAction('notes')} className="w-full px-4 py-3 hover:bg-[var(--surface)] transition-colors text-left rounded-xl text-[15px] font-medium text-[var(--foreground)]">
+            <button onClick={() => handlePopupAction('notes')} className="w-full px-4 py-3 hover:bg-[var(--surface)] transition-colors text-left rounded-[var(--radius)] text-[15px] font-medium text-[var(--foreground)]">
               Add to notes
             </button>
           </div>

@@ -115,7 +115,7 @@ export default function Home() {
           <nav className="hidden md:flex items-center gap-1">
             <Button
               variant={activeTab === "overview" ? "primary" : "ghost"}
-              className={`rounded-full px-5 py-2.5 text-sm font-bold transition-all ${
+              className={`rounded-[var(--radius)] px-5 py-2.5 text-sm font-bold transition-all ${
                 activeTab === "overview" ? "bg-[var(--accent)] text-[var(--accent-foreground)]" : "text-[var(--muted)] hover:bg-[var(--surface-secondary)]"
               }`}
               onClick={() => setActiveTab("overview")}
@@ -124,7 +124,7 @@ export default function Home() {
             </Button>
             <Button
               variant={activeTab === "library" ? "primary" : "ghost"}
-              className={`rounded-full px-5 py-2.5 text-sm font-bold transition-all ${
+              className={`rounded-[var(--radius)] px-5 py-2.5 text-sm font-bold transition-all ${
                 activeTab === "library" ? "bg-[var(--accent)] text-[var(--accent-foreground)]" : "text-[var(--muted)] hover:bg-[var(--surface-secondary)]"
               }`}
               onClick={() => setActiveTab("library")}
@@ -133,7 +133,7 @@ export default function Home() {
             </Button>
             <Button
               variant="ghost"
-              className="rounded-full px-5 py-2.5 text-sm font-bold text-[var(--muted)] hover:bg-[var(--surface-secondary)] transition-all"
+              className="rounded-[var(--radius)] px-5 py-2.5 text-sm font-bold text-[var(--muted)] hover:bg-[var(--surface-secondary)] transition-all"
             >
               <Bookmark className="w-4 h-4 mr-2" /> Bookmark
             </Button>
@@ -143,10 +143,10 @@ export default function Home() {
               <Search className="absolute left-3 w-4 h-4" />
               <input type="text" placeholder="Search books" className="w-full h-full pl-10 pr-4 text-sm bg-[var(--field-background)] border border-[var(--field-border)] rounded-[var(--field-radius)] outline-none focus:border-[var(--focus)] transition-all text-[var(--field-foreground)] placeholder-[var(--field-placeholder)]" />
             </div>
-            <Button variant="outline" className="rounded-full border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--surface-secondary)] w-10 h-10 p-0 min-w-0 flex items-center justify-center">
+            <Button variant="outline" className="rounded-[var(--radius)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--surface-secondary)] w-10 h-10 p-0 min-w-0 flex items-center justify-center">
               <Bell className="w-4 h-4" />
             </Button>
-            <Button variant="outline" className="rounded-full border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--surface-secondary)] w-10 h-10 p-0 min-w-0 flex items-center justify-center">
+            <Button variant="outline" className="rounded-[var(--radius)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--surface-secondary)] w-10 h-10 p-0 min-w-0 flex items-center justify-center">
               <Settings className="w-4 h-4" />
             </Button>
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--accent)] text-[var(--accent-foreground)] text-sm font-bold cursor-pointer hover:opacity-90 transition-opacity">MK</div>
@@ -168,7 +168,7 @@ export default function Home() {
                   
                   <div className="flex gap-4 mt-8">
                     <Card className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-row items-center gap-4 min-w-[200px] shadow-sm border border-[var(--border)]">
-                      <div className="w-12 h-12 rounded-xl bg-[var(--surface-tertiary)] text-[var(--accent)] flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-[var(--radius)] bg-[var(--surface-tertiary)] text-[var(--accent)] flex items-center justify-center shrink-0">
                         <Book className="w-6 h-6 stroke-[2.5]" />
                       </div>
                       <div>
@@ -177,7 +177,7 @@ export default function Home() {
                       </div>
                     </Card>
                     <Card className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-row items-center gap-4 min-w-[200px] shadow-sm border border-[var(--border)]">
-                      <div className="w-12 h-12 rounded-xl bg-[var(--warning)]/20 text-[var(--warning)] flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-[var(--radius)] bg-[var(--warning)]/20 text-[var(--warning)] flex items-center justify-center shrink-0">
                         <RefreshCw className="w-6 h-6 stroke-[2.5]" />
                       </div>
                       <div>
@@ -186,7 +186,7 @@ export default function Home() {
                       </div>
                     </Card>
                     <Card className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-row items-center gap-4 min-w-[200px] shadow-sm border border-[var(--border)]">
-                      <div className="w-12 h-12 rounded-xl bg-[var(--success)]/20 text-[var(--success)] flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-[var(--radius)] bg-[var(--success)]/20 text-[var(--success)] flex items-center justify-center shrink-0">
                         <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
                       </div>
                       <div>
@@ -275,7 +275,7 @@ export default function Home() {
               </div>
               <Button 
                 variant="primary"
-                className="bg-[var(--accent)] text-[var(--accent-foreground)] rounded-full font-bold px-6"
+                className="bg-[var(--accent)] text-[var(--accent-foreground)] rounded-[var(--radius)] font-bold px-6"
                 onClick={() => setIsModalOpen(true)}
               >
                 <Plus className="w-4 h-4 mr-2" /> Add new book
@@ -305,7 +305,7 @@ export default function Home() {
                           </div>
                           <Button
                             variant="danger"
-                            className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10 rounded-full w-9 h-9 min-w-0 p-0 flex items-center justify-center shadow-md bg-[var(--danger)]/15 text-[var(--danger)] hover:bg-[var(--danger)]/25"
+                            className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10 rounded-[var(--radius)] w-9 h-9 min-w-0 p-0 flex items-center justify-center shadow-md"
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setBookToDelete(book.id); }}
                           >
                             <Trash2 className="w-4 h-4" />
@@ -343,7 +343,7 @@ export default function Home() {
                 <h2 className="text-2xl font-bold text-[var(--foreground)]">Add new book</h2>
                 <p className="text-sm font-medium text-[var(--muted)] mt-1">Please fill book information.</p>
               </div>
-              <Button variant="ghost" onClick={handleCloseModal} className="text-[var(--muted)] hover:bg-[var(--surface-secondary)] rounded-full w-10 h-10 min-w-0 p-0 flex items-center justify-center">
+              <Button variant="ghost" onClick={handleCloseModal} className="text-[var(--muted)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] w-10 h-10 min-w-0 p-0 flex items-center justify-center">
                 <X className="w-5 h-5" />
               </Button>
             </div>
@@ -439,7 +439,7 @@ export default function Home() {
                             key={lang.value}
                             id={lang.value}
                             textValue={lang.label}
-                            className="w-full px-3 py-2 rounded-lg text-[var(--foreground)] font-medium cursor-pointer hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)] transition-colors outline-none"
+                            className="w-full px-3 py-2 rounded-[var(--radius)] text-[var(--foreground)] font-medium cursor-pointer hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)] transition-colors outline-none"
                           >
                             {lang.label}
                           </ListBox.Item>
@@ -476,7 +476,7 @@ export default function Home() {
                             key={lang.value}
                             id={lang.value}
                             textValue={lang.label}
-                            className="w-full px-3 py-2 rounded-lg text-[var(--foreground)] font-medium cursor-pointer hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)] transition-colors outline-none"
+                            className="w-full px-3 py-2 rounded-[var(--radius)] text-[var(--foreground)] font-medium cursor-pointer hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)] transition-colors outline-none"
                           >
                             {lang.label}
                           </ListBox.Item>
@@ -489,8 +489,8 @@ export default function Home() {
             </div>
 
             <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-[var(--border)]">
-              <Button variant="outline" className="rounded-full font-bold text-[var(--foreground)] border-[var(--border)]" onClick={handleCloseModal}>Cancel</Button>
-              <Button variant="primary" className="rounded-full font-bold bg-[var(--accent)] text-[var(--accent-foreground)]" onClick={handleConfirmAddBook}>Confirm</Button>
+              <Button variant="outline" className="rounded-[var(--radius)] font-bold text-[var(--foreground)] border-[var(--border)]" onClick={handleCloseModal}>Cancel</Button>
+              <Button variant="primary" className="rounded-[var(--radius)] font-bold bg-[var(--accent)] text-[var(--accent-foreground)]" onClick={handleConfirmAddBook}>Confirm</Button>
             </div>
           </Card>
         </div>
@@ -501,10 +501,10 @@ export default function Home() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[var(--overlay)]/40 backdrop-blur-sm p-4">
           <Card className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] w-full max-w-[460px] p-8 animate-in fade-in zoom-in-95 duration-200 shadow-xl">
             <div className="flex justify-between items-start mb-4">
-              <div className="w-12 h-12 rounded-full bg-[var(--danger)]/15 flex items-center justify-center text-[var(--danger)]">
+              <div className="w-12 h-12 rounded-[var(--radius)] bg-[var(--danger)]/15 flex items-center justify-center text-[var(--danger)]">
                 <Trash2 className="w-6 h-6" />
               </div>
-              <Button variant="ghost" onClick={() => setBookToDelete(null)} className="text-[var(--muted)] hover:bg-[var(--surface-secondary)] rounded-full w-10 h-10 min-w-0 p-0 flex items-center justify-center">
+              <Button variant="ghost" onClick={() => setBookToDelete(null)} className="text-[var(--muted)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] w-10 h-10 min-w-0 p-0 flex items-center justify-center">
                 <X className="w-5 h-5" />
               </Button>
             </div>
@@ -513,8 +513,8 @@ export default function Home() {
               <p className="text-base text-[var(--muted)] font-medium leading-relaxed">Are you sure you want to delete this book? This action cannot be undone.</p>
             </div>
             <div className="flex justify-end gap-3">
-              <Button variant="outline" className="rounded-full font-bold text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--surface-secondary)]" onClick={() => setBookToDelete(null)}>Cancel</Button>
-              <Button variant="danger" className="rounded-full font-bold bg-[var(--danger)]/15 text-[var(--danger)] hover:bg-[var(--danger)]/25" onClick={handleConfirmDelete}>Delete</Button>
+              <Button variant="outline" className="rounded-[var(--radius)] font-bold text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--surface-secondary)]" onClick={() => setBookToDelete(null)}>Cancel</Button>
+              <Button variant="danger" className="rounded-[var(--radius)] font-bold bg-[var(--danger)]/15 text-[var(--danger)] hover:bg-[var(--danger)]/25" onClick={handleConfirmDelete}>Delete</Button>
             </div>
           </Card>
         </div>
