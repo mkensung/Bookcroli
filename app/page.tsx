@@ -9,6 +9,7 @@ import { Select, ListBox, Button, Card, TextField, Label, Input, TextArea, Field
 } from "lucide-react";
 import { useBooks } from "./context/BookContext";
 import { toast } from "@heroui/react";
+import { Navbar } from "./components/Navbar";
 
 const languages = [
   { label: "English", value: "English" },
@@ -23,7 +24,7 @@ const languages = [
 export default function Home() {
   const { books, addBook, deleteBook } = useBooks();
 
-  const [activeTab, setActiveTab] = useState<"overview" | "library">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "library" | "bookmark">("overview");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [bookToDelete, setBookToDelete] = useState<number | null>(null);
@@ -106,53 +107,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-sans pb-20">
 
-      {/* --- Floating Navigation Bar --- */}
-      <div className="pt-6 px-6 max-w-7xl mx-auto">
-        <header className="flex items-center justify-between px-6 py-3 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] shadow-sm">
-          <div className="flex items-center gap-2 font-extrabold text-[22px] tracking-tight text-[var(--foreground)]">
-            ScriptArea
-          </div>
-          <nav className="hidden md:flex items-center gap-1">
-            <Button
-              variant={activeTab === "overview" ? "primary" : "ghost"}
-              className={`rounded-[var(--radius)] px-5 py-2.5 text-sm font-bold transition-all ${
-                activeTab === "overview" ? "bg-[var(--accent)] text-[var(--accent-foreground)]" : "text-[var(--muted)] hover:bg-[var(--surface-secondary)]"
-              }`}
-              onClick={() => setActiveTab("overview")}
-            >
-              <LayoutGrid className="w-4 h-4 mr-2" /> Overview
-            </Button>
-            <Button
-              variant={activeTab === "library" ? "primary" : "ghost"}
-              className={`rounded-[var(--radius)] px-5 py-2.5 text-sm font-bold transition-all ${
-                activeTab === "library" ? "bg-[var(--accent)] text-[var(--accent-foreground)]" : "text-[var(--muted)] hover:bg-[var(--surface-secondary)]"
-              }`}
-              onClick={() => setActiveTab("library")}
-            >
-              <Book className="w-4 h-4 mr-2" /> Library
-            </Button>
-            <Button
-              variant="ghost"
-              className="rounded-[var(--radius)] px-5 py-2.5 text-sm font-bold text-[var(--muted)] hover:bg-[var(--surface-secondary)] transition-all"
-            >
-              <Bookmark className="w-4 h-4 mr-2" /> Bookmark
-            </Button>
-          </nav>
-          <div className="flex items-center gap-3">
-            <div className="relative hidden sm:flex items-center w-[260px] h-10 text-[var(--muted)]">
-              <Search className="absolute left-3 w-4 h-4" />
-              <input type="text" placeholder="Search books" className="w-full h-full pl-10 pr-4 text-sm bg-[var(--field-background)] border border-[var(--field-border)] rounded-[var(--field-radius)] outline-none focus:border-[var(--focus)] transition-all text-[var(--field-foreground)] placeholder-[var(--field-placeholder)]" />
-            </div>
-            <Button variant="outline" className="rounded-[var(--radius)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--surface-secondary)] w-10 h-10 p-0 min-w-0 flex items-center justify-center">
-              <Bell className="w-4 h-4" />
-            </Button>
-            <Button variant="outline" className="rounded-[var(--radius)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--surface-secondary)] w-10 h-10 p-0 min-w-0 flex items-center justify-center">
-              <Settings className="w-4 h-4" />
-            </Button>
-            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--accent)] text-[var(--accent-foreground)] text-sm font-bold cursor-pointer hover:opacity-90 transition-opacity">MK</div>
-          </div>
-        </header>
-      </div>
+      <Navbar activeTab={activeTab} onTabChange={setActiveTab} />
 
       <main className="max-w-7xl mx-auto px-6 pt-10">
         

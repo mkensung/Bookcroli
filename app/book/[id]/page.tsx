@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useBooks, PageItem } from "../../context/BookContext";
 import { toast } from "@heroui/react";
+import { Navbar } from "../../components/Navbar";
 
 // 🚀 เพิ่ม Array ตัวเลือกภาษาเข้ามาให้หน้านี้รู้จัก
 const languages = [
@@ -153,27 +154,7 @@ export default function BookDetailsPage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-sans pb-20">
-      <div className="pt-6 px-6 max-w-7xl mx-auto">
-        <header className="flex items-center justify-between px-6 py-3 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] shadow-sm">
-          <Link href="/" className="flex items-center gap-2 font-extrabold text-[22px] tracking-tight text-[var(--foreground)] hover:opacity-80 transition-opacity">
-            ScriptArea
-          </Link>
-          <nav className="hidden md:flex items-center gap-1">
-            <Link href="/" className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-[var(--muted)] hover:bg-[var(--surface)] rounded-[var(--radius)] transition-all"><LayoutGrid className="w-4 h-4" /> Overview</Link>
-            <Link href="/" className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-[var(--accent-foreground)] bg-[var(--accent)] rounded-[var(--radius)] transition-all"><Book className="w-4 h-4" /> Library</Link>
-            <button className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-[var(--muted)] hover:bg-[var(--surface)] rounded-[var(--radius)] transition-all"><Bookmark className="w-4 h-4" /> Bookmark</button>
-          </nav>
-          <div className="flex items-center gap-3">
-            <div className="relative hidden sm:flex items-center w-[260px] h-10 text-[var(--muted)]">
-              <Search className="absolute left-3 w-4 h-4" />
-              <input type="text" placeholder="Search books" className="w-full h-full pl-10 pr-4 text-sm bg-transparent border border-[var(--border)] rounded-[var(--field-radius)] outline-none focus:border-[var(--focus)] transition-all text-[var(--foreground)] placeholder-[var(--muted)]" />
-            </div>
-            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border)] rounded-[var(--radius)] bg-transparent hover:bg-[var(--surface-secondary)] transition-colors text-[var(--foreground)]"><Bell className="w-4 h-4" /></button>
-            <button className="w-10 h-10 flex items-center justify-center border border-[var(--border)] rounded-[var(--radius)] bg-transparent hover:bg-[var(--surface-secondary)] transition-colors text-[var(--foreground)]"><Settings className="w-4 h-4" /></button>
-            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--accent)] text-[var(--accent-foreground)] text-sm font-bold cursor-pointer hover:opacity-90 transition-opacity">MK</div>
-          </div>
-        </header>
-      </div>
+      <Navbar activeTab="library" />
 
       <main className="max-w-[1000px] mx-auto px-6 pt-10">
         <div className="flex justify-between items-center mb-6">
