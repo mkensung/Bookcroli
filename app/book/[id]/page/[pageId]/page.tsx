@@ -32,57 +32,95 @@ export default function TranslatePage() {
   const [aiPreviewText, setAiPreviewText] = useState("");
   const [isAiTranslating, setIsAiTranslating] = useState(false);
 
-  // --- Text Selection Popup State ---
+  // --- Text Selection Popup State (Notion-style) ---
   const [selectedText, setSelectedText] = useState("");
-  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0, isFlippedY: false, isFlippedX: 'center' as 'center' | 'left' | 'right' });
+  const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
   const [activeTextarea, setActiveTextarea] = useState<"original" | "translated" | null>(null);
+  const popupRef = React.useRef<HTMLDivElement>(null);
 
+  // Compute popup position: bottom-right of the selection, close but not blocking
+  const computePopupPosition = () => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return null;
+
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+
+    // If rect has no size (can happen with textarea selections), fall back
+    if (rect.width === 0 && rect.height === 0) return null;
+
+    const popupWidth = 200;
+    const gap = 12;
+
+    // Place at bottom-right of the selection
+    let top = rect.bottom + gap;
+    let left = rect.right - popupWidth / 2;
+
+    // Clamp to viewport edges
+    left = Math.max(8, Math.min(left, window.innerWidth - popupWidth - 8));
+    if (top + 90 > window.innerHeight) top = rect.top - 90 - gap; // flip above if near bottom
+
+    return { top, left };
+  };
+
+  // Dismiss popup when clicking outside or when selection is lost
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleMouseDown = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (!target.closest("#selection-popup") && !target.closest("textarea")) {
+      // If clicking inside the popup itself, don't dismiss
+      if (popupRef.current?.contains(target)) return;
+      // Any other click dismisses the popup
+      setSelectedText("");
+      setActiveTextarea(null);
+      setPopupPosition(null);
+    };
+
+    const handleSelectionChange = () => {
+      const selection = window.getSelection();
+      if (!selection || selection.isCollapsed || !selection.toString().trim()) {
         setSelectedText("");
         setActiveTextarea(null);
+        setPopupPosition(null);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("selectionchange", handleSelectionChange);
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("selectionchange", handleSelectionChange);
+    };
   }, []);
 
-  const handleTextareaSelect = (e: React.SyntheticEvent<HTMLTextAreaElement>, type: "original" | "translated") => {
+  const handleTextareaMouseUp = (e: React.MouseEvent<HTMLTextAreaElement>, type: "original" | "translated") => {
     const textarea = e.currentTarget;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
-    
+
     if (start !== end) {
       const text = textarea.value.substring(start, end);
       setSelectedText(text);
       setActiveTextarea(type);
-      if (popupPosition.x === 0) {
-        const rect = textarea.getBoundingClientRect();
-        const y = rect.top + rect.height / 2;
-        const x = rect.left + rect.width / 2;
-        let isFlippedX: 'center' | 'left' | 'right' = 'center';
-        if (x < 160) isFlippedX = 'left';
-        else if (x > window.innerWidth - 160) isFlippedX = 'right';
-        setPopupPosition({ x, y, isFlippedY: y < 140, isFlippedX });
-      }
+
+      // Use requestAnimationFrame to let browser finalize the selection rect
+      requestAnimationFrame(() => {
+        const pos = computePopupPosition();
+        if (pos) {
+          setPopupPosition(pos);
+        } else {
+          // Fallback: position at bottom-right of mouse cursor
+          const popupWidth = 200;
+          const gap = 12;
+          let left = e.clientX;
+          left = Math.max(8, Math.min(left, window.innerWidth - popupWidth - 8));
+          const top = e.clientY + gap;
+          setPopupPosition({ top, left });
+        }
+      });
     } else {
       setSelectedText("");
       setActiveTextarea(null);
-    }
-  };
-  
-  const handleTextareaMouseUp = (e: React.MouseEvent<HTMLTextAreaElement>, type: "original" | "translated") => {
-    const textarea = e.currentTarget;
-    if (textarea.selectionStart !== textarea.selectionEnd) {
-      const isTooHigh = e.clientY < 140; // Avoid popping up out of bounds at the top
-      let isFlippedX: 'center' | 'left' | 'right' = 'center';
-      if (e.clientX < 160) isFlippedX = 'left';
-      else if (e.clientX > window.innerWidth - 160) isFlippedX = 'right';
-      
-      setPopupPosition({ x: e.clientX, y: e.clientY, isFlippedY: isTooHigh, isFlippedX });
-      handleTextareaSelect(e, type);
+      setPopupPosition(null);
     }
   };
 
@@ -93,8 +131,11 @@ export default function TranslatePage() {
       window.dispatchEvent(new CustomEvent('open-notes-drawer', { detail: { tab: 'notes', text: selectedText } }));
     }
     
+    // Clear selection and dismiss popup
+    window.getSelection()?.removeAllRanges();
     setSelectedText("");
     setActiveTextarea(null);
+    setPopupPosition(null);
   };
 
   useEffect(() => {
@@ -334,7 +375,6 @@ export default function TranslatePage() {
             placeholder="Original language"
             value={originalText}
             onChange={(e) => setOriginalText(e.target.value)}
-            onSelect={(e) => handleTextareaSelect(e, "original")}
             onMouseUp={(e) => handleTextareaMouseUp(e, "original")}
             className={`flex-1 w-full resize-none outline-none text-[var(--foreground)] text-lg leading-loose placeholder-[var(--muted)] bg-transparent mb-4 ${robotoSerif.className}`}
           />
@@ -378,7 +418,6 @@ export default function TranslatePage() {
             placeholder="Translation language."
             value={translatedText}
             onChange={handleTranslationChange}
-            onSelect={(e) => handleTextareaSelect(e, "translated")}
             onMouseUp={(e) => handleTextareaMouseUp(e, "translated")}
             className={`flex-1 w-full resize-none outline-none text-[var(--foreground)] text-lg leading-loose placeholder-[var(--muted)] bg-transparent mb-4 ${sarabun.className}`}
           />
@@ -417,23 +456,21 @@ export default function TranslatePage() {
       </main>
 
       {/* --- Text Selection Popup --- */}
-      {selectedText && popupPosition.x > 0 && (
+      {selectedText && popupPosition && (
         <div
+          ref={popupRef}
           id="selection-popup"
-          className="fixed z-50 bg-[var(--surface-secondary)] rounded-3xl border border-[var(--border)] flex flex-col w-[280px] animate-in fade-in zoom-in-95 duration-200 overflow-hidden"
+          className="fixed z-50 bg-[var(--surface-secondary)] rounded-xl border border-[var(--border)] shadow-md flex flex-col w-[200px] animate-in fade-in zoom-in-95 duration-200 overflow-hidden"
           style={{
-            top: popupPosition.y,
-            left: popupPosition.x,
-            transform: `translate(${popupPosition.isFlippedX === 'left' ? '0%' : popupPosition.isFlippedX === 'right' ? '-100%' : '-50%'}, ${popupPosition.isFlippedY ? '0%' : '-100%'})`,
-            marginTop: popupPosition.isFlippedY ? '15px' : '-15px',
-            marginLeft: popupPosition.isFlippedX === 'left' ? '15px' : popupPosition.isFlippedX === 'right' ? '-15px' : '0px'
+            top: popupPosition.top,
+            left: popupPosition.left,
           }}
         >
-          <div className="flex flex-col p-2 gap-0.5">
-            <button onClick={() => handlePopupAction('vocabulary')} className="w-full px-4 py-3 hover:bg-[var(--surface)] transition-colors text-left rounded-[var(--radius)] text-[15px] font-medium text-[var(--foreground)]">
+          <div className="flex flex-col p-1.5 gap-px">
+            <button onClick={() => handlePopupAction('vocabulary')} className="w-full px-3 py-2 hover:bg-[var(--surface)] transition-colors text-left rounded-lg text-[13px] font-medium text-[var(--foreground)]">
               Add to vocabulary
             </button>
-            <button onClick={() => handlePopupAction('notes')} className="w-full px-4 py-3 hover:bg-[var(--surface)] transition-colors text-left rounded-[var(--radius)] text-[15px] font-medium text-[var(--foreground)]">
+            <button onClick={() => handlePopupAction('notes')} className="w-full px-3 py-2 hover:bg-[var(--surface)] transition-colors text-left rounded-lg text-[13px] font-medium text-[var(--foreground)]">
               Add to notes
             </button>
           </div>
