@@ -11,9 +11,14 @@ export async function POST(request: Request) {
     
     const prompt = `You are a professional book translator. 
     Translate the following text from ${from} to ${to}. 
-    Provide only the translated text without any explanations.
     
-    Text: "${text}"`;
+    IMPORTANT FORMATTING RULES:
+    1. You MUST strictly preserve the exact paragraph structure, line breaks, and empty lines of the original text.
+    2. If there is a new line or a blank line in the original text, you must replicate it exactly in the translation.
+    3. Provide only the translated text without any explanations, comments, or markdown formatting.
+    
+    Original Text:
+    "${text}"`;
 
     // 🚀 1. เปลี่ยนคำสั่งเป็น generateContentStream เพื่อให้ AI ค่อยๆ พ่นคำออกมา
     const result = await model.generateContentStream(prompt);
