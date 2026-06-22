@@ -162,20 +162,24 @@ export default function BookDetailsPage() {
         </div>
 
         <div className="bg-[var(--surface)] rounded-[var(--radius)] shadow-sm border border-[var(--border)] p-6  mb-12 flex flex-col md:flex-row gap-8 relative">
-          <div className="absolute top-6 right-6 flex items-center gap-1">
-            <button onClick={handleOpenEditModal} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-normal text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] transition-colors border border-[var(--border)] bg-transparent"><Edit className="w-4 h-4" /> Edit book</button>
-            <button onClick={() => setIsDeleteBookModalOpen(true)} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-normal text-[var(--foreground)] hover:bg-[var(--danger)]/10 hover:text-[var(--danger)] hover:border-[var(--danger)]/30 rounded-[var(--radius)] transition-colors border border-[var(--border)] bg-transparent"><Trash2 className="w-4 h-4" /> Delete</button>
-          </div>
-
           <div className="w-full md:w-[240px] shrink-0">
             <div className="w-full aspect-[2/3] bg-[var(--background)] rounded-[var(--radius)] flex items-center justify-center border border-[var(--border)] overflow-hidden relative">
               {book.coverImage ? <img src={book.coverImage} alt="Cover" className="w-full h-full object-cover" /> : <BookOpen className="w-16 h-16 stroke-[1.5] text-[var(--muted)]" />}
             </div>
           </div>
 
-          <div className="flex flex-col flex-1 py-2 pr-12">
-            <h1 className="text-[40px] font-bold text-[var(--foreground)] mb-1 leading-tight tracking-tight">{book.title}</h1>
-            <p className="text-xl text-[var(--muted)] italic font-medium mb-6">{book.author}</p>
+          <div className="flex flex-col flex-1 py-2">
+            <div className="flex justify-between items-start mb-6">
+              <div className="flex-1 pr-8">
+                <h1 className="text-[40px] font-bold text-[var(--foreground)] mb-1 leading-tight tracking-tight">{book.title}</h1>
+                <p className="text-xl text-[var(--muted)] italic font-medium">{book.author}</p>
+              </div>
+              <div className="flex items-center gap-1 shrink-0">
+                <button onClick={handleOpenEditModal} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-normal text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] transition-colors border border-[var(--border)] bg-transparent"><Edit className="w-4 h-4" /> Edit book</button>
+                <button onClick={() => setIsDeleteBookModalOpen(true)} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-normal text-[var(--foreground)] hover:bg-[var(--danger)]/10 hover:text-[var(--danger)] hover:border-[var(--danger)]/30 rounded-[var(--radius)] transition-colors border border-[var(--border)] bg-transparent"><Trash2 className="w-4 h-4" /> Delete</button>
+              </div>
+            </div>
+            
             <p className="text-[var(--muted)] leading-relaxed mb-8 max-w-3xl font-medium">{book.plot}</p>
 
             <div className="flex gap-16 mb-auto">
@@ -223,7 +227,7 @@ export default function BookDetailsPage() {
 
                     {editingPageId === page.id ? (
                       <div>
-                        <input autoFocus type="text" value={editPageTitle} onChange={(e) => setEditPageTitle(e.target.value)} onKeyDown={handleKeyDownEdit} onBlur={handleSaveEdit} className="w-full px-4 py-2 bg-[var(--surface-secondary)] border border-[var(--border)] rounded-[var(--field-radius)] outline-none focus:border-[var(--focus)] focus:ring-1 focus:ring-transparent text-sm font-bold text-[var(--foreground)] transition-all"/>
+                        <input autoFocus type="text" value={editPageTitle} onChange={(e) => setEditPageTitle(e.target.value)} onKeyDown={handleKeyDownEdit} className="w-full px-4 py-2 bg-[var(--surface-secondary)] border border-[var(--border)] rounded-[var(--field-radius)] outline-none focus:border-[var(--focus)] focus:ring-1 focus:ring-transparent text-sm font-bold text-[var(--foreground)] transition-all"/>
                       </div>
                     ) : (
                       <div className="font-bold text-[var(--foreground)]">{page.title}</div>
@@ -250,10 +254,11 @@ export default function BookDetailsPage() {
                   <div className="grid grid-cols-[80px_1fr_160px] gap-4 px-6 py-3 border-b border-[var(--focus)] bg-[var(--surface)] items-center">
                     <div className="text-center font-bold text-[var(--muted)]"><div className="w-6 h-6 rounded-[var(--radius)] bg-[var(--background)] border border-[var(--border)] flex items-center justify-center mx-auto text-xs">{pages.length + 1}</div></div>
                     <div>
-                      <input autoFocus type="text" placeholder="Enter the content" value={newPageTitle} onChange={(e) => setNewPageTitle(e.target.value)} onKeyDown={handleKeyDownNew} onBlur={handleSaveNewPage} className="w-full px-4 py-2 bg-[var(--surface-secondary)] border border-[var(--focus)] rounded-[var(--field-radius)] outline-none focus:border-[var(--focus)] focus:ring-1 focus:ring-transparent text-sm font-bold text-[var(--foreground)] transition-all placeholder:font-medium placeholder-[var(--muted)]"/>
+                      <input autoFocus type="text" placeholder="Enter the content" value={newPageTitle} onChange={(e) => setNewPageTitle(e.target.value)} onKeyDown={handleKeyDownNew} className="w-full px-4 py-2 bg-[var(--surface-secondary)] border border-[var(--focus)] rounded-[var(--field-radius)] outline-none focus:border-[var(--focus)] focus:ring-1 focus:ring-transparent text-sm font-bold text-[var(--foreground)] transition-all placeholder:font-medium placeholder-[var(--muted)]"/>
                     </div>
                     <div className="flex items-center justify-end gap-2">
-                      <div className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border)] text-[var(--muted)] rounded-[var(--radius)]"><Eye className="w-4 h-4" /></div><div className="w-10 h-10 flex items-center justify-center bg-transparent border border-[var(--border)] text-[var(--muted)] rounded-[var(--radius)]"><Edit className="w-4 h-4" /></div><div className="w-10 h-10 flex items-center justify-center bg-[var(--danger)]/10 border border-[var(--danger)]/20 text-[var(--danger)] rounded-[var(--radius)]"><Trash2 className="w-4 h-4" /></div>
+                      <Button isIconOnly variant="outline" onPress={handleSaveNewPage} className="rounded-[var(--radius)] border-[var(--border)] text-[var(--success)] hover:bg-[var(--success)]/10 hover:border-[var(--success)]/30 hover:!text-[var(--success)]"><Check className="w-4 h-4" /></Button>
+                      <Button isIconOnly variant="outline" onPress={() => { setIsAddingPage(false); setNewPageTitle(""); }} className="rounded-[var(--radius)] border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--surface-secondary)]"><X className="w-4 h-4" /></Button>
                     </div>
                   </div>
                 )}
