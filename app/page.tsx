@@ -317,7 +317,7 @@ export default function Home() {
 
                   {/* Mascot - gentle bobbing */}
                   <img 
-                    src="/broccoli-mascot.png" 
+                    src="/Bookcroli_mascot.svg" 
                     alt="Bookcroli Mascot" 
                     className="relative z-10 drop-shadow-lg"
                     style={{
