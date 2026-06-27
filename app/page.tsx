@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { Select, ListBox, Button, Card, TextField, Label, Input, TextArea, FieldError } from "@heroui/react";import {
   BookOpen, Book, LayoutGrid, Bookmark, Search,
@@ -20,6 +20,130 @@ const languages = [
   { label: "French", value: "French" },
   { label: "German", value: "German" },
 ];
+
+// Swipeable Book Card component with swipe-to-delete on mobile
+function SwipeableBookCard({ book, progressPercent, onDelete }: { book: any; progressPercent: number; onDelete: (id: number) => void }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [translateX, setTranslateX] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const isHorizontalSwipe = useRef<boolean | null>(null);
+
+  const SWIPE_THRESHOLD = 80;
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    isHorizontalSwipe.current = null;
+    setIsSwiping(true);
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isSwiping) return;
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = touchStartX.current - currentX;
+    const diffY = Math.abs(touchStartY.current - currentY);
+
+    // Determine swipe direction on first significant movement
+    if (isHorizontalSwipe.current === null) {
+      if (Math.abs(diffX) > 10 || diffY > 10) {
+        isHorizontalSwipe.current = Math.abs(diffX) > diffY;
+      }
+      return;
+    }
+
+    // Only handle horizontal swipes (left swipe = positive diffX)
+    if (!isHorizontalSwipe.current) return;
+
+    if (diffX > 0) {
+      setTranslateX(-Math.min(diffX, 120));
+    } else {
+      setTranslateX(0);
+    }
+  }, [isSwiping]);
+
+  const handleTouchEnd = useCallback(() => {
+    setIsSwiping(false);
+    isHorizontalSwipe.current = null;
+    if (translateX < -SWIPE_THRESHOLD) {
+      // Snap open to reveal delete
+      setTranslateX(-100);
+    } else {
+      // Snap back
+      setTranslateX(0);
+    }
+  }, [translateX]);
+
+  const handleDeleteClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onDelete(book.id);
+    setTranslateX(0);
+  }, [book.id, onDelete]);
+
+  return (
+    <div className="relative overflow-hidden rounded-[var(--radius)]" ref={cardRef}>
+      {/* Delete background (revealed on swipe) */}
+      <div className="absolute inset-y-0 right-0 w-[100px] flex items-center justify-center bg-red-500 rounded-r-[var(--radius)] z-0">
+        <button
+          onClick={handleDeleteClick}
+          className="flex flex-col items-center gap-1 text-white"
+        >
+          <Trash2 className="w-5 h-5" />
+          <span className="text-[10px] font-bold">Delete</span>
+        </button>
+      </div>
+
+      {/* Card content (slides left) */}
+      <Link href={`/book/${book.id}`} className="block w-full h-full">
+        <Card
+          className="group bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-3 sm:p-4 relative flex flex-col gap-3 sm:gap-4 cursor-pointer h-full shadow-sm w-full hover:border-[var(--accent)] hover:shadow-md overflow-hidden z-10"
+          style={{
+            transform: `translateX(${translateX}px)`,
+            transition: isSwiping ? 'none' : 'transform 0.3s ease-out',
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="relative w-full">
+            <div className="w-full aspect-[2/3] bg-[var(--background)] rounded-[var(--radius)] flex items-center justify-center border border-[var(--border)] overflow-hidden">
+              {book.coverImage ? (
+                <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
+              ) : (
+                <BookOpen className="w-10 h-10 sm:w-14 sm:h-14 stroke-1 text-[var(--muted)]" />
+              )}
+            </div>
+            {/* Desktop-only hover delete button */}
+            <Button
+              variant="danger"
+              className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10 rounded-[var(--radius)] w-8 h-8 sm:w-9 sm:h-9 min-w-0 p-0 hidden sm:flex items-center justify-center shadow-md"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(book.id); }}
+            >
+              <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </Button>
+          </div>
+          <div className="flex flex-col gap-1 text-left w-full">
+            <p className="italic text-xs sm:text-sm text-[var(--muted)] line-clamp-1">{book.author}</p>
+            <h3 className="font-bold text-sm sm:text-lg text-[var(--foreground)] leading-tight line-clamp-2">{book.title}</h3>
+          </div>
+          <div className="mt-auto w-full">
+            <div className="flex justify-between text-xs sm:text-sm mb-1.5">
+              <span className="font-medium text-[var(--muted)]">Progress</span>
+              <span className="font-bold text-[var(--foreground)]">{progressPercent}%</span>
+            </div>
+            <div className="w-full h-1.5 bg-[var(--separator)] rounded-full overflow-hidden">
+              <div className="h-full bg-[var(--accent)] rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
+            </div>
+          </div>
+        </Card>
+      </Link>
+    </div>
+  );
+}
+
 
 export default function Home() {
   const { books, addBook, deleteBook } = useBooks();
@@ -105,11 +229,11 @@ export default function Home() {
   const inProgressBooksList = books.filter((b: any) => b.totalPages === 0 || b.translatedPages < b.totalPages);
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-sans pb-20">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-sans pb-24 md:pb-20">
 
       <Navbar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <main className="max-w-7xl mx-auto px-6 pt-10">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10">
         
         {/* --- OVERVIEW TAB --- */}
         {activeTab === "overview" && (
@@ -190,7 +314,7 @@ export default function Home() {
                 </div>
                 
                 {/* Animated Mascot Scene */}
-                <div className="relative md:absolute md:right-[20px] top-0 md:bottom-0 w-full md:w-[420px] h-[180px] md:h-auto pointer-events-none flex items-center justify-center overflow-visible order-first md:order-last -mt-8 md:mt-0 scale-75 origin-top md:scale-100 md:origin-center">
+                <div className="relative md:absolute md:right-[20px] top-0 md:bottom-0 w-full md:w-[420px] h-[180px] md:h-auto pointer-events-none flex items-center justify-center overflow-hidden md:overflow-visible order-first md:order-last -mt-8 md:mt-0 scale-75 origin-top md:scale-100 md:origin-center">
                   
                   {/* Soft radial glow behind mascot */}
                   <div
@@ -416,39 +540,12 @@ export default function Home() {
                 {books.map((book: any) => {
                   const progressPercent = book.totalPages > 0 ? Math.round((book.translatedPages / book.totalPages) * 100) : 0;
                   return (
-                    <Link href={`/book/${book.id}`} key={book.id} className="block w-full h-full">
-                      <Card className="group bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-3 sm:p-4 transition-all relative flex flex-col gap-3 sm:gap-4 cursor-pointer h-full shadow-sm w-full hover:border-[var(--accent)] hover:shadow-md overflow-hidden">
-                        <div className="relative w-full">
-                          <div className="w-full aspect-[2/3] bg-[var(--background)] rounded-[var(--radius)] flex items-center justify-center border border-[var(--border)] overflow-hidden">
-                            {book.coverImage ? (
-                              <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
-                            ) : (
-                              <BookOpen className="w-10 h-10 sm:w-14 sm:h-14 stroke-1 text-[var(--muted)]" />
-                            )}
-                          </div>
-                          <Button
-                            variant="danger"
-                            className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10 rounded-[var(--radius)] w-8 h-8 sm:w-9 sm:h-9 min-w-0 p-0 flex items-center justify-center shadow-md"
-                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setBookToDelete(book.id); }}
-                          >
-                            <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                          </Button>
-                        </div>
-                        <div className="flex flex-col gap-1 text-left w-full">
-                          <p className="italic text-xs sm:text-sm text-[var(--muted)] line-clamp-1">{book.author}</p>
-                          <h3 className="font-bold text-sm sm:text-lg text-[var(--foreground)] leading-tight line-clamp-2">{book.title}</h3>
-                        </div>
-                        <div className="mt-auto w-full">
-                          <div className="flex justify-between text-xs sm:text-sm mb-1.5">
-                            <span className="font-medium text-[var(--muted)]">Progress</span>
-                            <span className="font-bold text-[var(--foreground)]">{progressPercent}%</span>
-                          </div>
-                          <div className="w-full h-1.5 bg-[var(--separator)] rounded-full overflow-hidden">
-                            <div className="h-full bg-[var(--accent)] rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
-                          </div>
-                        </div>
-                      </Card>
-                    </Link>
+                    <SwipeableBookCard
+                      key={book.id}
+                      book={book}
+                      progressPercent={progressPercent}
+                      onDelete={(id) => setBookToDelete(id)}
+                    />
                   );
                 })}
               </div>
