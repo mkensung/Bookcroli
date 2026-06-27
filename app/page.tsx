@@ -118,8 +118,7 @@ function SwipeableBookCard({ book, progressPercent, onDelete }: { book: any; pro
             </div>
             {/* Desktop-only hover delete button */}
             <Button
-              color="danger"
-              className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10 rounded-[var(--radius)] w-9 h-9 min-w-0 p-0 hidden sm:flex items-center justify-center shadow-md"
+              className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10 rounded-[var(--radius)] w-9 h-9 min-w-0 p-0 hidden sm:flex items-center justify-center shadow-md bg-[#ff4d6d] text-white hover:bg-[#e04360]"
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(book.id); }}
             >
               <Trash2 className="w-4 h-4" />
