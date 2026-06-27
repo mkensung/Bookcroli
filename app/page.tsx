@@ -86,7 +86,7 @@ function SwipeableBookCard({ book, progressPercent, onDelete }: { book: any; pro
   return (
     <div className="relative overflow-hidden rounded-[var(--radius)]" ref={cardRef}>
       {/* Delete background (revealed on swipe) */}
-      <div className="absolute inset-y-0 right-0 w-[100px] flex items-center justify-center bg-red-500 rounded-r-[var(--radius)] z-0">
+      <div className="absolute inset-y-0 right-0 w-[100px] flex items-center justify-center bg-[#ff4d6d] rounded-r-[var(--radius)] z-0">
         <button
           onClick={handleDeleteClick}
           className="flex flex-col items-center gap-1 text-white"
