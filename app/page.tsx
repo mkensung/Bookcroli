@@ -153,13 +153,13 @@ export default function Home() {
 
             {/* Banner */}
             <Card className="bg-[var(--surface-secondary)] rounded-[var(--radius)] shadow-none border-none overflow-hidden">
-              <div className="p-10 flex justify-between relative overflow-hidden flex-row min-h-[280px]">
-                <div className="relative z-10 flex flex-col justify-center">
-                  <h1 className="text-[34px] font-extrabold text-[var(--foreground)] tracking-tight">Welcome back, Mean!</h1>
-                  <p className="text-[17px] text-[var(--muted)] mt-2 font-medium">You have {inProgressBooks} books in translation progress.</p>
+              <div className="p-6 md:p-10 flex flex-col md:flex-row justify-between relative overflow-hidden min-h-[280px] gap-8 md:gap-0">
+                <div className="relative z-10 flex flex-col justify-center order-last md:order-first">
+                  <h1 className="text-[28px] md:text-[34px] font-extrabold text-[var(--foreground)] tracking-tight">Welcome back, Mean!</h1>
+                  <p className="text-[16px] md:text-[17px] text-[var(--muted)] mt-2 font-medium">You have {inProgressBooks} books in translation progress.</p>
                   
-                  <div className="flex gap-4 mt-8">
-                    <Card className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-row items-center gap-4 min-w-[200px] shadow-sm border border-[var(--border)]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 md:mt-8">
+                    <Card className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-row items-center gap-4 shadow-sm border border-[var(--border)]">
                       <div className="w-12 h-12 rounded-[var(--radius)] bg-[var(--surface-tertiary)] text-[var(--accent)] flex items-center justify-center shrink-0">
                         <Book className="w-6 h-6 stroke-[2.5]" />
                       </div>
@@ -168,7 +168,7 @@ export default function Home() {
                         <p className="text-[26px] font-black text-[var(--foreground)] leading-none mt-1">{totalBooks}</p>
                       </div>
                     </Card>
-                    <Card className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-row items-center gap-4 min-w-[200px] shadow-sm border border-[var(--border)]">
+                    <Card className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-row items-center gap-4 shadow-sm border border-[var(--border)]">
                       <div className="w-12 h-12 rounded-[var(--radius)] bg-[var(--warning)]/20 text-[var(--warning)] flex items-center justify-center shrink-0">
                         <RefreshCw className="w-6 h-6 stroke-[2.5]" />
                       </div>
@@ -177,7 +177,7 @@ export default function Home() {
                         <p className="text-[26px] font-black text-[var(--foreground)] leading-none mt-1">{inProgressBooks}</p>
                       </div>
                     </Card>
-                    <Card className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-row items-center gap-4 min-w-[200px] shadow-sm border border-[var(--border)]">
+                    <Card className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-row items-center gap-4 shadow-sm border border-[var(--border)]">
                       <div className="w-12 h-12 rounded-[var(--radius)] bg-[var(--success)]/20 text-[var(--success)] flex items-center justify-center shrink-0">
                         <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
                       </div>
@@ -190,7 +190,7 @@ export default function Home() {
                 </div>
                 
                 {/* Animated Mascot Scene */}
-                <div className="absolute right-[20px] top-0 bottom-0 w-[420px] pointer-events-none flex items-center justify-center overflow-visible">
+                <div className="relative md:absolute md:right-[20px] top-0 md:bottom-0 w-full md:w-[420px] h-[180px] md:h-auto pointer-events-none flex items-center justify-center overflow-visible order-first md:order-last -mt-8 md:mt-0 scale-75 origin-top md:scale-100 md:origin-center">
                   
                   {/* Soft radial glow behind mascot */}
                   <div
@@ -460,7 +460,7 @@ export default function Home() {
       {/* --- Add New Book Modal --- */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--overlay)]/40 backdrop-blur-sm p-4">
-          <Card className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] w-full max-w-3xl overflow-hidden flex flex-col p-8 animate-in fade-in zoom-in-95 duration-200 shadow-xl">
+          <Card className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] w-full max-w-3xl max-h-[90vh] overflow-y-auto flex flex-col p-5 md:p-8 animate-in fade-in zoom-in-95 duration-200 shadow-xl">
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-[var(--foreground)]">Add new book</h2>
@@ -502,7 +502,7 @@ export default function Home() {
                     <FieldError className="text-xs text-[var(--danger)]">{errors.title}</FieldError>
                   </TextField>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <TextField className="flex flex-col gap-1.5" isRequired isInvalid={!!errors.author}>
                       <Label className="text-sm font-semibold text-[var(--foreground)]">Author name</Label>
                       <Input
@@ -534,7 +534,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 md:mt-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-semibold text-[var(--foreground)]">Original language <span className="text-[var(--danger)]">*</span></label>
                   <Select
