@@ -99,7 +99,7 @@ function SwipeableBookCard({ book, progressPercent, onDelete }: { book: any; pro
       {/* Card content (slides left) */}
       <Link href={`/book/${book.id}`} className="block w-full h-full">
         <Card
-          className="group bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-3 sm:p-4 relative flex flex-col gap-3 sm:gap-4 cursor-pointer h-full shadow-sm w-full hover:border-[var(--accent)] hover:shadow-md overflow-hidden z-10"
+          className="group bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-3 sm:p-4 relative flex flex-col gap-3 sm:gap-4 cursor-pointer h-full shadow-sm w-full hover:border-[var(--accent)] hover:shadow-md z-10"
           style={{
             transform: `translateX(${translateX}px)`,
             transition: isSwiping ? 'none' : 'transform 0.3s ease-out',
@@ -118,11 +118,11 @@ function SwipeableBookCard({ book, progressPercent, onDelete }: { book: any; pro
             </div>
             {/* Desktop-only hover delete button */}
             <Button
-              variant="danger"
-              className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10 rounded-[var(--radius)] w-8 h-8 sm:w-9 sm:h-9 min-w-0 p-0 hidden sm:flex items-center justify-center shadow-md"
+              color="danger"
+              className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10 rounded-[var(--radius)] w-9 h-9 min-w-0 p-0 hidden sm:flex items-center justify-center shadow-md"
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(book.id); }}
             >
-              <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <Trash2 className="w-4 h-4" />
             </Button>
           </div>
           <div className="flex flex-col gap-1 text-left w-full">
