@@ -314,7 +314,7 @@ export default function Home() {
                 </div>
                 
                 {/* Animated Mascot Scene */}
-                <div className="relative md:absolute md:right-[20px] top-0 md:bottom-0 w-full md:w-[420px] h-[180px] md:h-auto pointer-events-none flex items-center justify-center overflow-hidden md:overflow-visible order-first md:order-last -mt-8 md:mt-0 scale-75 origin-top md:scale-100 md:origin-center">
+                <div className="relative md:absolute md:right-[20px] top-0 md:bottom-0 w-full md:w-[420px] h-[220px] md:h-auto pointer-events-none flex items-center justify-center overflow-visible order-first md:order-last -mt-4 md:mt-0 scale-[0.8] origin-center md:scale-100">
                   
                   {/* Soft radial glow behind mascot */}
                   <div
