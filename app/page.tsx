@@ -417,36 +417,40 @@ export default function Home() {
                   const progressPercent = book.totalPages > 0 ? Math.round((book.translatedPages / book.totalPages) * 100) : 0;
                   return (
                     <Link href={`/book/${book.id}`} key={book.id} className="block w-full h-full">
-                      <Card className="group bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-4 transition-all relative flex flex-col gap-4 cursor-pointer h-full shadow-sm w-full hover:border-[var(--accent)] hover:shadow-md">
-                        <div className="relative w-full">
+                      <Card className="group bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-4 transition-all relative flex flex-row sm:flex-col gap-4 sm:gap-4 cursor-pointer h-full shadow-sm w-full hover:border-[var(--accent)] hover:shadow-md items-center sm:items-stretch">
+                        <div className="relative w-24 sm:w-full shrink-0">
                           <div className="w-full aspect-[2/3] bg-[var(--background)] rounded-[var(--radius)] flex items-center justify-center border border-[var(--border)] overflow-hidden">
                             {book.coverImage ? (
                               <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
                             ) : (
-                              <BookOpen className="w-14 h-14 stroke-1 text-[var(--muted)]" />
+                              <BookOpen className="w-8 h-8 sm:w-14 sm:h-14 stroke-1 text-[var(--muted)]" />
                             )}
                           </div>
-                          <Button
-                            variant="danger"
-                            className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 z-10 rounded-[var(--radius)] w-9 h-9 min-w-0 p-0 flex items-center justify-center shadow-md"
-                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setBookToDelete(book.id); }}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
                         </div>
-                        <div className="flex flex-col gap-1 text-left w-full">
-                          <p className="italic text-sm text-[var(--muted)] line-clamp-1">{book.author}</p>
-                          <h3 className="font-bold text-lg text-[var(--foreground)] leading-tight line-clamp-2">{book.title}</h3>
-                        </div>
-                        <div className="mt-auto w-full">
-                          <div className="flex justify-between text-sm mb-1.5">
-                            <span className="font-medium text-[var(--muted)]">Progress</span>
-                            <span className="font-bold text-[var(--foreground)]">{progressPercent}%</span>
+                        
+                        <div className="flex flex-col flex-1 min-w-0 justify-between h-full py-1 sm:py-0 w-full">
+                          <div className="flex flex-col gap-1 text-left w-full mb-3 sm:mb-0">
+                            <p className="italic text-xs sm:text-sm text-[var(--muted)] line-clamp-1">{book.author}</p>
+                            <h3 className="font-bold text-base sm:text-lg text-[var(--foreground)] leading-tight line-clamp-2">{book.title}</h3>
                           </div>
-                          <div className="w-full h-1.5 bg-[var(--separator)] rounded-full overflow-hidden">
-                            <div className="h-full bg-[var(--accent)] rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
+                          <div className="mt-auto w-full">
+                            <div className="flex justify-between text-xs sm:text-sm mb-1.5">
+                              <span className="font-medium text-[var(--muted)]">Progress</span>
+                              <span className="font-bold text-[var(--foreground)]">{progressPercent}%</span>
+                            </div>
+                            <div className="w-full h-1.5 bg-[var(--separator)] rounded-full overflow-hidden">
+                              <div className="h-full bg-[var(--accent)] rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
+                            </div>
                           </div>
                         </div>
+
+                        <Button
+                          variant="danger"
+                          className="absolute -top-3 -right-3 sm:opacity-0 group-hover:opacity-100 transition-all sm:scale-90 group-hover:scale-100 z-10 rounded-[var(--radius)] w-9 h-9 min-w-0 p-0 flex items-center justify-center shadow-md bg-red-500 text-white"
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setBookToDelete(book.id); }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </Card>
                     </Link>
                   );
