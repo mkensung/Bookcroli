@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Select, ListBox, Button, TextField, Label, Input, TextArea, Card, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
@@ -55,6 +55,18 @@ export default function BookDetailsPage() {
 
   const [isEditBookModalOpen, setIsEditBookModalOpen] = useState(false);
   const [isDeleteBookModalOpen, setIsDeleteBookModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const [pageToDelete, setPageToDelete] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -159,26 +171,32 @@ export default function BookDetailsPage() {
       <main className="max-w-[1000px] mx-auto px-6 pt-10">
         <div className="flex justify-between items-center mb-6">
           <Link href="/" className="inline-flex items-center gap-2 text-[var(--muted)] hover:text-[var(--foreground)] font-medium transition-colors"><ChevronLeft className="w-5 h-5" /> Back to Library</Link>
-          <div className="flex items-center gap-1 shrink-0">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly variant="ghost" className="text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] border-none bg-transparent">
-                  <MoreVertical className="w-5 h-5" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Book Actions">
-                <DropdownItem key="edit" onPress={handleOpenEditModal}>
-                  <div className="flex items-center gap-2">
-                    <Edit className="w-4 h-4" /> Edit book
-                  </div>
-                </DropdownItem>
-                <DropdownItem key="delete" className="text-[var(--danger)]" onPress={() => setIsDeleteBookModalOpen(true)}>
-                  <div className="flex items-center gap-2">
-                    <Trash2 className="w-4 h-4" /> Delete
-                  </div>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+          <div className="flex items-center gap-1 shrink-0 relative" ref={menuRef}>
+            <Button 
+              isIconOnly 
+              variant="ghost" 
+              className="text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] border-none bg-transparent"
+              onPress={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <MoreVertical className="w-5 h-5" />
+            </Button>
+            
+            {isMenuOpen && (
+              <div className="absolute right-0 top-full mt-2 w-40 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] shadow-lg overflow-hidden z-50 flex flex-col py-1 animate-in fade-in zoom-in-95 duration-100">
+                <button 
+                  onClick={() => { setIsMenuOpen(false); handleOpenEditModal(); }}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[var(--foreground)] hover:bg-[var(--surface-secondary)] transition-colors text-left"
+                >
+                  <Edit className="w-4 h-4" /> Edit book
+                </button>
+                <button 
+                  onClick={() => { setIsMenuOpen(false); setIsDeleteBookModalOpen(true); }}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white transition-colors text-left"
+                >
+                  <Trash2 className="w-4 h-4" /> Delete
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
