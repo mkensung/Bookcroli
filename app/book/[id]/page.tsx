@@ -159,6 +159,27 @@ export default function BookDetailsPage() {
       <main className="max-w-[1000px] mx-auto px-6 pt-10">
         <div className="flex justify-between items-center mb-6">
           <Link href="/" className="inline-flex items-center gap-2 text-[var(--muted)] hover:text-[var(--foreground)] font-medium transition-colors"><ChevronLeft className="w-5 h-5" /> Back to Library</Link>
+          <div className="flex items-center gap-1 shrink-0">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly variant="ghost" className="text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] border-none bg-transparent">
+                  <MoreVertical className="w-5 h-5" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Book Actions">
+                <DropdownItem key="edit" onPress={handleOpenEditModal}>
+                  <div className="flex items-center gap-2">
+                    <Edit className="w-4 h-4" /> Edit book
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="delete" className="text-[var(--danger)]" onPress={() => setIsDeleteBookModalOpen(true)}>
+                  <div className="flex items-center gap-2">
+                    <Trash2 className="w-4 h-4" /> Delete
+                  </div>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
         </div>
 
         <div className="bg-[var(--surface)] rounded-[var(--radius)] shadow-sm border border-[var(--border)] p-6  mb-12 flex flex-col md:flex-row gap-8 relative">
@@ -169,32 +190,9 @@ export default function BookDetailsPage() {
           </div>
 
           <div className="flex flex-col flex-1 py-2">
-            <div className="flex justify-between items-start mb-6">
-              <div className="flex-1 pr-2 sm:pr-8">
-                <h1 className="text-3xl sm:text-[40px] font-bold text-[var(--foreground)] mb-1 leading-tight tracking-tight break-words">{book.title}</h1>
-                <p className="text-lg sm:text-xl text-[var(--muted)] italic font-medium">{book.author}</p>
-              </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <Dropdown>
-                  <DropdownTrigger>
-                    <Button isIconOnly variant="ghost" className="text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] border-none bg-transparent">
-                      <MoreVertical className="w-5 h-5" />
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu aria-label="Book Actions">
-                    <DropdownItem key="edit" onPress={handleOpenEditModal}>
-                      <div className="flex items-center gap-2">
-                        <Edit className="w-4 h-4" /> Edit book
-                      </div>
-                    </DropdownItem>
-                    <DropdownItem key="delete" className="text-[var(--danger)]" onPress={() => setIsDeleteBookModalOpen(true)}>
-                      <div className="flex items-center gap-2">
-                        <Trash2 className="w-4 h-4" /> Delete
-                      </div>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </div>
+            <div className="mb-6">
+              <h1 className="text-3xl sm:text-[40px] font-bold text-[var(--foreground)] mb-1 leading-tight tracking-tight break-words">{book.title}</h1>
+              <p className="text-lg sm:text-xl text-[var(--muted)] italic font-medium">{book.author}</p>
             </div>
             
             <p className="text-[var(--muted)] leading-relaxed mb-8 max-w-3xl font-medium">{book.plot}</p>
