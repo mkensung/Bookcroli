@@ -175,18 +175,22 @@ export default function BookDetailsPage() {
                 <p className="text-lg sm:text-xl text-[var(--muted)] italic font-medium">{book.author}</p>
               </div>
               <div className="flex items-center gap-1 shrink-0">
-                <Dropdown placement="bottom-end">
+                <Dropdown>
                   <DropdownTrigger>
-                    <Button isIconOnly variant="light" className="text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)]">
+                    <Button isIconOnly variant="ghost" className="text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] border-none bg-transparent">
                       <MoreVertical className="w-5 h-5" />
                     </Button>
                   </DropdownTrigger>
-                  <DropdownMenu aria-label="Book Actions" variant="flat">
-                    <DropdownItem key="edit" startContent={<Edit className="w-4 h-4" />} onPress={handleOpenEditModal}>
-                      Edit book
+                  <DropdownMenu aria-label="Book Actions">
+                    <DropdownItem key="edit" onPress={handleOpenEditModal}>
+                      <div className="flex items-center gap-2">
+                        <Edit className="w-4 h-4" /> Edit book
+                      </div>
                     </DropdownItem>
-                    <DropdownItem key="delete" className="text-danger" color="danger" startContent={<Trash2 className="w-4 h-4" />} onPress={() => setIsDeleteBookModalOpen(true)}>
-                      Delete
+                    <DropdownItem key="delete" className="text-[var(--danger)]" onPress={() => setIsDeleteBookModalOpen(true)}>
+                      <div className="flex items-center gap-2">
+                        <Trash2 className="w-4 h-4" /> Delete
+                      </div>
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
