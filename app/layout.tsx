@@ -7,8 +7,8 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "BookLator",
-  description: "Your awesome book translation app",
+  title: "Bookcroli",
+  description: "An AI-powered book translation app",
 };
 
 export default function RootLayout({
