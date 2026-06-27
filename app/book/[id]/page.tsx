@@ -170,7 +170,7 @@ export default function BookDetailsPage() {
 
       <main className="max-w-[1000px] mx-auto px-6 pt-10">
         <div className="flex justify-between items-center mb-6">
-          <Link href="/" className="inline-flex items-center gap-2 text-[var(--muted)] hover:text-[var(--foreground)] font-medium transition-colors"><ChevronLeft className="w-5 h-5" /> Back to Library</Link>
+          <Link href="/?tab=library" className="inline-flex items-center gap-2 text-[var(--muted)] hover:text-[var(--foreground)] font-medium transition-colors"><ChevronLeft className="w-5 h-5" /> Back to Library</Link>
           <div className="flex items-center gap-1 shrink-0 relative" ref={menuRef}>
             <Button 
               isIconOnly 

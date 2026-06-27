@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { Select, ListBox, Button, Card, TextField, Label, Input, TextArea, FieldError } from "@heroui/react";import {
   BookOpen, Book, LayoutGrid, Bookmark, Search,
@@ -148,6 +148,14 @@ export default function Home() {
   const { books, addBook, deleteBook } = useBooks();
 
   const [activeTab, setActiveTab] = useState<"overview" | "library" | "bookmark">("overview");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab");
+    if (tab === "library" || tab === "overview" || tab === "bookmark") {
+      setActiveTab(tab as "overview" | "library" | "bookmark");
+    }
+  }, []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [bookToDelete, setBookToDelete] = useState<number | null>(null);
