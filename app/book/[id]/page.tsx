@@ -3,10 +3,10 @@
 import React, { useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Select, ListBox, Button, TextField, Label, Input, TextArea, Card } from "@heroui/react";
+import { Select, ListBox, Button, TextField, Label, Input, TextArea, Card, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
 import { 
   BookOpen, Book, LayoutGrid, Bookmark, Search, Bell, Settings, 
-  ChevronLeft, Edit, Trash2, Plus, X, Eye, Image as ImageIcon, ChevronDown, Check
+  ChevronLeft, Edit, Trash2, Plus, X, Eye, Image as ImageIcon, ChevronDown, Check, MoreVertical
 } from "lucide-react";
 import { useBooks, PageItem } from "../../context/BookContext";
 import { toast } from "@heroui/react";
@@ -170,13 +170,26 @@ export default function BookDetailsPage() {
 
           <div className="flex flex-col flex-1 py-2">
             <div className="flex justify-between items-start mb-6">
-              <div className="flex-1 pr-8">
-                <h1 className="text-[40px] font-bold text-[var(--foreground)] mb-1 leading-tight tracking-tight">{book.title}</h1>
-                <p className="text-xl text-[var(--muted)] italic font-medium">{book.author}</p>
+              <div className="flex-1 pr-2 sm:pr-8">
+                <h1 className="text-3xl sm:text-[40px] font-bold text-[var(--foreground)] mb-1 leading-tight tracking-tight break-words">{book.title}</h1>
+                <p className="text-lg sm:text-xl text-[var(--muted)] italic font-medium">{book.author}</p>
               </div>
               <div className="flex items-center gap-1 shrink-0">
-                <button onClick={handleOpenEditModal} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-normal text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] transition-colors border border-[var(--border)] bg-transparent"><Edit className="w-4 h-4" /> Edit book</button>
-                <button onClick={() => setIsDeleteBookModalOpen(true)} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-normal text-[var(--foreground)] hover:bg-[var(--danger)]/10 hover:text-[var(--danger)] hover:border-[var(--danger)]/30 rounded-[var(--radius)] transition-colors border border-[var(--border)] bg-transparent"><Trash2 className="w-4 h-4" /> Delete</button>
+                <Dropdown placement="bottom-end">
+                  <DropdownTrigger>
+                    <Button isIconOnly variant="light" className="text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)]">
+                      <MoreVertical className="w-5 h-5" />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="Book Actions" variant="flat">
+                    <DropdownItem key="edit" startContent={<Edit className="w-4 h-4" />} onPress={handleOpenEditModal}>
+                      Edit book
+                    </DropdownItem>
+                    <DropdownItem key="delete" className="text-danger" color="danger" startContent={<Trash2 className="w-4 h-4" />} onPress={() => setIsDeleteBookModalOpen(true)}>
+                      Delete
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </div>
             </div>
             
