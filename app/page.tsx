@@ -114,9 +114,46 @@ export default function Home() {
         {/* --- OVERVIEW TAB --- */}
         {activeTab === "overview" && (
           <div className="flex flex-col gap-6">
+            {/* Keyframe animations for the banner scene */}
+            <style>{`
+              @keyframes mascotFloat {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-14px); }
+              }
+              @keyframes floatBook1 {
+                0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+                25% { transform: translate(6px, -10px) rotate(4deg); }
+                50% { transform: translate(-2px, -18px) rotate(-2deg); }
+                75% { transform: translate(-8px, -8px) rotate(2deg); }
+              }
+              @keyframes floatBook2 {
+                0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+                30% { transform: translate(-8px, -14px) rotate(-5deg); }
+                60% { transform: translate(4px, -20px) rotate(3deg); }
+              }
+              @keyframes sparkle {
+                0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+                50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+              }
+              @keyframes leafDrift {
+                0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.6; }
+                25% { transform: translate(8px, -12px) rotate(15deg); opacity: 0.9; }
+                50% { transform: translate(-4px, -20px) rotate(-10deg); opacity: 0.7; }
+                75% { transform: translate(-10px, -6px) rotate(8deg); opacity: 0.85; }
+              }
+              @keyframes pulseGlow {
+                0%, 100% { opacity: 0.15; transform: scale(1); }
+                50% { opacity: 0.3; transform: scale(1.08); }
+              }
+              @keyframes dotFloat {
+                0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+                50% { transform: translateY(-8px) scale(1.3); opacity: 0.8; }
+              }
+            `}</style>
+
             {/* Banner */}
             <Card className="bg-[var(--surface-secondary)] rounded-[var(--radius)] shadow-none border-none overflow-hidden">
-              <div className="p-10 flex justify-between relative overflow-hidden flex-row">
+              <div className="p-10 flex justify-between relative overflow-hidden flex-row min-h-[280px]">
                 <div className="relative z-10 flex flex-col justify-center">
                   <h1 className="text-[34px] font-extrabold text-[var(--foreground)] tracking-tight">Welcome back, Mean!</h1>
                   <p className="text-[17px] text-[var(--muted)] mt-2 font-medium">You have {inProgressBooks} books in translation progress.</p>
@@ -152,12 +189,143 @@ export default function Home() {
                   </div>
                 </div>
                 
-                {/* Decorative Illustration */}
-                <div className="absolute right-[-20px] top-0 bottom-0 w-[450px] opacity-100 pointer-events-none flex items-center justify-end overflow-visible">
+                {/* Animated Mascot Scene */}
+                <div className="absolute right-[20px] top-0 bottom-0 w-[420px] pointer-events-none flex items-center justify-center overflow-visible">
+                  
+                  {/* Soft radial glow behind mascot */}
+                  <div
+                    className="absolute rounded-full"
+                    style={{
+                      width: 280, height: 280,
+                      background: 'radial-gradient(circle, oklch(73.29% 0.1941 129.82 / 0.18) 0%, transparent 70%)',
+                      animation: 'pulseGlow 4s ease-in-out infinite',
+                      right: 60, top: '50%', transform: 'translateY(-50%)',
+                    }}
+                  />
+
+                  {/* Floating book 1 - top left */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: 280, top: 30,
+                      animation: 'floatBook1 6s ease-in-out infinite',
+                    }}
+                  >
+                    <svg width="44" height="36" viewBox="0 0 44 36" fill="none">
+                      <rect x="4" y="4" width="36" height="28" rx="3" fill="oklch(73.29% 0.1941 129.82 / 0.25)" stroke="oklch(73.29% 0.1941 129.82 / 0.5)" strokeWidth="1.5"/>
+                      <path d="M22 8V28" stroke="oklch(73.29% 0.1941 129.82 / 0.4)" strokeWidth="1"/>
+                      <rect x="8" y="10" width="10" height="2" rx="1" fill="oklch(73.29% 0.1941 129.82 / 0.35)"/>
+                      <rect x="8" y="15" width="8" height="2" rx="1" fill="oklch(73.29% 0.1941 129.82 / 0.25)"/>
+                      <rect x="26" y="10" width="10" height="2" rx="1" fill="oklch(73.29% 0.1941 129.82 / 0.35)"/>
+                      <rect x="26" y="15" width="8" height="2" rx="1" fill="oklch(73.29% 0.1941 129.82 / 0.25)"/>
+                    </svg>
+                  </div>
+
+                  {/* Floating book 2 - bottom right */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: 10, bottom: 40,
+                      animation: 'floatBook2 7s ease-in-out infinite 1s',
+                    }}
+                  >
+                    <svg width="38" height="30" viewBox="0 0 38 30" fill="none">
+                      <rect x="3" y="3" width="32" height="24" rx="3" fill="oklch(78.19% 0.1590 51.34 / 0.2)" stroke="oklch(78.19% 0.1590 51.34 / 0.45)" strokeWidth="1.5"/>
+                      <path d="M19 6V24" stroke="oklch(78.19% 0.1590 51.34 / 0.3)" strokeWidth="1"/>
+                      <rect x="7" y="9" width="8" height="1.5" rx="0.75" fill="oklch(78.19% 0.1590 51.34 / 0.3)"/>
+                      <rect x="7" y="13" width="6" height="1.5" rx="0.75" fill="oklch(78.19% 0.1590 51.34 / 0.2)"/>
+                    </svg>
+                  </div>
+
+                  {/* Sparkle 1 - top right */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: 50, top: 25,
+                      animation: 'sparkle 3s ease-in-out infinite 0.5s',
+                    }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8Z" fill="oklch(78.19% 0.1590 51.34 / 0.5)"/>
+                    </svg>
+                  </div>
+
+                  {/* Sparkle 2 - left side */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: 310, top: 60,
+                      animation: 'sparkle 4s ease-in-out infinite 1.5s',
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+                      <path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8Z" fill="oklch(73.29% 0.1941 129.82 / 0.45)"/>
+                    </svg>
+                  </div>
+
+                  {/* Sparkle 3 - bottom left */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: 260, bottom: 50,
+                      animation: 'sparkle 3.5s ease-in-out infinite 2.5s',
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 20 20" fill="none">
+                      <path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8Z" fill="oklch(78.19% 0.1590 51.34 / 0.4)"/>
+                    </svg>
+                  </div>
+
+                  {/* Leaf 1 - floating */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: 340, top: 100,
+                      animation: 'leafDrift 8s ease-in-out infinite',
+                    }}
+                  >
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                      <path d="M17 8C8 10 5 18 5 18C5 18 13 17 17 8Z" fill="oklch(73.29% 0.1941 129.82 / 0.3)" stroke="oklch(73.29% 0.1941 129.82 / 0.45)" strokeWidth="1"/>
+                      <path d="M6 17L16 9" stroke="oklch(73.29% 0.1941 129.82 / 0.3)" strokeWidth="0.8"/>
+                    </svg>
+                  </div>
+
+                  {/* Leaf 2 - floating */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: 40, top: 90,
+                      animation: 'leafDrift 9s ease-in-out infinite 3s',
+                    }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M17 8C8 10 5 18 5 18C5 18 13 17 17 8Z" fill="oklch(73.29% 0.1941 129.82 / 0.25)" stroke="oklch(73.29% 0.1941 129.82 / 0.4)" strokeWidth="1"/>
+                      <path d="M6 17L16 9" stroke="oklch(73.29% 0.1941 129.82 / 0.25)" strokeWidth="0.8"/>
+                    </svg>
+                  </div>
+
+                  {/* Floating dots */}
+                  <div className="absolute" style={{ right: 130, top: 20, animation: 'dotFloat 5s ease-in-out infinite 0s' }}>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'oklch(73.29% 0.1941 129.82 / 0.3)' }} />
+                  </div>
+                  <div className="absolute" style={{ right: 20, top: 130, animation: 'dotFloat 4s ease-in-out infinite 1.2s' }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'oklch(78.19% 0.1590 51.34 / 0.35)' }} />
+                  </div>
+                  <div className="absolute" style={{ right: 300, bottom: 30, animation: 'dotFloat 6s ease-in-out infinite 2s' }}>
+                    <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'oklch(73.29% 0.1941 129.82 / 0.25)' }} />
+                  </div>
+
+                  {/* Mascot - gentle bobbing */}
                   <img 
-                    src="/Reading glasses-bro.svg" 
-                    alt="Overview Illustration" 
-                    className="w-[110%] h-auto object-contain translate-y-2"
+                    src="/broccoli-mascot.png" 
+                    alt="Bookcroli Mascot" 
+                    className="relative z-10 drop-shadow-lg"
+                    style={{
+                      width: 220,
+                      height: 'auto',
+                      animation: 'mascotFloat 4s ease-in-out infinite',
+                      filter: 'drop-shadow(0 8px 24px oklch(73.29% 0.1941 129.82 / 0.2))',
+                    }}
                   />
                 </div>
               </div>
