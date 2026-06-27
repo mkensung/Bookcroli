@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const { text, from, to } = await request.json();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `You are a professional book translator. 
     Translate the following text from ${from} to ${to}. 

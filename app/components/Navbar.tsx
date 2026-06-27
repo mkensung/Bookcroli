@@ -34,7 +34,7 @@ export function Navbar({ activeTab = "library", onTabChange }: NavbarProps) {
     <div className="pt-6 px-6 max-w-7xl mx-auto">
       <header className="flex items-center justify-between px-6 py-3 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] shadow-sm">
         <Link href="/" className="flex items-center gap-2 font-extrabold text-[22px] tracking-tight text-[var(--foreground)] hover:opacity-80 transition-opacity">
-          ScriptArea
+          <img src="/Bookcroli_logo.svg" alt="Bookcroli Logo" className="h-[23px] w-auto" />
         </Link>
         <nav className="hidden md:flex items-center gap-1">
           <NavItem tab="overview" icon={LayoutGrid} label="Overview" />
