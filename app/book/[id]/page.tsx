@@ -169,34 +169,24 @@ export default function BookDetailsPage() {
       <Navbar activeTab="library" />
 
       <main className="max-w-[1000px] mx-auto px-6 pt-10">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-4">
           <Link href="/?tab=library" className="inline-flex items-center gap-2 text-[var(--muted)] hover:text-[var(--foreground)] font-medium transition-colors"><ChevronLeft className="w-5 h-5" /> Back to Library</Link>
-          <div className="flex items-center gap-1 shrink-0 relative" ref={menuRef}>
-            <Button 
-              isIconOnly 
-              variant="ghost" 
-              className="text-[var(--foreground)] hover:bg-[var(--surface-secondary)] rounded-[var(--radius)] border-none bg-transparent"
-              onPress={() => setIsMenuOpen(!isMenuOpen)}
+          <div className="flex items-center gap-4 shrink-0">
+            <button 
+              onClick={handleOpenEditModal}
+              className="flex items-center justify-center gap-2 h-10 px-3 sm:px-4 rounded-[var(--radius)] text-sm font-bold text-[var(--foreground)] bg-transparent border border-[var(--border)] hover:bg-[var(--surface-secondary)] transition-all"
             >
-              <MoreVertical className="w-5 h-5" />
-            </Button>
+              <Edit className="w-4 h-4" />
+              <span className="hidden sm:inline">Edit book</span>
+            </button>
             
-            {isMenuOpen && (
-              <div className="absolute right-0 top-full mt-2 w-40 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] shadow-lg overflow-hidden z-50 flex flex-col py-1 animate-in fade-in zoom-in-95 duration-100">
-                <button 
-                  onClick={() => { setIsMenuOpen(false); handleOpenEditModal(); }}
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[var(--foreground)] hover:bg-[var(--surface-secondary)] transition-colors text-left"
-                >
-                  <Edit className="w-4 h-4" /> Edit book
-                </button>
-                <button 
-                  onClick={() => { setIsMenuOpen(false); setIsDeleteBookModalOpen(true); }}
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white transition-colors text-left"
-                >
-                  <Trash2 className="w-4 h-4" /> Delete
-                </button>
-              </div>
-            )}
+            <button 
+              onClick={() => setIsDeleteBookModalOpen(true)}
+              className="flex items-center justify-center gap-2 h-10 px-3 sm:px-4 rounded-[var(--radius)] text-sm font-bold text-[var(--danger)] bg-transparent border border-[var(--danger)]/30 hover:bg-[var(--danger)]/10 transition-all"
+            >
+              <Trash2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Delete</span>
+            </button>
           </div>
         </div>
 
