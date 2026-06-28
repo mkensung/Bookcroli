@@ -1,3 +1,7 @@
+---
+name: safe-redesign
+description: Use when asked to 'Redesign', 'Improve UI', or 'Make it look better'.
+---
 # 🛡️ Skill: Safe Structural Redesign
 
 **[CRITICAL SAFEGUARD]** When requested to "Redesign", "Modernize", or "Improve" the UI, you are strictly acting as a **Structural Enhancer**, NOT a Brand Identity Designer.

@@ -1,4 +1,4 @@
-# 🤖 AI Developer Guidelines & Project Rules (ScriptArea)
+# 🤖 AI Developer Guidelines & Project Rules (.agents)
 
 **[CRITICAL INSTRUCTION]**
 You MUST adhere to these absolute rules. Violation is strictly prohibited.
@@ -11,17 +11,19 @@ You MUST adhere to these absolute rules. Violation is strictly prohibited.
 * **Laser Focus:** Modify ONLY requested areas. NO unsolicited refactoring.
 * **Error Memory:** Do not repeat previous import path mistakes.
 
-## 🚦 3. AGENT ROUTING (Skill Triggers)
-Depending on the user's prompt, you MUST fetch and read the following context files before writing any code:
+## 🚦 3. AGENT ROUTING (Context Files)
+The system will now automatically load skills when needed, but always ensure you read the following context files for UI and Design tasks:
 
 * **IF asked to create/modify UI, layout, or components:**
-  -> READ: `/.agent/skills/heroui-docs.md` (CRITICAL: For correct HeroUI imports and component props)
-  -> READ: `/DESIGN.md` (For native OKLCH CSS variables and architecture)
-  -> READ: `/.agent/taste/ui-principles.md` (For typography hierarchy & consistency)
+  -> READ: `.agents/DESIGN.md` (For native OKLCH CSS variables and architecture)
+  -> READ: `.agents/taste/ui-principles.md` (For typography hierarchy & consistency)
+  -> The `heroui-docs` skill will trigger automatically.
+
 * **IF asked to review, check contrast, or find UI bugs:**
-  -> READ: `/.agent/skills/design-review.md`
+  -> The `design-review` skill will trigger automatically.
+
 * **IF asked to "Redesign", "Improve UI", or "Make it look better":**
-  -> READ: `/.agent/skills/safe-redesign.md` FIRST! Do not alter any styles until you read this safeguard.
+  -> The `safe-redesign` skill will trigger automatically.
 
 ---
 *Acknowledge silently and proceed strictly.*

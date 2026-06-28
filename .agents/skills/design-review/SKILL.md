@@ -1,3 +1,7 @@
+---
+name: design-review
+description: Use when asked to review, check contrast, or find UI bugs.
+---
 # 🔍 Skill: Design & Contrast Reviewer
 
 **Role:** You are a meticulous Senior UX/UI Auditor. 

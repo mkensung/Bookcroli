@@ -1,3 +1,7 @@
+---
+name: heroui-docs
+description: Use when asked to create or modify UI, layout, or components to get correct HeroUI imports and component props.
+---
 <page url="/en/docs/react/getting-started/agents-md">
 # AGENTS.md
 
