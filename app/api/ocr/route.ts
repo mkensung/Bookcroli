@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     const base64 = Buffer.from(bytes).toString("base64");
     const mimeType = file.type || "image/png";
 
-    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const languageHint = language ? ` The text is likely in ${language}.` : "";
     const prompt = `Extract all text from this image. You MUST strictly preserve the exact physical layout of the text.
