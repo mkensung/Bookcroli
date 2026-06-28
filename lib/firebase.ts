@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,6 +15,21 @@ const firebaseConfig = {
 // Initialize Firebase only if it hasn't been initialized already (important for Next.js SSR)
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
-const db = getFirestore(app);
+
+// Enable offline persistence to drastically speed up initial data load
+let db: ReturnType<typeof getFirestore>;
+try {
+  // Use persistent cache in the browser
+  if (typeof window !== "undefined") {
+    db = initializeFirestore(app, {
+      localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+    });
+  } else {
+    db = getFirestore(app);
+  }
+} catch (error) {
+  // Fallback if firestore is already initialized (e.g. Next.js Hot Reload)
+  db = getFirestore(app);
+}
 
 export { app, auth, db };

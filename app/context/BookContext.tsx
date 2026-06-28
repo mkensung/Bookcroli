@@ -1,6 +1,10 @@
 "use client";
 
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import { db } from "../../lib/firebase";
+import { collection, onSnapshot, doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { useAuth } from "./AuthContext";
+import { toast } from "@heroui/react";
 
 export interface VocabularyItem {
   id: string;
@@ -20,7 +24,6 @@ export interface NoteItem {
   createdAt: number;
 }
 
-// 🚀 อัปเกรด: เพิ่มกล่องเก็บข้อความต้นฉบับและคำแปล
 export interface PageItem {
   id: string;
   title: string;
@@ -32,7 +35,7 @@ export interface PageItem {
 }
 
 export interface BookItem {
-  id: number;
+  id: string; // Changed from number to string for Firestore compatibility
   title: string;
   author: string;
   coverImage: string | null;
@@ -41,48 +44,97 @@ export interface BookItem {
   translationLang: string;
   totalPages: number;
   translatedPages: number;
-  pages: PageItem[]; // 🚀 เพิ่ม: ให้หนังสือ 1 เล่ม เก็บหน้าต่างย่อยๆ ได้หลายหน้า
+  pages: PageItem[];
+  createdAt?: number;
 }
 
 interface BookContextType {
   books: BookItem[];
-  addBook: (book: Omit<BookItem, "id" | "translatedPages" | "pages">) => void;
-  updateBook: (id: number, updatedData: Partial<BookItem>) => void;
-  deleteBook: (id: number) => void;
-  getBookById: (id: number) => BookItem | undefined;
+  isLoading: boolean;
+  addBook: (book: Omit<BookItem, "id" | "translatedPages" | "pages">) => Promise<void>;
+  updateBook: (id: string, updatedData: Partial<BookItem>) => Promise<void>;
+  deleteBook: (id: string) => Promise<void>;
+  getBookById: (id: string) => BookItem | undefined;
 }
 
 const BookContext = createContext<BookContextType | undefined>(undefined);
 
 export function BookProvider({ children }: { children: ReactNode }) {
   const [books, setBooks] = useState<BookItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
 
-  const addBook = (newBookData: Omit<BookItem, "id" | "translatedPages" | "pages">) => {
-    const newBook: BookItem = {
-      ...newBookData,
-      id: Date.now(),
-      translatedPages: 0,
-      pages: [], // 🚀 เริ่มต้นหนังสือใหม่ จะยังไม่มีหน้า
-    };
-    setBooks((prev) => [...prev, newBook]);
+  useEffect(() => {
+    if (!user) {
+      setBooks([]);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+    const booksRef = collection(db, "users", user.id, "books");
+    
+    const unsubscribe = onSnapshot(booksRef, (snapshot) => {
+      const booksData: BookItem[] = [];
+      snapshot.forEach((doc) => {
+        booksData.push({ id: doc.id, ...doc.data() } as BookItem);
+      });
+      // Sort books by createdAt if needed, for now just set them
+      setBooks(booksData.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)));
+      setIsLoading(false);
+    }, (error) => {
+      console.error("Error fetching books: ", error);
+      toast.danger("Failed to load books.");
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  const addBook = async (newBookData: Omit<BookItem, "id" | "translatedPages" | "pages">) => {
+    if (!user) return;
+    try {
+      const booksRef = collection(db, "users", user.id, "books");
+      await addDoc(booksRef, {
+        ...newBookData,
+        translatedPages: 0,
+        pages: [],
+        createdAt: Date.now()
+      });
+    } catch (error) {
+      console.error("Error adding book: ", error);
+      toast.danger("Failed to add book.");
+    }
   };
 
-  const updateBook = (id: number, updatedData: Partial<BookItem>) => {
-    setBooks((prev) =>
-      prev.map((book) => (book.id === id ? { ...book, ...updatedData } : book))
-    );
+  const updateBook = async (id: string, updatedData: Partial<BookItem>) => {
+    if (!user) return;
+    try {
+      const bookRef = doc(db, "users", user.id, "books", id);
+      await updateDoc(bookRef, updatedData);
+    } catch (error) {
+      console.error("Error updating book: ", error);
+      toast.danger("Failed to update book.");
+    }
   };
 
-  const deleteBook = (id: number) => {
-    setBooks((prev) => prev.filter((book) => book.id !== id));
+  const deleteBook = async (id: string) => {
+    if (!user) return;
+    try {
+      const bookRef = doc(db, "users", user.id, "books", id);
+      await deleteDoc(bookRef);
+    } catch (error) {
+      console.error("Error deleting book: ", error);
+      toast.danger("Failed to delete book.");
+    }
   };
 
-  const getBookById = (id: number) => {
+  const getBookById = (id: string) => {
     return books.find((book) => book.id === id);
   };
 
   return (
-    <BookContext.Provider value={{ books, addBook, updateBook, deleteBook, getBookById }}>
+    <BookContext.Provider value={{ books, isLoading, addBook, updateBook, deleteBook, getBookById }}>
       {children}
     </BookContext.Provider>
   );

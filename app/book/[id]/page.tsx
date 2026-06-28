@@ -26,9 +26,9 @@ const languages = [
 export default function BookDetailsPage() {
   const params = useParams();
   const router = useRouter();
-  const bookId = Number(params.id); 
+  const bookId = String(params.id); 
   
-  const { getBookById, updateBook, deleteBook } = useBooks();
+  const { getBookById, updateBook, deleteBook, isLoading: isBooksLoading } = useBooks();
   const book = getBookById(bookId);
   
   const pages = book?.pages || [];
@@ -71,8 +71,16 @@ export default function BookDetailsPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  if (isBooksLoading) {
+    return (
+      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--accent)]"></div>
+      </div>
+    );
+  }
+
   if (!book) {
-    return <div className="min-h-screen flex items-center justify-center text-[var(--muted)] font-medium">Book not found or loading...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-[var(--muted)] font-medium">Book not found.</div>;
   }
 
   const handleEditImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

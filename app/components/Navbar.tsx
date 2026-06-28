@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { LayoutGrid, Book, Bookmark, Search, Bell, Settings, LogOut, User } from "lucide-react";
 import { Input } from "@heroui/react";
 import { useAuth } from "../context/AuthContext";
@@ -10,6 +11,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ activeTab = "library", onTabChange }: NavbarProps) {
+  const router = useRouter();
   const { user, isAuthenticated, logout } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -161,9 +163,10 @@ export function Navbar({ activeTab = "library", onTabChange }: NavbarProps) {
                     <div className="border-t border-[var(--separator)] py-1">
                       <button
                         className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[var(--danger)] hover:bg-[var(--surface-secondary)] transition-colors"
-                        onClick={() => {
-                          logout();
+                        onClick={async () => {
+                          await logout();
                           setShowUserMenu(false);
+                          router.push('/login');
                         }}
                       >
                         <LogOut className="w-4 h-4" />

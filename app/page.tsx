@@ -24,7 +24,7 @@ const languages = [
 ];
 
 // Swipeable Book Card component with swipe-to-delete on mobile
-function SwipeableBookCard({ book, progressPercent, onDelete }: { book: any; progressPercent: number; onDelete: (id: number) => void }) {
+function SwipeableBookCard({ book, progressPercent, onDelete }: { book: any; progressPercent: number; onDelete: (id: string) => void }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [translateX, setTranslateX] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
@@ -147,7 +147,7 @@ function SwipeableBookCard({ book, progressPercent, onDelete }: { book: any; pro
 
 
 export default function Home() {
-  const { books, addBook, deleteBook } = useBooks();
+  const { books, isLoading: isBooksLoading, addBook, deleteBook } = useBooks();
   const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
@@ -168,7 +168,7 @@ export default function Home() {
   }, []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [bookToDelete, setBookToDelete] = useState<number | null>(null);
+  const [bookToDelete, setBookToDelete] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     title: "", author: "", totalPages: "", plot: "",
@@ -245,7 +245,7 @@ export default function Home() {
   const inProgressBooks = totalBooks - completedBooks;
   const inProgressBooksList = books.filter((b: any) => b.totalPages === 0 || b.translatedPages < b.totalPages);
 
-  if (isLoading || !isAuthenticated) {
+  if (isLoading || isBooksLoading || !isAuthenticated) {
     return (
       <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
         {/* Simple loading state */}

@@ -15,7 +15,7 @@ const robotoSerif = Roboto_Serif({ subsets: ["latin"], weight: ["400"] });
 const sarabun = Sarabun({ subsets: ["thai"], weight: ["300"] });
 
 interface NotesDrawerProps {
-  bookId: number;
+  bookId: string;
   pageId: string;
 }
 
