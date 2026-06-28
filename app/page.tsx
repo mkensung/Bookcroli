@@ -10,6 +10,8 @@ import { Select, ListBox, Button, Card, TextField, Label, Input, TextArea, Field
 import { useBooks } from "./context/BookContext";
 import { toast } from "@heroui/react";
 import { Navbar } from "./components/Navbar";
+import { useAuth } from "./context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const languages = [
   { label: "English", value: "English" },
@@ -146,6 +148,14 @@ function SwipeableBookCard({ book, progressPercent, onDelete }: { book: any; pro
 
 export default function Home() {
   const { books, addBook, deleteBook } = useBooks();
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isLoading, isAuthenticated, router]);
 
   const [activeTab, setActiveTab] = useState<"overview" | "library" | "bookmark">("overview");
 
@@ -235,6 +245,15 @@ export default function Home() {
   const inProgressBooks = totalBooks - completedBooks;
   const inProgressBooksList = books.filter((b: any) => b.totalPages === 0 || b.translatedPages < b.totalPages);
 
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+        {/* Simple loading state */}
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--accent)]"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-sans pb-24 md:pb-20">
 
@@ -286,7 +305,9 @@ export default function Home() {
             <Card className="bg-[var(--surface-secondary)] rounded-[var(--radius)] shadow-none border-none overflow-hidden">
               <div className="p-6 md:p-10 flex flex-col md:flex-row justify-between relative overflow-hidden min-h-[280px] gap-8 md:gap-0">
                 <div className="relative z-10 flex flex-col justify-center order-last md:order-first">
-                  <h1 className="text-[28px] md:text-[34px] font-extrabold text-[var(--foreground)] tracking-tight">Welcome back, Mean!</h1>
+                  <h1 className="text-[28px] md:text-[34px] font-extrabold text-[var(--foreground)] tracking-tight">
+                    Welcome back, {user?.displayName ? user.displayName.split(" ")[0] : "Reader"}!
+                  </h1>
                   <p className="text-[16px] md:text-[17px] text-[var(--muted)] mt-2 font-medium">You have {inProgressBooks} books in translation progress.</p>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 md:mt-8">
